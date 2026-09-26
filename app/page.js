@@ -229,25 +229,27 @@ export default function HomePage() {
 
       {/* CONSULTATION CONTACT */}
       <section id="contact" style={{
-        background: 'var(--ink)',
-        color: 'var(--paper)',
+        background: 'var(--paper-deep)',
+        border: '1px solid var(--line)',
+        color: 'var(--ink)',
         padding: '50px clamp(20px, 5vw, 60px)',
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
         gap: '40px',
-        alignItems: 'end'
+        alignItems: 'start',
+        marginTop: '30px'
       }}>
         <div>
           <h2 style={{
             fontFamily: 'var(--display)',
             fontSize: 'clamp(46px, 6vw, 84px)',
             fontWeight: 500,
-            lineHeight: 0.82,
+            lineHeight: 0.88,
             letterSpacing: '-.05em'
           }}>
             Have a site<br />with <em style={{ color: 'var(--accent)', fontStyle: 'normal' }}>weather?</em>
           </h2>
-          <p style={{ fontSize: '14px', lineHeight: 1.6, color: 'var(--line)', maxWidth: '420px', marginTop: '20px' }}>
+          <p style={{ fontSize: '14px', lineHeight: 1.6, color: 'var(--ink-soft)', maxWidth: '420px', marginTop: '20px' }}>
             Diskusikan rencana tapak, sayembara, atau eksplorasi arsitektur bersama GradiEnt Studio. Tinggalkan detail Anda di formulir untuk konsultasi langsung.
           </p>
           <div style={{
@@ -265,10 +267,10 @@ export default function HomePage() {
         </div>
 
         <div style={{
-          background: 'rgba(255,255,255,0.03)',
-          border: '1px solid rgba(255,255,255,0.1)',
+          background: 'var(--paper)',
+          border: '1px solid var(--line)',
           padding: '28px',
-          borderRadius: '4px'
+          borderRadius: '2px'
         }}>
           <h3 style={{
             fontFamily: 'var(--mono)',
@@ -283,7 +285,7 @@ export default function HomePage() {
 
           <form onSubmit={sendInquiry} style={{ display: 'grid', gap: '14px' }}>
             <div>
-              <label style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent-soft)', marginBottom: '5px' }}>
+              <label style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-soft)', marginBottom: '6px' }}>
                 Nama Lengkap / Instansi *
               </label>
               <input
@@ -294,19 +296,20 @@ export default function HomePage() {
                 placeholder="Nama Anda / Perusahaan"
                 style={{
                   width: '100%',
-                  padding: '10px 12px',
-                  background: 'rgba(0,0,0,0.25)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  color: 'var(--paper)',
+                  padding: '11px 13px',
+                  background: 'var(--paper-deep)',
+                  border: '1px solid var(--line)',
+                  color: 'var(--ink)',
                   fontFamily: 'var(--body)',
                   fontSize: '13px',
-                  outline: 'none'
+                  outline: 'none',
+                  transition: 'border-color 0.2s ease'
                 }}
               />
             </div>
 
             <div>
-              <label style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent-soft)', marginBottom: '5px' }}>
+              <label style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-soft)', marginBottom: '6px' }}>
                 Nomor WhatsApp / Kontak *
               </label>
               <input
@@ -317,19 +320,20 @@ export default function HomePage() {
                 placeholder="08xxxxxxxxxx atau email aktif"
                 style={{
                   width: '100%',
-                  padding: '10px 12px',
-                  background: 'rgba(0,0,0,0.25)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  color: 'var(--paper)',
+                  padding: '11px 13px',
+                  background: 'var(--paper-deep)',
+                  border: '1px solid var(--line)',
+                  color: 'var(--ink)',
                   fontFamily: 'var(--body)',
                   fontSize: '13px',
-                  outline: 'none'
+                  outline: 'none',
+                  transition: 'border-color 0.2s ease'
                 }}
               />
             </div>
 
             <div>
-              <label style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent-soft)', marginBottom: '5px' }}>
+              <label style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-soft)', marginBottom: '6px' }}>
                 Kategori Pekerjaan
               </label>
               <select
@@ -337,13 +341,14 @@ export default function HomePage() {
                 onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                 style={{
                   width: '100%',
-                  padding: '10px 12px',
-                  background: 'rgba(0,0,0,0.3)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  color: 'var(--paper)',
+                  padding: '11px 13px',
+                  background: 'var(--paper-deep)',
+                  border: '1px solid var(--line)',
+                  color: 'var(--ink)',
                   fontFamily: 'var(--body)',
                   fontSize: '13px',
-                  outline: 'none'
+                  outline: 'none',
+                  cursor: 'pointer'
                 }}
               >
                 <option value="Rumah Tinggal / Private Residence">Rumah Tinggal / Private Residence</option>
@@ -355,7 +360,7 @@ export default function HomePage() {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--accent-soft)', marginBottom: '5px' }}>
+              <label style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--ink-soft)', marginBottom: '6px' }}>
                 Rencana Lokasi & Deskripsi Singkat
               </label>
               <textarea
@@ -365,10 +370,10 @@ export default function HomePage() {
                 placeholder="Ceritakan sedikit tentang lokasi lahan atau kebutuhan ruang..."
                 style={{
                   width: '100%',
-                  padding: '10px 12px',
-                  background: 'rgba(0,0,0,0.25)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  color: 'var(--paper)',
+                  padding: '11px 13px',
+                  background: 'var(--paper-deep)',
+                  border: '1px solid var(--line)',
+                  color: 'var(--ink)',
                   fontFamily: 'var(--body)',
                   fontSize: '13px',
                   outline: 'none',
@@ -382,7 +387,7 @@ export default function HomePage() {
               style={{
                 background: 'var(--accent)',
                 color: 'var(--white)',
-                padding: '12px 18px',
+                padding: '13px 20px',
                 fontFamily: 'var(--mono)',
                 fontSize: '11px',
                 letterSpacing: '0.12em',
@@ -392,7 +397,10 @@ export default function HomePage() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '8px',
-                marginTop: '4px'
+                marginTop: '6px',
+                cursor: 'pointer',
+                border: 'none',
+                transition: 'opacity 0.2s'
               }}
             >
               <span>Kirim via WhatsApp Direct</span>
@@ -402,18 +410,18 @@ export default function HomePage() {
 
           <div style={{
             marginTop: '20px',
-            paddingTop: '14px',
-            borderTop: '1px solid rgba(255,255,255,0.1)',
+            paddingTop: '16px',
+            borderTop: '1px solid var(--line)',
             display: 'flex',
             justifyContent: 'space-between',
             flexWrap: 'wrap',
             gap: '10px',
             fontSize: '11px',
-            color: 'var(--accent-soft)',
+            color: 'var(--ink-soft)',
             fontFamily: 'var(--mono)'
           }}>
-            <span>Email: <a href="mailto:heruardiansyah2one@gmail.com" style={{ textDecoration: 'underline' }}>heruardiansyah2one@gmail.com</a></span>
-            <span>WhatsApp: <a href="https://wa.me/6285143628550" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>+62 851-4362-8550</a></span>
+            <span>Email: <a href="mailto:heruardiansyah2one@gmail.com" style={{ textDecoration: 'underline', color: 'var(--accent)' }}>heruardiansyah2one@gmail.com</a></span>
+            <span>WhatsApp: <a href="https://wa.me/6285143628550" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'var(--accent)' }}>+62 851-4362-8550</a></span>
             <span>Makassar, Indonesia</span>
           </div>
         </div>
