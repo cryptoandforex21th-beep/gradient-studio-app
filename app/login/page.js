@@ -81,10 +81,10 @@ export default function LoginPage() {
           }));
         }
 
-        setSuccess(`Selamat datang kembali, ${fullName}!`);
+        setSuccess(`Selamat datang kembali, ${fullName}! Mengalihkan ke Dashboard...`);
         setTimeout(() => {
-          router.push('/');
-        }, 1000);
+          router.push('/dashboard');
+        }, 800);
       }
     } catch (err) {
       setError('Terjadi kendala saat login. Silakan coba lagi.');
