@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabaseClient';
 
 export default function ClientDashboard() {
   const router = useRouter();
+  const fileInputRef = useRef(null);
+
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -32,7 +34,6 @@ export default function ClientDashboard() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) {
-        // Check if admin is logged in
         if (sessionStorage.getItem('gradient_admin') === '1') {
           router.push('/admin');
           return;
@@ -44,7 +45,6 @@ export default function ClientDashboard() {
       const u = session.user;
       setUser(u);
 
-      // Load user metadata
       const meta = u.user_metadata || {};
       setFullName(meta.full_name || '');
       setPhone(meta.phone || '');
@@ -53,7 +53,6 @@ export default function ClientDashboard() {
       setBio(meta.bio || '');
       setAvatarUrl(meta.avatar_url || '');
 
-      // Load inquiries associated with this client's email or phone
       const { data: inqData } = await supabase
         .from('inquiries')
         .select('*')
@@ -68,6 +67,51 @@ export default function ClientDashboard() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Mohon pilih file gambar (JPG, PNG, atau WebP).');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        // Optimize & resize image locally using canvas (max 300x300)
+        const canvas = document.createElement('canvas');
+        const MAX_SIZE = 300;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_SIZE) {
+            height *= MAX_SIZE / width;
+            width = MAX_SIZE;
+          }
+        } else {
+          if (height > MAX_SIZE) {
+            width *= MAX_SIZE / height;
+            height = MAX_SIZE;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
+        setAvatarUrl(dataUrl);
+        setSavedMsg('Foto profil dipilih dari komputer! Klik "Simpan Perubahan Data Diri" di bawah untuk mengunci.');
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSaveProfile = async (e) => {
@@ -119,6 +163,16 @@ export default function ClientDashboard() {
 
   return (
     <div style={{ maxWidth: '960px', margin: '40px auto 100px', padding: '0 20px' }}>
+      
+      {/* Hidden File Picker for Local PC Storage */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        accept="image/*"
+        style={{ display: 'none' }}
+      />
+
       {/* Top Banner */}
       <div style={{
         display: 'flex',
@@ -180,25 +234,47 @@ export default function ClientDashboard() {
           border: '1px solid var(--line)',
           padding: '28px'
         }}>
-          {/* Avatar Header */}
+          {/* Avatar Header with Local Upload Trigger */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '28px', borderBottom: '1px solid var(--line)', paddingBottom: '20px' }}>
-            <div style={{
-              width: '68px',
-              height: '68px',
-              borderRadius: '50%',
-              background: avatarUrl ? `url(${avatarUrl}) center/cover` : 'var(--canvas)',
-              color: 'var(--white)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontFamily: 'var(--display)',
-              fontSize: '28px',
-              fontWeight: 600,
-              border: '2px solid var(--accent)',
-              flexShrink: 0
-            }}>
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              title="Klik untuk memilih foto dari penyimpanan laptop"
+              style={{
+                width: '76px',
+                height: '76px',
+                borderRadius: '50%',
+                background: avatarUrl ? `url(${avatarUrl}) center/cover` : 'var(--canvas)',
+                color: 'var(--white)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontFamily: 'var(--display)',
+                fontSize: '28px',
+                fontWeight: 600,
+                border: '2px solid var(--accent)',
+                flexShrink: 0,
+                cursor: 'pointer',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+            >
               {!avatarUrl && (fullName[0]?.toUpperCase() || user?.email[0]?.toUpperCase())}
+              <div style={{
+                position: 'absolute',
+                bottom: 0,
+                insetInline: 0,
+                background: 'rgba(0,0,0,0.65)',
+                color: 'var(--white)',
+                fontSize: '8px',
+                fontFamily: 'var(--mono)',
+                textAlign: 'center',
+                padding: '3px 0',
+                letterSpacing: '.06em'
+              }}>
+                GANTI
+              </div>
             </div>
+
             <div>
               <div style={{ fontFamily: 'var(--display)', fontSize: '24px', fontWeight: 600 }}>
                 {fullName || 'Klien GradiEnt'}
@@ -206,26 +282,39 @@ export default function ClientDashboard() {
               <div style={{ font: '11px var(--mono)', color: 'var(--ink-soft)', marginTop: '2px' }}>
                 {user?.email}
               </div>
-              <div style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                marginTop: '6px',
-                font: '9px var(--mono)',
-                color: '#2ea44f',
-                letterSpacing: '.08em',
-                textTransform: 'uppercase'
-              }}>
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2ea44f' }}></span>
-                Email Terverifikasi
-              </div>
+              
+              {/* Button: Local Device File Picker */}
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                style={{
+                  marginTop: '10px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  background: 'var(--paper)',
+                  border: '1px solid var(--line)',
+                  padding: '6px 12px',
+                  fontFamily: 'var(--mono)',
+                  fontSize: '10px',
+                  letterSpacing: '.06em',
+                  textTransform: 'uppercase',
+                  color: 'var(--ink)',
+                  cursor: 'pointer',
+                  transition: 'all .2s'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--accent)'}
+                onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--line)'}
+              >
+                <span>📷 Upload dari Laptop</span>
+              </button>
             </div>
           </div>
 
           {/* Edit Form */}
           <form onSubmit={handleSaveProfile} style={{ display: 'grid', gap: '16px' }}>
             <h3 style={{ font: '11px var(--mono)', letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--accent)' }}>
-              Edit Data Diri Klien
+              Data Diri Klien
             </h3>
 
             <div>
@@ -284,26 +373,13 @@ export default function ClientDashboard() {
 
             <div>
               <label style={{ display: 'block', font: '9px var(--mono)', letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--ink-soft)', marginBottom: '5px' }}>
-                Link Foto Profil (URL Gambar)
-              </label>
-              <input
-                type="url"
-                value={avatarUrl}
-                onChange={(e) => setAvatarUrl(e.target.value)}
-                placeholder="https://images.unsplash.com/..."
-                style={{ width: '100%', padding: '10px 12px', background: 'var(--paper)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '13px', outline: 'none' }}
-              />
-            </div>
-
-            <div>
-              <label style={{ display: 'block', font: '9px var(--mono)', letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--ink-soft)', marginBottom: '5px' }}>
                 Preferensi Desain / Kebutuhan Ruang
               </label>
               <textarea
                 rows={3}
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
-                placeholder="Contoh: Suka desain tropis modern dengan ventilasi silang alami dan material bata ekspos..."
+                placeholder="Contoh: Menyukai desain tropis modern dengan pencahayaan alami dan material ramah lingkungan..."
                 style={{ width: '100%', padding: '10px 12px', background: 'var(--paper)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '13px', outline: 'none', resize: 'vertical' }}
               />
             </div>
@@ -314,7 +390,8 @@ export default function ClientDashboard() {
                 padding: '10px',
                 background: savedMsg.includes('Gagal') ? 'rgba(217, 56, 56, 0.1)' : 'rgba(46, 164, 79, 0.1)',
                 color: savedMsg.includes('Gagal') ? '#d93838' : '#2ea44f',
-                border: '1px solid currentColor'
+                border: '1px solid currentColor',
+                lineHeight: 1.5
               }}>
                 {savedMsg}
               </div>
