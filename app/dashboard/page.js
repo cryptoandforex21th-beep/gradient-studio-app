@@ -27,13 +27,49 @@ export default function ClientDashboard() {
 
   useEffect(() => {
     fetchUserProfile();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        populateUserData(session.user);
+        setLoading(false);
+      }
+    });
+
+    return () => {
+      subscription?.unsubscribe();
+    };
   }, []);
+
+  const populateUserData = async (u) => {
+    setUser(u);
+    const meta = u.user_metadata || {};
+    setFullName(meta.full_name || meta.name || u.email?.split('@')[0] || '');
+    setPhone(meta.phone || '');
+    setCity(meta.city || 'Makassar');
+    setCompany(meta.company || '');
+    setBio(meta.bio || '');
+    setAvatarUrl(meta.avatar_url || meta.picture || '');
+
+    const { data: inqData } = await supabase
+      .from('inquiries')
+      .select('*')
+      .or(`contact.ilike.%${u.email}%,name.ilike.%${meta.full_name || meta.name || u.email}%`)
+      .order('created_at', { ascending: false });
+
+    if (inqData) {
+      setMyInquiries(inqData);
+    }
+  };
 
   const fetchUserProfile = async () => {
     setLoading(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) {
+        // If coming from an auth callback URL (hash with access_token or query code), wait for Supabase to parse
+        if (typeof window !== 'undefined' && (window.location.hash.includes('access_token') || window.location.search.includes('code'))) {
+          return;
+        }
         if (sessionStorage.getItem('gradient_admin') === '1') {
           router.push('/admin');
           return;
@@ -42,26 +78,7 @@ export default function ClientDashboard() {
         return;
       }
 
-      const u = session.user;
-      setUser(u);
-
-      const meta = u.user_metadata || {};
-      setFullName(meta.full_name || '');
-      setPhone(meta.phone || '');
-      setCity(meta.city || 'Makassar');
-      setCompany(meta.company || '');
-      setBio(meta.bio || '');
-      setAvatarUrl(meta.avatar_url || '');
-
-      const { data: inqData } = await supabase
-        .from('inquiries')
-        .select('*')
-        .or(`contact.ilike.%${u.email}%,name.ilike.%${meta.full_name || u.email}%`)
-        .order('created_at', { ascending: false });
-
-      if (inqData) {
-        setMyInquiries(inqData);
-      }
+      await populateUserData(session.user);
     } catch (err) {
       console.log('Dashboard load notice:', err);
     } finally {
