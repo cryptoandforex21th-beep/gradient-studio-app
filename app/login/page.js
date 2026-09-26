@@ -191,14 +191,14 @@ export default function LoginPage() {
             color: 'var(--ink-soft)',
             marginBottom: '6px'
           }}>
-            {role === 'admin' ? 'Email / Username Admin' : 'Alamat Email Terdaftar'}
+            {role === 'admin' ? 'ID Pengguna / Email Admin' : 'Alamat Email Terdaftar'}
           </label>
           <input
             type={role === 'admin' ? 'text' : 'email'}
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder={role === 'admin' ? 'gradient_admin atau heruardiansyah2one@gmail.com' : 'nama@email.com'}
+            placeholder={role === 'admin' ? 'Masukkan ID Admin' : 'nama@email.com'}
             style={{
               width: '100%',
               padding: '12px 14px',
