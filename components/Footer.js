@@ -31,15 +31,11 @@ export default function Footer() {
             color: 'inherit',
             textAlign: 'left'
           }}>
-            <span style={{
-              width: '10px',
-              height: '10px',
-              background: 'var(--accent)',
-              display: 'inline-block',
-              borderRadius: '50%',
-              boxShadow: '0 0 12px var(--accent)',
-              flexShrink: 0
-            }}></span>
+            <img 
+              src="/brand-logo-transparent.png" 
+              alt="GradiEnt Logo" 
+              style={{ width: '32px', height: '32px', objectFit: 'contain' }}
+            />
             <span style={{
               background: 'linear-gradient(135deg, var(--ink) 30%, var(--accent) 100%)',
               WebkitBackgroundClip: 'text',

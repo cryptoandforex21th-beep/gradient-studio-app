@@ -86,8 +86,12 @@ export default function Navbar() {
 
   return (
     <header className="topbar">
-      <Link href="/" className="mark">
-        <i className="mark-dot"></i>
+      <Link href="/" className="mark" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+        <img 
+          src="/brand-logo-transparent.png" 
+          alt="GradiEnt Logo" 
+          style={{ width: '22px', height: '22px', objectFit: 'contain' }}
+        />
         <span className="brand-name">GradiEnt</span>
         <span className="mark-sub">Studio</span>
       </Link>

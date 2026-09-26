@@ -240,6 +240,22 @@ export default function HomePage() {
         marginTop: '30px'
       }}>
         <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
+            <img 
+              src="/brand-logo-transparent.png" 
+              alt="GradiEnt Studio Logo" 
+              style={{ width: '40px', height: '40px', objectFit: 'contain' }}
+            />
+            <div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--accent)', fontWeight: 600 }}>
+                GradiEnt Studio
+              </div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', color: 'var(--ink-soft)' }}>
+                Architecture + Spatial Computation
+              </div>
+            </div>
+          </div>
+
           <h2 style={{
             fontFamily: 'var(--display)',
             fontSize: 'clamp(46px, 6vw, 84px)',
@@ -272,16 +288,22 @@ export default function HomePage() {
           padding: '28px',
           borderRadius: '2px'
         }}>
-          <h3 style={{
-            fontFamily: 'var(--mono)',
-            fontSize: '11px',
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: 'var(--accent)',
-            marginBottom: '18px'
-          }}>
-            Formulir Konsultasi Proyek
-          </h3>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+            <h3 style={{
+              fontFamily: 'var(--mono)',
+              fontSize: '11px',
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              color: 'var(--accent)'
+            }}>
+              Formulir Konsultasi Proyek
+            </h3>
+            <img 
+              src="/brand-logo-transparent.png" 
+              alt="GradiEnt Mark" 
+              style={{ width: '22px', height: '22px', objectFit: 'contain' }}
+            />
+          </div>
 
           <form onSubmit={sendInquiry} style={{ display: 'grid', gap: '14px' }}>
             <div>
