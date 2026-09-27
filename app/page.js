@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AxonModel from '../components/AxonModel';
 import { supabase } from '../lib/supabaseClient';
 
@@ -11,6 +11,24 @@ export default function HomePage() {
     type: 'Rumah Tinggal / Private Residence',
     notes: ''
   });
+
+  const [projects, setProjects] = useState([
+    { id: '01', title: 'House for\nthe Long View', tag: 'Built', loc: 'Makassar, ID / 2025', bg: '#172326' },
+    { id: '02', title: 'Salt\nLibrary', tag: 'In Progress', loc: 'South Sulawesi, ID / 2025', bg: '#2b3b3e' },
+    { id: '03', title: 'Parametric\nCanopy', tag: 'Research', loc: 'Rhino & Grasshopper / 2024', bg: '#223035' },
+    { id: '04', title: 'The Quiet\nWorkshop', tag: 'Built', loc: 'Gowa, ID / 2024', bg: '#172326' }
+  ]);
+
+  useEffect(() => {
+    fetch('/api/notion/projects')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.projects && data.projects.length > 0) {
+          setProjects(data.projects);
+        }
+      })
+      .catch((err) => console.log('Notion projects sync info:', err));
+  }, []);
 
   const sendInquiry = async (e) => {
     e.preventDefault();
@@ -29,7 +47,18 @@ export default function HomePage() {
       console.log('Inquiry save notice:', err);
     }
 
-    // 2. Track GA4 Event
+    // 2. Sync to Notion CRM (Real-time Lead Entry)
+    try {
+      fetch('/api/notion/inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, contact, type, notes })
+      });
+    } catch (err) {
+      console.log('Notion inquiry sync error:', err);
+    }
+
+    // 3. Track GA4 Event
     if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
       window.gtag('event', 'generate_lead', {
         event_category: 'inquiry',
@@ -38,7 +67,7 @@ export default function HomePage() {
       });
     }
 
-    // 3. Open WhatsApp Direct
+    // 4. Open WhatsApp Direct
     window.open(`https://wa.me/6285143628550?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
@@ -136,7 +165,7 @@ export default function HomePage() {
             </h2>
           </div>
           <div style={{ font: '10px var(--mono)', color: 'var(--ink-soft)', letterSpacing: '.08em', textTransform: 'uppercase', textAlign: 'right' }}>
-            Four studies in<br />light, mass + air
+            {projects.length} studies in<br />light, mass + air
           </div>
         </div>
 
@@ -145,14 +174,9 @@ export default function HomePage() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: '20px'
         }}>
-          {[
-            { id: '01', title: 'House for\nthe Long View', tag: 'Built', loc: 'Makassar, ID / 2025', bg: 'var(--canvas)' },
-            { id: '02', title: 'Salt\nLibrary', tag: 'In Progress', loc: 'South Sulawesi, ID / 2025', bg: '#2b3b3e' },
-            { id: '03', title: 'Parametric\nCanopy', tag: 'Research', loc: 'Rhino & Grasshopper / 2024', bg: '#223035' },
-            { id: '04', title: 'The Quiet\nWorkshop', tag: 'Built', loc: 'Gowa, ID / 2024', bg: 'var(--canvas)' }
-          ].map((item) => (
-            <div key={item.id} style={{
-              background: item.bg,
+          {projects.map((item, idx) => (
+            <div key={item.id || idx} style={{
+              background: item.bg || '#172326',
               color: 'var(--white)',
               minHeight: '340px',
               padding: '24px',
@@ -164,7 +188,7 @@ export default function HomePage() {
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ font: '10px var(--mono)', letterSpacing: '.1em', color: 'var(--blueprint)' }}>
-                  {item.id} / 04
+                  {item.id} / {String(projects.length).padStart(2, '0')}
                 </span>
                 <span style={{ font: '9px var(--mono)', padding: '4px 8px', border: '1px solid rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>
                   {item.tag}
@@ -428,6 +452,21 @@ export default function HomePage() {
               <span>Kirim via WhatsApp Direct</span>
               <span>→</span>
             </button>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              fontFamily: 'var(--mono)',
+              fontSize: '9px',
+              color: 'var(--ink-soft)',
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              marginTop: '4px'
+            }}>
+              <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#22c55e' }}></span>
+              Tersinkronisasi otomatis ke WhatsApp, Supabase & Notion CRM
+            </div>
           </form>
 
           <div style={{
