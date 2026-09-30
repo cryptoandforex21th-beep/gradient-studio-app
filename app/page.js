@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import AxonModel from '../components/AxonModel';
-import ModularConfigurator from '../components/ModularConfigurator';
 import { supabase } from '../lib/supabaseClient';
 
 export default function HomePage() {
@@ -74,75 +73,221 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* HERO SECTION */}
+      {/* CINEMATIC HERO SECTION (Awwwards Architectural Style) */}
       <section style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-        gap: 'clamp(32px, 6vw, 90px)',
-        alignItems: 'center',
-        padding: 'clamp(50px, 7vw, 100px) 0 80px'
+        padding: 'clamp(30px, 5vw, 60px) 0 30px',
+        position: 'relative'
       }}>
-        <div>
-          <div style={{
-            fontFamily: 'var(--mono)',
-            fontSize: '10px',
-            letterSpacing: '.14em',
-            textTransform: 'uppercase',
-            color: 'var(--accent)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px'
-          }}>
-            <span style={{ width: '28px', height: '1px', background: 'var(--accent)' }}></span>
-            GradiEnt / Est. 2026
+        {/* Top Editorial Identity & Metadata */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          flexWrap: 'wrap',
+          gap: '24px',
+          borderBottom: '1px solid var(--line)',
+          paddingBottom: '24px',
+          marginBottom: '28px'
+        }}>
+          <div>
+            <div style={{
+              fontFamily: 'var(--mono)',
+              fontSize: '10px',
+              letterSpacing: '.14em',
+              textTransform: 'uppercase',
+              color: 'var(--accent)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}>
+              <span style={{ width: '28px', height: '1px', background: 'var(--accent)' }}></span>
+              GradiEnt Studio / Est. 2026 • Makassar, Indonesia
+            </div>
+            <h1 style={{
+              fontFamily: 'var(--display)',
+              fontSize: 'clamp(46px, 6.5vw, 96px)',
+              fontWeight: 500,
+              lineHeight: 0.88,
+              letterSpacing: '-.05em',
+              margin: '18px 0 12px'
+            }}>
+              Spaces with<br />
+              <em style={{ color: 'var(--accent)', fontStyle: 'normal', fontWeight: 600 }}>weather</em> in them.
+            </h1>
           </div>
 
-          <h1 style={{
-            fontFamily: 'var(--display)',
-            fontSize: 'clamp(54px, 7vw, 110px)',
-            fontWeight: 500,
-            lineHeight: 0.85,
-            letterSpacing: '-.05em',
-            margin: '24px 0 30px'
-          }}>
-            Spaces with<br />
-            <em style={{ color: 'var(--accent)', fontStyle: 'normal', fontWeight: 600 }}>weather</em> in them.
-          </h1>
-
-          <p style={{
-            fontSize: '16px',
-            lineHeight: 1.6,
-            color: 'var(--ink-soft)',
-            maxWidth: '430px'
-          }}>
-            GradiEnt adalah praktik arsitektur yang beroperasi di antara lansekap, geometri parametrik, dan material lokal. Kami merancang ruang yang adaptif terhadap iklim dan ritual keseharian.
-          </p>
-
-          <div style={{
-            display: 'flex',
-            gap: '28px',
-            marginTop: '40px',
-            paddingTop: '16px',
-            borderTop: '1px solid var(--line)',
-            maxWidth: '480px'
-          }}>
-            <div>
-              <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--ink-soft)' }}>
-                Founder & Principal
+          <div style={{ maxWidth: '440px' }}>
+            <p style={{
+              fontSize: '15px',
+              lineHeight: 1.6,
+              color: 'var(--ink-soft)',
+              marginBottom: '20px'
+            }}>
+              Praktik arsitektur spasial yang beroperasi di antara lansekap tropis, geometri parametrik, dan materialitas lokal. Menghadirkan ruang yang bernapas bersama iklim dan ritual keseharian.
+            </p>
+            <div style={{
+              display: 'flex',
+              gap: '24px',
+              borderTop: '1px solid var(--line)',
+              paddingTop: '14px',
+              fontFamily: 'var(--mono)',
+              fontSize: '10px',
+              color: 'var(--ink-soft)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em'
+            }}>
+              <div>
+                <span style={{ color: 'var(--accent)' }}>Principal:</span> Heru Ardiansyah
               </div>
-              <div style={{ fontSize: '13px', marginTop: '4px', fontWeight: 600 }}>Heru Ardiansyah</div>
-            </div>
-            <div>
-              <div style={{ fontFamily: 'var(--mono)', fontSize: '9px', letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--ink-soft)' }}>
-                Focus
+              <div>
+                <span style={{ color: 'var(--accent)' }}>Discipline:</span> Spatial Computation
               </div>
-              <div style={{ fontSize: '13px', marginTop: '4px', fontWeight: 600 }}>Architecture + Parametric</div>
             </div>
           </div>
         </div>
 
-        <div>
+        {/* CINEMATIC THREE.JS 3D VIEWPORT (Wide Stage) */}
+        <div style={{
+          position: 'relative',
+          width: '100%',
+          height: 'clamp(460px, 58vh, 660px)',
+          background: 'linear-gradient(180deg, rgba(14, 17, 21, 0.4) 0%, rgba(14, 17, 21, 0.95) 100%)',
+          border: '1px solid var(--line)',
+          overflow: 'hidden',
+          marginBottom: '26px'
+        }}>
+          {/* Three.js Canvas */}
           <AxonModel />
+
+          {/* Architectural Drafting Guidelines (Overlay) */}
+          <div style={{
+            position: 'absolute',
+            top: '18px',
+            left: '20px',
+            fontFamily: 'var(--mono)',
+            fontSize: '9px',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: 'var(--accent)',
+            pointerEvents: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', display: 'inline-block' }}></span>
+            <span>Study 01 // Tropical Modular Pavilion • Live 3D WebGL</span>
+          </div>
+
+          <div style={{
+            position: 'absolute',
+            top: '18px',
+            right: '20px',
+            fontFamily: 'var(--mono)',
+            fontSize: '9px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'var(--ink-soft)',
+            pointerEvents: 'none'
+          }}>
+            LAT -5.1477° // LON 119.4327° MAKASSAR
+          </div>
+
+          <div style={{
+            position: 'absolute',
+            bottom: '18px',
+            left: '20px',
+            fontFamily: 'var(--mono)',
+            fontSize: '10px',
+            letterSpacing: '0.08em',
+            color: 'var(--accent-soft)',
+            pointerEvents: 'none',
+            textTransform: 'uppercase'
+          }}>
+            Dusk Lighting • Charred Cedar Timber • Panoramic Glazing
+          </div>
+
+          <div style={{
+            position: 'absolute',
+            bottom: '18px',
+            right: '20px',
+            fontFamily: 'var(--mono)',
+            fontSize: '9px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'var(--ink-soft)',
+            pointerEvents: 'none',
+            padding: '4px 8px',
+            background: 'rgba(0,0,0,0.4)',
+            backdropFilter: 'blur(4px)',
+            border: '1px solid var(--line)'
+          }}>
+            Drag to Rotate 360° • Scroll Zoom
+          </div>
+        </div>
+
+        {/* Hero Action CTAs */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '16px',
+          paddingBottom: '20px'
+        }}>
+          <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
+            <a
+              href="#contact"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '12px 22px',
+                background: 'var(--accent)',
+                color: 'var(--white)',
+                fontFamily: 'var(--mono)',
+                fontSize: '11px',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                fontWeight: 600,
+                textDecoration: 'none',
+                transition: 'opacity 0.2s'
+              }}
+            >
+              <span>Mulai Konsultasi Tapak</span>
+              <span>→</span>
+            </a>
+            <a
+              href="#projects"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '12px 20px',
+                background: 'transparent',
+                color: 'var(--ink)',
+                border: '1px solid var(--line)',
+                fontFamily: 'var(--mono)',
+                fontSize: '11px',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                textDecoration: 'none',
+                transition: 'border-color 0.2s'
+              }}
+            >
+              <span>Telusuri Karya Terpilih</span>
+              <span>↓</span>
+            </a>
+          </div>
+
+          <div style={{
+            fontFamily: 'var(--mono)',
+            fontSize: '10px',
+            color: 'var(--ink-soft)',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase'
+          }}>
+            Integrated with Notion CRM & Supabase Cloud
+          </div>
         </div>
       </section>
 
@@ -215,9 +360,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* INTERACTIVE MODULAR CONFIGURATOR */}
-      <ModularConfigurator />
-
       {/* APPROACH SECTION */}
       <section id="approach" style={{
         display: 'grid',
@@ -264,15 +406,15 @@ export default function HomePage() {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
         gap: '40px',
-        alignItems: 'start',
-        marginTop: '30px'
+        alignItems: 'center',
+        margin: '0 0 100px'
       }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
             <img 
               src="/brand-logo-transparent.png" 
-              alt="GradiEnt Studio Logo" 
-              style={{ width: '40px', height: '40px', objectFit: 'contain' }}
+              alt="GradiEnt Logo" 
+              style={{ width: '32px', height: '32px', objectFit: 'contain' }}
             />
             <div>
               <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--accent)', fontWeight: 600 }}>
@@ -284,14 +426,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          <h2 style={{
-            fontFamily: 'var(--display)',
-            fontSize: 'clamp(46px, 6vw, 84px)',
-            fontWeight: 500,
-            lineHeight: 0.88,
-            letterSpacing: '-.05em'
-          }}>
-            Have a site<br />with <em style={{ color: 'var(--accent)', fontStyle: 'normal' }}>weather?</em>
+          <h2 style={{ fontFamily: 'var(--display)', fontSize: 'clamp(36px, 4.5vw, 60px)', fontWeight: 500, lineHeight: 0.95, letterSpacing: '-.04em' }}>
+            Let us build<br />with the land.
           </h2>
           <p style={{ fontSize: '14px', lineHeight: 1.6, color: 'var(--ink-soft)', maxWidth: '420px', marginTop: '20px' }}>
             Diskusikan rencana tapak, sayembara, atau eksplorasi arsitektur bersama GradiEnt Studio. Tinggalkan detail Anda di formulir untuk konsultasi langsung.
@@ -300,13 +436,15 @@ export default function HomePage() {
             marginTop: '30px',
             fontFamily: 'var(--mono)',
             fontSize: '10px',
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
             color: 'var(--accent)',
             display: 'flex',
             alignItems: 'center',
             gap: '8px'
           }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#2ea44f', display: 'inline-block', boxShadow: '0 0 8px #2ea44f' }}></span>
-            STUDIO TELEMETRY / VISITOR ANALYTICS: ACTIVE
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', display: 'inline-block' }}></span>
+            <span>Menerima Konsultasi Proyek Baru 2026</span>
           </div>
         </div>
 
@@ -352,8 +490,7 @@ export default function HomePage() {
                   color: 'var(--ink)',
                   fontFamily: 'var(--body)',
                   fontSize: '13px',
-                  outline: 'none',
-                  transition: 'border-color 0.2s ease'
+                  outline: 'none'
                 }}
               />
             </div>
@@ -376,8 +513,7 @@ export default function HomePage() {
                   color: 'var(--ink)',
                   fontFamily: 'var(--body)',
                   fontSize: '13px',
-                  outline: 'none',
-                  transition: 'border-color 0.2s ease'
+                  outline: 'none'
                 }}
               />
             </div>
@@ -487,7 +623,6 @@ export default function HomePage() {
           }}>
             <span>Email: <a href="mailto:heruardiansyah2one@gmail.com" style={{ textDecoration: 'underline', color: 'var(--accent)' }}>heruardiansyah2one@gmail.com</a></span>
             <span>WhatsApp: <a href="https://wa.me/6285143628550" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline', color: 'var(--accent)' }}>+62 851-4362-8550</a></span>
-            <span>Makassar, Indonesia</span>
           </div>
         </div>
       </section>

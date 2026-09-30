@@ -97,7 +97,6 @@ export default function Navbar() {
       </Link>
       <nav className="nav" aria-label="Primary navigation">
         <Link href="/#projects">Projects</Link>
-        <Link href="/#configurator">3D Configurator</Link>
         <Link href="/#approach">Approach</Link>
         <Link href="/#contact">Contact</Link>
         
