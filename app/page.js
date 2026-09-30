@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import AxonModel from '../components/AxonModel';
+import ModularConfigurator from '../components/ModularConfigurator';
 import { supabase } from '../lib/supabaseClient';
 
 export default function HomePage() {
@@ -213,6 +214,9 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* INTERACTIVE MODULAR CONFIGURATOR */}
+      <ModularConfigurator />
 
       {/* APPROACH SECTION */}
       <section id="approach" style={{
