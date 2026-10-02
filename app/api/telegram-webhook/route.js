@@ -45,7 +45,7 @@ async function callGemini(systemPrompt, userMessage) {
     throw new Error('GEMINI_API_KEY is not configured in environment variables.');
   }
 
-  const modelsToTry = ['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite', 'gemini-3.8-flash'];
+  const modelsToTry = ['gemini-flash-lite-latest', 'gemini-3.1-flash-lite-preview', 'gemini-3.5-flash-lite'];
   let lastError = null;
 
   for (const model of modelsToTry) {
@@ -182,24 +182,39 @@ Hub ini terhubung 24/7 di Cloud Vercel, jadi kamu bisa memanggil seluruh divisi 
     let targetAgent = 'ai';
     let cleanPrompt = text;
 
-    const lower = text.toLowerCase();
+    const chatTitle = (message.chat.title || '').toLowerCase();
+    const isReplyToBot = message.reply_to_message?.from?.is_bot && message.reply_to_message?.from?.username?.toLowerCase() === 'aisecondbrainpmbot';
+
+    let isAddressed = false;
+
     if (lower.startsWith('/luna') || lower.startsWith('@luna')) {
       targetAgent = 'luna';
       cleanPrompt = text.replace(/^(\/luna|@luna)\s*/i, '');
+      isAddressed = true;
     } else if (lower.startsWith('/mochi') || lower.startsWith('@mochi')) {
       targetAgent = 'mochi';
       cleanPrompt = text.replace(/^(\/mochi|@mochi)\s*/i, '');
+      isAddressed = true;
     } else if (lower.startsWith('/kaktus') || lower.startsWith('@kaktus')) {
       targetAgent = 'kaktus';
       cleanPrompt = text.replace(/^(\/kaktus|@kaktus)\s*/i, '');
+      isAddressed = true;
     } else if (lower.startsWith('/masamba') || lower.startsWith('@masamba')) {
       targetAgent = 'masamba';
       cleanPrompt = text.replace(/^(\/masamba|@masamba)\s*/i, '');
-    } else if (lower.startsWith('/ai') || lower.startsWith('@ai')) {
+      isAddressed = true;
+    } else if (lower.startsWith('/ai') || lower.startsWith('@ai') || lower.includes('@aisecondbrainpmbot') || /\bai\b/i.test(lower)) {
       targetAgent = 'ai';
-      cleanPrompt = text.replace(/^(\/ai|@ai)\s*/i, '');
-    } else if (isGroup) {
-      // In a group, if no command was used and bot wasn't tagged, ignore to avoid spamming
+      cleanPrompt = text.replace(/(@aisecondbrainpmbot|\/ai|@ai)/gi, '').trim();
+      isAddressed = true;
+    } else if (isGroup && (chatTitle.includes('gradient') || chatTitle.includes('secondbrain'))) {
+      targetAgent = 'ai';
+      isAddressed = true;
+    } else if (!isGroup) {
+      isAddressed = true;
+    }
+
+    if (isGroup && !isAddressed && !isReplyToBot) {
       return NextResponse.json({ ok: true });
     }
 

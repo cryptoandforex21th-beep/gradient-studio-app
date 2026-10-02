@@ -8,3 +8,6 @@ out
 
 .vercel
 .env*
+node_modules/
+.next/
+.env.local
