@@ -207,9 +207,6 @@ Hub ini terhubung 24/7 di Cloud Vercel, jadi kamu bisa memanggil seluruh divisi 
       targetAgent = 'ai';
       cleanPrompt = text.replace(/(@aisecondbrainpmbot|\/ai|@ai)/gi, '').trim();
       isAddressed = true;
-    } else if (isGroup && (chatTitle.includes('gradient') || chatTitle.includes('secondbrain'))) {
-      targetAgent = 'ai';
-      isAddressed = true;
     } else if (!isGroup) {
       isAddressed = true;
     }
