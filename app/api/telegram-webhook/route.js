@@ -45,38 +45,49 @@ async function callGemini(systemPrompt, userMessage) {
     throw new Error('GEMINI_API_KEY is not configured in environment variables.');
   }
 
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-  
-  const payload = {
-    contents: [
-      {
-        role: 'user',
-        parts: [{ text: userMessage }]
+  const modelsToTry = ['gemini-3.1-flash-lite', 'gemini-3.5-flash-lite', 'gemini-3.8-flash'];
+  let lastError = null;
+
+  for (const model of modelsToTry) {
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+    
+    const payload = {
+      contents: [
+        {
+          role: 'user',
+          parts: [{ text: userMessage }]
+        }
+      ],
+      systemInstruction: {
+        parts: [{ text: systemPrompt }]
+      },
+      generationConfig: {
+        temperature: 0.7,
+        maxOutputTokens: 2048,
       }
-    ],
-    systemInstruction: {
-      parts: [{ text: systemPrompt }]
-    },
-    generationConfig: {
-      temperature: 0.7,
-      maxOutputTokens: 2048,
+    };
+
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const candidate = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (candidate) return candidate;
+      } else {
+        const errText = await res.text();
+        lastError = new Error(`Gemini API Error (${res.status}): ${errText}`);
+      }
+    } catch (err) {
+      lastError = err;
     }
-  };
-
-  const res = await fetch(endpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-
-  if (!res.ok) {
-    const errText = await res.text();
-    throw new Error(`Gemini API Error (${res.status}): ${errText}`);
   }
 
-  const data = await res.json();
-  const candidate = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  return candidate || 'Maaf, tidak ada respons yang dihasilkan oleh model AI.';
+  throw lastError || new Error('Semua model Gemini sedang sibuk. Silakan coba sesaat lagi.');
 }
 
 // Function to send message back to Telegram
