@@ -1244,12 +1244,13 @@ export default function JarvisUltimateHUD() {
           </span>
           {[
             { label: 'Status Report', cmd: 'give me a system status report, jarvis' },
+            { label: '📱 Status HP', cmd: 'status hp' },
+            { label: '📱 Unlock HP', cmd: 'unlock my phone' },
+            { label: '📱 WA di HP', cmd: 'open whatsapp in my phone' },
+            { label: '📞 Call Sister', cmd: 'call sister' },
             { label: 'Buka Rhino', cmd: 'buka rhino' },
             { label: 'Buka Revit', cmd: 'buka revit' },
-            { label: 'Sync GDrive', cmd: 'sync drive' },
-            { label: '📱 Unlock HP', cmd: 'unlock my phone' },
-            { label: '📞 Call Sister', cmd: 'call sister' },
-            { label: '📱 WA di HP', cmd: 'open whatsapp in my phone' }
+            { label: 'Sync GDrive', cmd: 'sync drive' }
           ].map((rf) => (
             <button
               key={rf.label}

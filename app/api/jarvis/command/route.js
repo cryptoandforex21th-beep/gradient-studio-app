@@ -54,7 +54,32 @@ export async function POST(req) {
     const timestamp = new Date().toLocaleTimeString('id-ID', { timeZone: 'Asia/Makassar', hour12: false }) + ' WITA';
 
     // 0. Smartphone Automation Hooks (Wireless ADB Bridge)
-    if (q.includes('unlock') && (q.includes('phone') || q.includes('hp'))) {
+    if (q.includes('status hp') || q.includes('cek hp') || q.includes('phone status') || ((q.includes('baterai') || q.includes('battery')) && (q.includes('hp') || q.includes('phone')))) {
+      const pythonPath = 'C:\\Python314\\python.exe';
+      const scriptPath = 'D:\\SecondBrain\\00_system\\phone_jarvis.py';
+      try {
+        const action = (q.includes('baterai') || q.includes('battery')) && !q.includes('status') ? 'battery' : 'status';
+        const { stdout, stderr } = await execPromise(`"${pythonPath}" "${scriptPath}" ${action}`);
+        return NextResponse.json({
+          status: 'success',
+          type: 'phone_control',
+          cost: '$0.00 (Wireless ADB)',
+          text: stdout.trim() || stderr.trim(),
+          agent: 'JARVIS // PHONE_BRIDGE',
+          timestamp
+        });
+      } catch (err) {
+        return NextResponse.json({
+          status: 'error',
+          type: 'phone_control',
+          text: `Gagal membaca status HP: ${err.message}`,
+          agent: 'JARVIS // PHONE_BRIDGE',
+          timestamp
+        });
+      }
+    }
+
+    if ((q.includes('unlock') || q.includes('buka kunci')) && (q.includes('phone') || q.includes('hp'))) {
       const pythonPath = 'C:\\Python314\\python.exe';
       const scriptPath = 'D:\\SecondBrain\\00_system\\phone_jarvis.py';
       try {
