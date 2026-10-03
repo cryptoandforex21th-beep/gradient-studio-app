@@ -4,83 +4,630 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const graphData = {
-    nodes: [
-      // CORE / SYSTEM
-      { id: 'sb_core', label: 'SecondBrain Core', category: 'core', val: 24, status: 'ONLINE', desc: 'Sistem sentral manajemen memori, otomasi, dan kecerdasan personal Heru Ardiansyah.' },
-      { id: 'profile', label: 'Master Profile', category: 'core', val: 16, status: 'LOCKED', desc: 'Identitas, preferensi desain, ritme kerja, dan batasan personal Heru (PROFILE.md).' },
-      { id: 'omniroute', label: 'OmniRoute Gateway', category: 'core', val: 18, status: 'ONLINE', desc: 'Router API multi-provider lokal di port 20128 dengan auto-fallback dan token pooling.' },
-      { id: 'supabase_cloud', label: 'Supabase Cloud 24/7', category: 'core', val: 18, status: 'ONLINE', desc: 'Database relasional, auth, dan edge functions serverless untuk Bot Telegram Ai & Luna.' },
-      { id: 'desktop_cli', label: 'Desktop Action CLI', category: 'core', val: 14, status: 'READY', desc: 'Otomasi fisik Session 1: app_launcher.py (0.2s launch) & whatsapp_cli.py.' },
-
-      // DIVISI 01: AKADEMIK & SKRIPSI UNHAS
-      { id: 'prof_luna', label: 'Prof. LUNA', category: 'academic', val: 22, status: 'ACTIVE', desc: 'Dosen Pembimbing Killer Stanford-Unhas. Objektif, anti-sycophancy, pengawal rigoritas metodologi skripsi.' },
-      { id: 'kutu', label: 'Kutu (Validator)', category: 'academic', val: 14, status: 'ACTIVE', desc: 'Spesialis penyisir dan verifikator rujukan jurnal internasional Scopus Q1 & pasal resmi SNI.' },
-      { id: 'crayon', label: 'Crayon (Diagram)', category: 'academic', val: 12, status: 'STANDBY', desc: 'Perancang kurva distribusi lux dan diagram metodologi 600 DPI publikasi.' },
-      { id: 'skripsi_unhas', label: 'Skripsi Arsitektur Unhas', category: 'academic', val: 20, status: 'IN_PROGRESS', desc: 'Penelitian performa selubung dan pencahayaan alami ruang kuliah kampus Samata Unhas.' },
-      { id: 'solar_tube', label: 'Sistem Solar Tube', category: 'academic', val: 16, status: 'VERIFIED', desc: 'Penyalur daylight pasif tubular untuk mereduksi beban energi lampu artifisial.' },
-      { id: 'sni_03_6197', label: 'SNI 03-6197-2020', category: 'academic', val: 14, status: 'STANDARD', desc: 'Standar nasional konservasi energi pada sistem pencahayaan bangunan gedung (target 250 lux ruang kuliah).' },
-      { id: 'al_marwaee', label: 'Al-Marwaee & Carter', category: 'academic', val: 14, status: 'SCOPUS_Q1', desc: 'Rujukan utama transmisi cahaya tubular daylight guide pada sudut elevasi matahari tinggi.' },
-      { id: 'mayhoub', label: 'Mayhoub (2014)', category: 'academic', val: 12, status: 'SCOPUS_Q1', desc: 'Klasifikasi sistem pandu cahaya inovatif dan indeks efisiensi illuminansi bidang kerja.' },
-
-      // DIVISI 02: SOFTWARE & 3D STUDIO
-      { id: 'mochi', label: 'Mochi (Creative Dev)', category: 'studio', val: 22, status: 'ACTIVE', desc: 'Lead Web Architect & Creative Developer GradiEnt Studio. Ahli Next.js dan 3D WebGL.' },
-      { id: 'piksel', label: 'Piksel (UI/UX)', category: 'studio', val: 14, status: 'ACTIVE', desc: 'Perancang antarmuka taktil, layout responsif, dan interaktivitas Cult-UI.' },
-      { id: 'gradient_app', label: 'GradiEnt Studio Web', category: 'studio', val: 20, status: 'ONLINE', desc: 'Portal arsitektur resmi di https://gradientstudioapp.vercel.app.' },
-      { id: 'modular_cabin_3d', label: '3D Modular Cabin', category: 'studio', val: 16, status: 'RENDERED', desc: 'Pengalaman interaktif Awwwards-grade California Modulars di Three.js.' },
-      { id: 'notion_crm', label: 'Notion CMS & CRM', category: 'studio', val: 14, status: 'SYNCED', desc: 'Integrasi headless CMS untuk proyek terpilih dan leads konsultasi klien.' },
-
-      // DIVISI 03: BIM & REKAYASA KONSTRUKSI
-      { id: 'kaktus', label: 'Kaktus (BIM Lead)', category: 'bim', val: 22, status: 'ACTIVE', desc: 'Koordinator BIM & Konstruksi. Mengawasi pemodelan Revit 2027, Dynamo, dan standar ISO 19650.' },
-      { id: 'tabrak', label: 'Tabrak (Clash Detective)', category: 'bim', val: 14, status: 'STANDBY', desc: 'Penyisir potensi benturan geometri pipa MEP vs balok/kolom struktur (Zero Clash Tolerance).' },
-      { id: 'cuan', label: 'Cuan (QTO & RAB)', category: 'bim', val: 14, status: 'STANDBY', desc: 'Ekstraktor volume material akurat dan kalkulator estimasi biaya standar AHSP Makassar.' },
-      { id: 'menara_dynamo', label: 'Menara Dynamo BIM', category: 'bim', val: 18, status: 'PARAMETRIC', desc: 'Studi komputasi fasad parametrik dan optimasi radiasi matahari di Autodesk Revit.' },
-
-      // DIVISI 04: TRADING & KUANTITATIF
-      { id: 'mas_amba', label: 'MasAmba (Quant Lead)', category: 'trading', val: 22, status: 'ACTIVE', desc: 'Koordinator Analisis Kuantitatif & Likuiditas Pasar Crypto, Forex, dan Emas.' },
-      { id: 'lilin', label: 'Lilin (Chartist)', category: 'trading', val: 14, status: 'ACTIVE', desc: 'Pembaca struktur candle SMC, Order Block (OB), dan Fair Value Gap (FVG).' },
-      { id: 'rem', label: 'Rem (Risk Officer)', category: 'trading', val: 14, status: 'ARMED', desc: 'Pengawal batas toleransi risiko mutlak 1% - 2% modal per posisi.' },
-      { id: 'crypto_forex', label: 'Crypto & Forex Engine', category: 'trading', val: 18, status: 'SCANNING', desc: 'Algoritma screening likuiditas pasar dan peringatan anomali orderbook.' }
-    ],
-    links: [
-      // Core Links
-      { source: 'sb_core', target: 'profile', strength: 1 },
-      { source: 'sb_core', target: 'omniroute', strength: 0.8 },
-      { source: 'sb_core', target: 'supabase_cloud', strength: 0.9 },
-      { source: 'sb_core', target: 'desktop_cli', strength: 0.7 },
-      { source: 'sb_core', target: 'prof_luna', strength: 1 },
-      { source: 'sb_core', target: 'mochi', strength: 1 },
-      { source: 'sb_core', target: 'kaktus', strength: 1 },
-      { source: 'sb_core', target: 'mas_amba', strength: 1 },
-
-      // Divisi 01
-      { source: 'prof_luna', target: 'kutu', strength: 0.9 },
-      { source: 'prof_luna', target: 'crayon', strength: 0.7 },
-      { source: 'prof_luna', target: 'skripsi_unhas', strength: 1 },
-      { source: 'skripsi_unhas', target: 'solar_tube', strength: 0.9 },
-      { source: 'skripsi_unhas', target: 'sni_03_6197', strength: 0.8 },
-      { source: 'kutu', target: 'al_marwaee', strength: 0.85 },
-      { source: 'kutu', target: 'mayhoub', strength: 0.8 },
-      { source: 'solar_tube', target: 'al_marwaee', strength: 0.75 },
-
-      // Divisi 02
-      { source: 'mochi', target: 'piksel', strength: 0.9 },
-      { source: 'mochi', target: 'gradient_app', strength: 1 },
-      { source: 'gradient_app', target: 'modular_cabin_3d', strength: 0.9 },
-      { source: 'gradient_app', target: 'notion_crm', strength: 0.8 },
-      { source: 'gradient_app', target: 'supabase_cloud', strength: 0.9 },
-
-      // Divisi 03
-      { source: 'kaktus', target: 'tabrak', strength: 0.85 },
-      { source: 'kaktus', target: 'cuan', strength: 0.85 },
-      { source: 'kaktus', target: 'menara_dynamo', strength: 1 },
-      { source: 'menara_dynamo', target: 'skripsi_unhas', strength: 0.6 }, // cross link BIM & Skripsi!
-
-      // Divisi 04
-      { source: 'mas_amba', target: 'lilin', strength: 0.9 },
-      { source: 'mas_amba', target: 'rem', strength: 0.95 },
-      { source: 'mas_amba', target: 'crypto_forex', strength: 1 }
-    ]
-  };
-
+  "nodes": [
+    {
+      "id": "sb_core",
+      "label": "SecondBrain Core",
+      "category": "core",
+      "val": 24,
+      "status": "ONLINE",
+      "desc": "Sistem sentral manajemen memori, otomasi, dan kecerdasan personal Heru Ardiansyah."
+    },
+    {
+      "id": "profile",
+      "label": "Master Profile",
+      "category": "core",
+      "val": 16,
+      "status": "LOCKED",
+      "desc": "Identitas, preferensi desain, ritme kerja, dan batasan personal Heru (PROFILE.md)."
+    },
+    {
+      "id": "prof_luna",
+      "label": "Prof. LUNA",
+      "category": "academic",
+      "val": 22,
+      "status": "ACTIVE",
+      "desc": "Dosen Pembimbing Killer Stanford-Unhas. Objektif, anti-sycophancy, pengawal rigoritas metodologi skripsi."
+    },
+    {
+      "id": "mochi",
+      "label": "Mochi (Creative Dev)",
+      "category": "studio",
+      "val": 22,
+      "status": "ACTIVE",
+      "desc": "Lead Web Architect & Creative Developer GradiEnt Studio. Ahli Next.js dan 3D WebGL."
+    },
+    {
+      "id": "kaktus",
+      "label": "Kaktus (BIM Lead)",
+      "category": "bim",
+      "val": 22,
+      "status": "ACTIVE",
+      "desc": "Koordinator BIM & Konstruksi. Mengawasi pemodelan Revit 2027, Dynamo, dan standar ISO 19650."
+    },
+    {
+      "id": "mas_amba",
+      "label": "MasAmba (Quant Lead)",
+      "category": "trading",
+      "val": 22,
+      "status": "ACTIVE",
+      "desc": "Koordinator Analisis Kuantitatif & Likuiditas Pasar Crypto, Forex, dan Emas."
+    },
+    {
+      "id": "readme",
+      "label": "Readme",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\archives\\README.md"
+    },
+    {
+      "id": "skill",
+      "label": "Skill",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\archives\\desktop_bridge_legacy\\SKILL.md"
+    },
+    {
+      "id": "sample_quick_note",
+      "label": "Sample Quick Note",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\inbox\\sample_quick_note.md"
+    },
+    {
+      "id": "project_cloud_secondbrain",
+      "label": "Project Cloud Secondbrain",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\project_cloud_secondbrain.md"
+    },
+    {
+      "id": "project_kaktus_towers_ml",
+      "label": "Project Kaktus Towers Ml",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\project_kaktus_towers_ml.md"
+    },
+    {
+      "id": "project_samata_pavilion_bim",
+      "label": "Project Samata Pavilion Bim",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\project_samata_pavilion_bim.md"
+    },
+    {
+      "id": "bab_1_pendahuluan",
+      "label": "Bab 1 Pendahuluan",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\skripsi_facade_collector_unhas\\bab_1_pendahuluan.md"
+    },
+    {
+      "id": "bab_2_metode_perancangan",
+      "label": "Bab 2 Metode Perancangan",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\skripsi_facade_collector_unhas\\bab_2_metode_perancangan.md"
+    },
+    {
+      "id": "bab_3_analisis_data",
+      "label": "Bab 3 Analisis Data",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\skripsi_facade_collector_unhas\\bab_3_analisis_data.md"
+    },
+    {
+      "id": "bab_4_konsep_perancangan",
+      "label": "Bab 4 Konsep Perancangan",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\skripsi_facade_collector_unhas\\bab_4_konsep_perancangan.md"
+    },
+    {
+      "id": "bab_5_penutup",
+      "label": "Bab 5 Penutup",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\skripsi_facade_collector_unhas\\bab_5_penutup.md"
+    },
+    {
+      "id": "daftar_pustaka",
+      "label": "Daftar Pustaka",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\skripsi_facade_collector_unhas\\daftar_pustaka.md"
+    },
+    {
+      "id": "draft_skripsi_lengkap",
+      "label": "Draft Skripsi Lengkap",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\skripsi_facade_collector_unhas\\draft_skripsi_lengkap.md"
+    },
+    {
+      "id": "00_brain_state_prof_luna",
+      "label": "00 Brain State Prof Luna",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\skripsi_facade_collector_unhas\\NOTEBOOKLM_SOURCES\\00_BRAIN_STATE_PROF_LUNA.md"
+    },
+    {
+      "id": "00_panduan_riset_akademik_prof_luna",
+      "label": "00 Panduan Riset Akademik Pr",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\skripsi_facade_collector_unhas\\NOTEBOOKLM_SOURCES\\00_PANDUAN_RISET_AKADEMIK_PROF_LUNA.md"
+    },
+    {
+      "id": "02_draft_skripsi_facade_collector_modular",
+      "label": "02 Draft Skripsi Facade Coll",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\skripsi_facade_collector_unhas\\NOTEBOOKLM_SOURCES\\02_DRAFT_SKRIPSI_FACADE_COLLECTOR_MODULAR.md"
+    },
+    {
+      "id": "aec_ai_master_toolkit",
+      "label": "Aec Ai Master Toolkit",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\AEC_AI_MASTER_TOOLKIT.md"
+    },
+    {
+      "id": "ai_projects_registry",
+      "label": "Ai Projects Registry",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\ai_projects_registry.md"
+    },
+    {
+      "id": "archaiflow_tools_catalog",
+      "label": "Archaiflow Tools Catalog",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\archaiflow_tools_catalog.md"
+    },
+    {
+      "id": "architecture_ai_starter_kit",
+      "label": "Architecture Ai Starter Kit",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\architecture_ai_starter_kit.md"
+    },
+    {
+      "id": "kurikulum_kuliah_ai_drizzle",
+      "label": "Kurikulum Kuliah Ai Drizzle",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\kurikulum_kuliah_ai_drizzle.md"
+    },
+    {
+      "id": "metaprinsip_evolusi_otonom_2x_4x",
+      "label": "Metaprinsip Evolusi Otonom 2",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\metaprinsip_evolusi_otonom_2x_4x.md"
+    },
+    {
+      "id": "panduan_arena_skill_token_shield",
+      "label": "Panduan Arena Skill Token Sh",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_arena_skill_token_shield.md"
+    },
+    {
+      "id": "panduan_arsitektur_agent_world_class",
+      "label": "Panduan Arsitektur Agent Wor",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_arsitektur_agent_world_class.md"
+    },
+    {
+      "id": "panduan_arsitektur_layer5_management_plane",
+      "label": "Panduan Arsitektur Layer5 Ma",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_arsitektur_layer5_management_plane.md"
+    },
+    {
+      "id": "panduan_integrasi_rhino_revit_mcp",
+      "label": "Panduan Integrasi Rhino Revi",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_integrasi_rhino_revit_mcp.md"
+    },
+    {
+      "id": "panduan_otomasi_desktop_gui",
+      "label": "Panduan Otomasi Desktop Gui",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_otomasi_desktop_gui.md"
+    },
+    {
+      "id": "panduan_pyrevit_threading_external_event",
+      "label": "Panduan Pyrevit Threading Ex",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_pyrevit_threading_external_event.md"
+    },
+    {
+      "id": "panduan_riset_akademik_prof_luna",
+      "label": "Panduan Riset Akademik Prof ",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_riset_akademik_prof_luna.md"
+    },
+    {
+      "id": "panduan_setup_revit_mcp",
+      "label": "Panduan Setup Revit Mcp",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_setup_revit_mcp.md"
+    },
+    {
+      "id": "panduan_setup_rhino_mcp",
+      "label": "Panduan Setup Rhino Mcp",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_setup_rhino_mcp.md"
+    },
+    {
+      "id": "referensi_ui_cult_design_engineers",
+      "label": "Referensi Ui Cult Design Eng",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\referensi_ui_cult_design_engineers.md"
+    },
+    {
+      "id": "revit_guide",
+      "label": "Revit Guide",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\revit_guide.md"
+    },
+    {
+      "id": "rhino_guide",
+      "label": "Rhino Guide",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\rhino_guide.md"
+    }
+  ],
+  "links": [
+    {
+      "source": "sb_core",
+      "target": "profile",
+      "strength": 1.0
+    },
+    {
+      "source": "sb_core",
+      "target": "prof_luna",
+      "strength": 1.0
+    },
+    {
+      "source": "sb_core",
+      "target": "mochi",
+      "strength": 1.0
+    },
+    {
+      "source": "sb_core",
+      "target": "kaktus",
+      "strength": 1.0
+    },
+    {
+      "source": "sb_core",
+      "target": "mas_amba",
+      "strength": 1.0
+    },
+    {
+      "source": "prof_luna",
+      "target": "readme",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "skill",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "readme",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "sample_quick_note",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "project_cloud_secondbrain",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "project_kaktus_towers_ml",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "project_samata_pavilion_bim",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "readme",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "bab_1_pendahuluan",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "bab_2_metode_perancangan",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "bab_3_analisis_data",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "bab_4_konsep_perancangan",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "bab_5_penutup",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "daftar_pustaka",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "draft_skripsi_lengkap",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "00_brain_state_prof_luna",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "00_panduan_riset_akademik_prof_luna",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "02_draft_skripsi_facade_collector_modular",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "bab_1_pendahuluan",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "bab_2_metode_perancangan",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "bab_3_analisis_data",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "bab_4_konsep_perancangan",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "bab_5_penutup",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "daftar_pustaka",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "readme",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "aec_ai_master_toolkit",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "ai_projects_registry",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "archaiflow_tools_catalog",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "architecture_ai_starter_kit",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "kurikulum_kuliah_ai_drizzle",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "metaprinsip_evolusi_otonom_2x_4x",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "panduan_arena_skill_token_shield",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "panduan_arsitektur_agent_world_class",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "panduan_arsitektur_layer5_management_plane",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "panduan_integrasi_rhino_revit_mcp",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "panduan_otomasi_desktop_gui",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "panduan_pyrevit_threading_external_event",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "panduan_riset_akademik_prof_luna",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "panduan_setup_revit_mcp",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "panduan_setup_rhino_mcp",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "readme",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "referensi_ui_cult_design_engineers",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "revit_guide",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "rhino_guide",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "sakana_v2_academic_reviewer_blueprint",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "changelog",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "known_limitations",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "manifest",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "readme",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "skill",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "test_cases",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "chinese_text_ai_risk",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "detection_principles",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "qualitative_authorship_restoration",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "rewrite_methods",
+      "strength": 0.7
+    }
+  ]
+};
   return NextResponse.json(graphData);
 }
