@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
 import { exec } from 'child_process';
+import util from 'util';
 import fs from 'fs';
 import path from 'path';
+
+const execPromise = util.promisify(exec);
 
 export const dynamic = 'force-dynamic';
 
@@ -54,45 +57,75 @@ export async function POST(req) {
     if (q.includes('unlock') && (q.includes('phone') || q.includes('hp'))) {
       const pythonPath = 'C:\\Python314\\python.exe';
       const scriptPath = 'D:\\SecondBrain\\00_system\\phone_jarvis.py';
-      exec(`"${pythonPath}" "${scriptPath}" unlock`);
-      return NextResponse.json({
-        status: 'success',
-        type: 'phone_control',
-        cost: '$0.00 (Wireless ADB)',
-        text: 'Layar smartphone telah dibuka kuncinya via Wireless ADB, sir.',
-        agent: 'JARVIS // PHONE_BRIDGE',
-        timestamp
-      });
+      try {
+        const { stdout, stderr } = await execPromise(`"${pythonPath}" "${scriptPath}" unlock`);
+        return NextResponse.json({
+          status: 'success',
+          type: 'phone_control',
+          cost: '$0.00 (Wireless ADB)',
+          text: stdout.trim() || stderr.trim(),
+          agent: 'JARVIS // PHONE_BRIDGE',
+          timestamp
+        });
+      } catch (err) {
+        return NextResponse.json({
+          status: 'error',
+          type: 'phone_control',
+          text: `Koneksi HP belum aktif: ${err.message}`,
+          agent: 'JARVIS // PHONE_BRIDGE',
+          timestamp
+        });
+      }
     }
 
     if (q.startsWith('call ') || q.startsWith('telepon ') || q.startsWith('hubungi ')) {
       const target = command.replace(/^(call|telepon|hubungi)\s+/i, '').replace(/in my phone|di hp/gi, '').trim();
       const pythonPath = 'C:\\Python314\\python.exe';
       const scriptPath = 'D:\\SecondBrain\\00_system\\phone_jarvis.py';
-      exec(`"${pythonPath}" "${scriptPath}" call "${target}"`);
-      return NextResponse.json({
-        status: 'success',
-        type: 'phone_control',
-        cost: '$0.00 (Wireless ADB)',
-        text: `Menghubungi ${target} langsung dari kartu SIM smartphone Anda sekarang, sir.`,
-        agent: 'JARVIS // PHONE_BRIDGE',
-        timestamp
-      });
+      try {
+        const { stdout, stderr } = await execPromise(`"${pythonPath}" "${scriptPath}" call "${target}"`);
+        return NextResponse.json({
+          status: 'success',
+          type: 'phone_control',
+          cost: '$0.00 (Wireless ADB)',
+          text: stdout.trim() || stderr.trim(),
+          agent: 'JARVIS // PHONE_BRIDGE',
+          timestamp
+        });
+      } catch (err) {
+        return NextResponse.json({
+          status: 'error',
+          type: 'phone_control',
+          text: `Gagal memanggil kontak: ${err.message}`,
+          agent: 'JARVIS // PHONE_BRIDGE',
+          timestamp
+        });
+      }
     }
 
     if ((q.includes('in my phone') || q.includes('di hp')) && (q.startsWith('buka ') || q.startsWith('open '))) {
       const appName = command.replace(/^(buka|open)\s+/i, '').replace(/in my phone|di hp/gi, '').trim();
       const pythonPath = 'C:\\Python314\\python.exe';
       const scriptPath = 'D:\\SecondBrain\\00_system\\phone_jarvis.py';
-      exec(`"${pythonPath}" "${scriptPath}" app "${appName}"`);
-      return NextResponse.json({
-        status: 'success',
-        type: 'phone_control',
-        cost: '$0.00 (Wireless ADB)',
-        text: `Aplikasi ${appName} telah dibuka di smartphone, sir.`,
-        agent: 'JARVIS // PHONE_BRIDGE',
-        timestamp
-      });
+      try {
+        const { stdout, stderr } = await execPromise(`"${pythonPath}" "${scriptPath}" app "${appName}"`);
+        return NextResponse.json({
+          status: 'success',
+          type: 'phone_control',
+          cost: '$0.00 (Wireless ADB)',
+          text: stdout.trim() || stderr.trim(),
+          agent: 'JARVIS // PHONE_BRIDGE',
+          timestamp
+        });
+      } catch (err) {
+        return NextResponse.json({
+          status: 'error',
+          type: 'phone_control',
+          text: `Gagal membuka aplikasi di HP: ${err.message}`,
+          agent: 'JARVIS // PHONE_BRIDGE',
+          timestamp
+        });
+      }
     }
 
     // 1. Desktop Reflex Launchers (Sub-second execution, $0.00 cost)
