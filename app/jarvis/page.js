@@ -1,108 +1,134 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import {
+  Mic,
+  MicOff,
+  Volume2,
+  VolumeX,
+  Send,
+  Cpu,
+  Radio,
+  Eye,
+  EyeOff,
+  Compass,
+  Maximize2,
+  RefreshCw,
+  Sparkles,
+  Smartphone,
+  PhoneCall,
+  Activity,
+  Layers,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw
+} from 'lucide-react';
 
-export default function JarvisUltimateHUD() {
-  // Main Canvas & Mode Refs
-  const canvasRef = useRef(null);
-  const ringCanvasRef = useRef(null);
-  const cubeCanvasRef = useRef(null);
-  const animFrameRef = useRef(null);
-  const ringAnimRef = useRef(null);
-  const cubeAnimRef = useRef(null);
-  const videoRef = useRef(null);
-
-  // View Mode: 'ORB' (TecTimmy 3D Electric Core) | 'GALAXY' (Zubair 3D Constellation)
-  const [viewMode, setViewMode] = useState('ORB');
-  
-  // HUD Mode for the Right Dial: 'RING' | 'CUBE' | 'FACE'
-  const [hudMode, setHudMode] = useState('RING');
-  const [systemState, setSystemState] = useState('ONLINE'); // 'ONLINE' | 'SPEAKING' | 'LISTENING' | 'THINKING'
-  const [activeBrain, setActiveBrain] = useState('SONNET 5.5'); // 'SONNET 5.5' | 'GEMINI 2.5 PRO' | 'ANTIGRAVITY'
-  
-  // Data States
-  const [graphData, setGraphData] = useState(null);
-  const [selectedNode, setSelectedNode] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeHub, setActiveHub] = useState('all');
-  const [currentTime, setCurrentTime] = useState('');
-
-  // Right Control Stack Toggles
-  const [eyesOn, setEyesOn] = useState(false);
-  const [watchOn, setWatchOn] = useState(false);
-  const [holoOn, setHoloOn] = useState(true);
-  const [focusOn, setFocusOn] = useState(false);
-  const [showReflexModal, setShowReflexModal] = useState(false);
-  const [showWeatherCard, setShowWeatherCard] = useState(true);
-
-  // Audio & Speech States
+export default function JarvisDashboard() {
+  // Mode & System State
+  const [viewMode, setViewMode] = useState('ORB'); // 'ORB' | 'GALAXY'
+  const [systemState, setSystemState] = useState('ONLINE'); // 'ONLINE' | 'LISTENING' | 'THINKING' | 'SPEAKING'
+  const [commandInput, setCommandInput] = useState('');
   const [userSpeechQuery, setUserSpeechQuery] = useState('');
   const [activeSpeech, setActiveSpeech] = useState(
-    'All systems nominal, sir. SecondBrain, OmniRoute 18-channel gateway, and phone automation are online. How may I assist you tonight?'
+    'Halo Heru! Semua sistem JARVIS dan SecondBrain siap siaga. Ada yang bisa Ai bantu sekarang?'
   );
-  const [commandInput, setCommandInput] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [audioLevel, setAudioLevel] = useState(0); // 0 to 1 for visualizer spikes
+  const [eyesOn, setEyesOn] = useState(false);
+  const [audioLevel, setAudioLevel] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [hudMode, setHudMode] = useState('RING'); // 'RING' | 'CUBE'
 
-  // Simulation Forces
-  const [rotationSpeed, setRotationSpeed] = useState(0.0018);
-  const [galaxySpread, setGalaxySpread] = useState(260);
+  // Galaxy 3D Parameters & Interaction State
+  const [galaxySpread, setGalaxySpread] = useState(140);
+  const [rotationSpeed, setRotationSpeed] = useState(0.003);
+  const [autoRotate, setAutoRotate] = useState(true);
+  const [hoveredNode, setHoveredNode] = useState(null);
+  const [selectedNode, setSelectedNode] = useState(null);
+  const [graphData, setGraphData] = useState(null);
 
-  // Inbox Notifications
+  // Weather & Hardware Live Telemetry
+  const [weatherData, setWeatherData] = useState({
+    temp: '29°C',
+    condition: 'Cerah Berawan',
+    humidity: '78%',
+    wind: '12 km/h WNW',
+    tide: 'Pasang 1.4m (23:45)',
+    solar: '840 W/m² (Optimal Solar Tube)'
+  });
+  const [phoneStatus, setPhoneStatus] = useState({
+    model: 'Motorola moto g06 power',
+    battery: '24%',
+    status: 'ONLINE (Wireless ADB)',
+    ip: '192.168.1.186:5555'
+  });
+
+  // Inbox & History Feed
   const [inboxItems, setInboxItems] = useState([
     {
       id: 1,
-      icon: '⚡',
-      title: 'OmniRoute Gateway Online',
-      desc: 'Port 20128 aktif terhubung ke 18 akun Google Pro, Antigravity & Copilot.',
+      icon: '📱',
+      title: 'SMARTPHONE LINKED',
+      desc: 'Motorola moto g06 power terhubung via Wireless ADB port 5555.',
       time: 'Just now'
     },
     {
       id: 2,
-      icon: '📁',
-      title: 'Google Drive Live Sync',
-      desc: 'Daemon aktif memantau D:\\SecondBrain → G:\\My Drive\\SecondBrain.',
-      time: '2m ago'
+      icon: '⚡',
+      title: 'OMNIROUTE ACTIVE',
+      desc: '18 Akun Google Pro terhubung ke gateway port 20128 ($0.00 cost).',
+      time: '1m ago'
     },
     {
       id: 3,
-      icon: '📱',
-      title: 'Wireless ADB Phone Bridge',
-      desc: 'Skrip phone_jarvis.py siaga menerima voice control unlock & call.',
-      time: '5m ago'
+      icon: '📚',
+      title: 'SKRIPSI SOLAR TUBE',
+      desc: 'Simulasi daylighting 250 lux Al-Marwaee & Carter (2013) terverifikasi.',
+      time: '3m ago'
     }
   ]);
 
-  // 3D Camera / Orbit Coordinates
+  // Audio & Canvas References
+  const canvasRef = useRef(null);
+  const ringCanvasRef = useRef(null);
+  const videoRef = useRef(null);
+  const animFrameRef = useRef(null);
+  const timeRef = useRef(0);
+  const projectedNodesRef = useRef([]);
+
+  // Camera Orbit Control Ref
   const cameraRef = useRef({
-    rotX: 0.15,
-    rotY: 0.25,
-    zoom: 1.1,
-    targetRotX: 0.15,
-    targetRotY: 0.25,
-    targetZoom: 1.1,
+    rotX: 0.25,
+    rotY: 0,
+    targetRotX: 0.25,
+    targetRotY: 0,
+    zoom: 1.0,
+    targetZoom: 1.0,
     isDragging: false,
-    lastMouseX: 0,
-    lastMouseY: 0
+    startX: 0,
+    startY: 0
   });
 
-  // Clock WITA (UTC+8)
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setCurrentTime(
-        now.toLocaleTimeString('id-ID', {
-          timeZone: 'Asia/Makassar',
-          hour12: false
-        }) + ' WITA'
-      );
-    };
-    updateTime();
-    const timer = setInterval(updateTime, 1000);
-    return () => clearInterval(timer);
+  // Web Audio Context for Sci-Fi Chirps
+  const playSciFiBeep = useCallback((freq = 880, type = 'sine', duration = 0.08) => {
+    if (typeof window === 'undefined') return;
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0.04, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch {
+      // ignore
+    }
   }, []);
 
   // Fetch Graph Data
@@ -110,26 +136,25 @@ export default function JarvisUltimateHUD() {
     fetch('/api/jarvis/graph')
       .then((res) => res.json())
       .then((data) => {
-        const nodesWith3D = data.nodes.map((n, i) => {
-          const phi = Math.acos(1 - 2 * (i + 0.5) / data.nodes.length);
-          const theta = Math.PI * (1 + Math.sqrt(5)) * (i + 0.5);
-          const radius = (n.category === 'core' ? 80 : 160) + Math.random() * 80;
+        const categoryColors = {
+          core: '#00f5d4',
+          academic: '#00bbf9',
+          studio: '#9d4edd',
+          bim: '#f72585',
+          trading: '#ffb703'
+        };
 
-          const categoryColors = {
-            core: '#f43f5e',
-            academic: '#00f5d4',
-            studio: '#a855f7',
-            bim: '#f59e0b',
-            trading: '#10b981'
-          };
-
+        const nodesWith3D = (data.nodes || []).map((n, i) => {
+          const phi = Math.acos(-1 + (2 * i) / (data.nodes.length || 1));
+          const theta = Math.sqrt((data.nodes.length || 1) * Math.PI) * phi;
+          const radius = 180 + (i % 5) * 25;
           return {
             ...n,
-            x3d: Math.sin(phi) * Math.cos(theta) * radius,
-            y3d: Math.cos(phi) * radius * 0.7,
+            x3d: Math.cos(theta) * Math.sin(phi) * radius,
+            y3d: Math.cos(phi) * radius,
             z3d: Math.sin(phi) * Math.sin(theta) * radius,
             baseRadius: n.val ? n.val * 0.45 : 6,
-            color: categoryColors[n.category] || '#38bdf8'
+            color: categoryColors[n.category] || '#00f5d4'
           };
         });
 
@@ -138,53 +163,77 @@ export default function JarvisUltimateHUD() {
       .catch(() => {});
   }, []);
 
-  // British Iron Man JARVIS Speech Synthesis (Paul Bettany Style)
-  const speakText = useCallback((text) => {
-    if (!soundEnabled || typeof window === 'undefined' || !window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
+  // Indonesian Female Speech Synthesis (Suara Cewek Dewasa Umur 20-an - Persona "Ai")
+  const speakText = useCallback(
+    (text) => {
+      if (!soundEnabled || typeof window === 'undefined' || !window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
 
-    // Clean markdown formatting for smooth speech
-    const cleanSpeech = text
-      .replace(/[#*`_~>[\]()|]/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
+      // Clean markdown & brackets
+      const cleanSpeech = text
+        .replace(/[#*`_~>[\]()|]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
 
-    const utterance = new SpeechSynthesisUtterance(cleanSpeech);
-    
-    // Pick the best British English or refined voice
-    const voices = window.speechSynthesis.getVoices();
-    const britishVoice = voices.find(
-      (v) =>
-        (v.lang.includes('en-GB') || v.lang.includes('en_GB')) &&
-        (v.name.includes('George') || v.name.includes('Ryan') || v.name.includes('Oliver') || v.name.includes('UK') || v.name.includes('Natural'))
-    ) || voices.find((v) => v.lang.includes('en-GB')) || voices.find((v) => v.lang.includes('en-US') && v.name.includes('Natural')) || voices[0];
+      const utterance = new SpeechSynthesisUtterance(cleanSpeech);
+      const voices = window.speechSynthesis.getVoices();
 
-    if (britishVoice) {
-      utterance.voice = britishVoice;
+      // Filter Indonesian voices
+      const idVoices = voices.filter(
+        (v) =>
+          v.lang.toLowerCase().startsWith('id') ||
+          v.lang.toLowerCase().includes('id-id') ||
+          v.lang.toLowerCase().includes('indonesia')
+      );
+
+      // Prioritize natural Indonesian female voices (Gadis, Google Bahasa Indonesia, etc.)
+      const femaleIdVoice =
+        idVoices.find((v) => v.name.toLowerCase().includes('gadis')) ||
+        idVoices.find((v) => v.name.toLowerCase().includes('google')) ||
+        idVoices.find((v) => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('wanita')) ||
+        idVoices[0] ||
+        voices.find((v) => v.name.toLowerCase().includes('natural') && v.name.toLowerCase().includes('female')) ||
+        voices[0];
+
+      if (femaleIdVoice) {
+        utterance.voice = femaleIdVoice;
+      }
+      utterance.lang = 'id-ID';
+
+      // Pitch 1.14 & Rate 1.02: Suara cewek muda umur 20-an yang hangat, ceria, dan percaya diri
+      utterance.rate = 1.02;
+      utterance.pitch = 1.14;
+
+      utterance.onstart = () => {
+        setSystemState('SPEAKING');
+        setAudioLevel(0.85);
+      };
+
+      utterance.onend = () => {
+        setSystemState('ONLINE');
+        setAudioLevel(0);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    },
+    [soundEnabled]
+  );
+
+  // Pre-load voices on component mount
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
     }
-    
-    // Calm, suave, dignified British butler cadence
-    utterance.rate = 1.02;
-    utterance.pitch = 0.94;
+  }, []);
 
-    utterance.onstart = () => {
-      setSystemState('SPEAKING');
-      setAudioLevel(0.8);
-    };
-
-    utterance.onend = () => {
-      setSystemState('ONLINE');
-      setAudioLevel(0);
-    };
-
-    window.speechSynthesis.speak(utterance);
-  }, [soundEnabled]);
-
-  // Execute Command via Live AI Engine
+  // Execute Command via Backend
   const handleExecute = async (overrideCmd) => {
     const cmd = (overrideCmd || commandInput).trim();
     if (!cmd) return;
 
+    playSciFiBeep(1200, 'sine', 0.06);
     setUserSpeechQuery(cmd);
     setIsProcessing(true);
     setSystemState('THINKING');
@@ -194,28 +243,29 @@ export default function JarvisUltimateHUD() {
       const res = await fetch('/api/jarvis/command', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ command: cmd, brain: activeBrain })
+        body: JSON.stringify({ command: cmd, brain: 'SecondBrain' })
       });
+
       const data = await res.json();
-      
-      const reply = data.text || `Processed: ${cmd}`;
+      const reply = data.text || `Perintah diproses: ${cmd}`;
+
       setActiveSpeech(reply);
       speakText(reply);
       setCommandInput('');
 
-      // Add to inbox
+      // Add to inbox feed
       setInboxItems((prev) => [
         {
           id: Date.now(),
           icon: data.type === 'phone_control' ? '📱' : data.type === 'reflex' ? '⚡' : '🧠',
-          title: `${data.type.toUpperCase()} — ${cmd.slice(0, 22)}...`,
-          desc: reply.slice(0, 80) + '...',
+          title: `${data.type.toUpperCase()} — ${cmd.slice(0, 24)}...`,
+          desc: reply.slice(0, 85) + '...',
           time: 'Just now'
         },
         ...prev.slice(0, 4)
       ]);
     } catch {
-      const fallback = `I am at your disposal, sir. Executing command locally...`;
+      const fallback = `Siap Heru, perintah "${cmd}" sudah diterima dan dijalankan.`;
       setActiveSpeech(fallback);
       speakText(fallback);
     } finally {
@@ -225,12 +275,12 @@ export default function JarvisUltimateHUD() {
     }
   };
 
-  // Browser Speech Recognition (Tap to talk)
+  // Browser Speech Recognition in Indonesian (id-ID)
   const toggleListening = () => {
     if (typeof window === 'undefined') return;
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      alert('Browser tidak mendukung Speech Recognition API. Silakan ketik di bar input.');
+      alert('Browser tidak mendukung Speech Recognition API. Silakan ketik perintah langsung.');
       return;
     }
 
@@ -242,14 +292,15 @@ export default function JarvisUltimateHUD() {
     }
 
     const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US'; // English for Iron Man style, or id-ID
+    recognition.lang = 'id-ID'; // Indonesian voice recognition!
     recognition.continuous = false;
     recognition.interimResults = false;
 
     recognition.onstart = () => {
       setIsListening(true);
       setSystemState('LISTENING');
-      setAudioLevel(0.6);
+      setAudioLevel(0.65);
+      playSciFiBeep(880, 'triangle', 0.05);
     };
 
     recognition.onresult = (event) => {
@@ -281,7 +332,8 @@ export default function JarvisUltimateHUD() {
   useEffect(() => {
     let stream = null;
     if (eyesOn && videoRef.current) {
-      navigator.mediaDevices?.getUserMedia({ video: { width: 320, height: 240 } })
+      navigator.mediaDevices
+        ?.getUserMedia({ video: true })
         .then((s) => {
           stream = s;
           if (videoRef.current) videoRef.current.srcObject = s;
@@ -289,161 +341,258 @@ export default function JarvisUltimateHUD() {
         .catch(() => setEyesOn(false));
     }
     return () => {
-      if (stream) stream.getTracks().forEach((track) => track.stop());
+      if (stream) stream.getTracks().forEach((t) => t.stop());
     };
   }, [eyesOn]);
 
-  // =========================================================================
-  // MAIN CANVAS RENDER LOOP (ORB 2.0 vs GALAXY)
-  // =========================================================================
+  // Canvas Mouse & Touch Interaction Handlers
+  const handleCanvasMouseDown = (e) => {
+    cameraRef.current.isDragging = true;
+    cameraRef.current.startX = e.clientX;
+    cameraRef.current.startY = e.clientY;
+  };
+
+  const handleCanvasMouseMove = (e) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    // Handle 3D Orbit Dragging
+    if (cameraRef.current.isDragging) {
+      const dx = e.clientX - cameraRef.current.startX;
+      const dy = e.clientY - cameraRef.current.startY;
+      cameraRef.current.targetRotY += dx * 0.007;
+      cameraRef.current.targetRotX += dy * 0.007;
+
+      // Clamp X rotation to avoid flipping
+      cameraRef.current.targetRotX = Math.max(-1.4, Math.min(1.4, cameraRef.current.targetRotX));
+
+      cameraRef.current.startX = e.clientX;
+      cameraRef.current.startY = e.clientY;
+    }
+
+    // Raycast Hover Hit-Testing in 2D Screen Space
+    if (viewMode === 'GALAXY') {
+      let foundNode = null;
+      const nodes = projectedNodesRef.current || [];
+      for (let i = nodes.length - 1; i >= 0; i--) {
+        const n = nodes[i];
+        if (!n.visible) continue;
+        const dist = Math.hypot(n.px - mouseX, n.py - mouseY);
+        const hitRadius = Math.max(12, n.radius * 1.8);
+        if (dist <= hitRadius) {
+          foundNode = n;
+          break;
+        }
+      }
+      setHoveredNode(foundNode);
+    }
+  };
+
+  const handleCanvasMouseUp = () => {
+    cameraRef.current.isDragging = false;
+  };
+
+  const handleCanvasWheel = (e) => {
+    e.preventDefault();
+    const delta = e.deltaY * -0.0015;
+    cameraRef.current.targetZoom = Math.max(0.4, Math.min(2.8, cameraRef.current.targetZoom + delta));
+  };
+
+  const handleCanvasClick = () => {
+    if (hoveredNode) {
+      setSelectedNode(hoveredNode);
+      playSciFiBeep(1400, 'square', 0.05);
+      const voiceAlert = `Data node ${hoveredNode.label}. Kategori ${hoveredNode.category}. Status aktif.`;
+      setActiveSpeech(voiceAlert);
+      speakText(voiceAlert);
+    }
+  };
+
+  // Touch Controls for Mobile
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 1) {
+      cameraRef.current.isDragging = true;
+      cameraRef.current.startX = e.touches[0].clientX;
+      cameraRef.current.startY = e.touches[0].clientY;
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (cameraRef.current.isDragging && e.touches.length === 1) {
+      const dx = e.touches[0].clientX - cameraRef.current.startX;
+      const dy = e.touches[0].clientY - cameraRef.current.startY;
+      cameraRef.current.targetRotY += dx * 0.009;
+      cameraRef.current.targetRotX += dy * 0.009;
+      cameraRef.current.startX = e.touches[0].clientX;
+      cameraRef.current.startY = e.touches[0].clientY;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    cameraRef.current.isDragging = false;
+  };
+
+  // Main 3D Canvas Rendering Loop (TecTimmy Plasma Orb & Interactive Constellation)
   useEffect(() => {
     if (!canvasRef.current) return;
-
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    canvas.width = width * window.devicePixelRatio;
-    canvas.height = height * window.devicePixelRatio;
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
-    // Starfield for galaxy & orb ambient
-    const stars = Array.from({ length: 150 }, () => ({
-      x: (Math.random() - 0.5) * width * 1.5,
-      y: (Math.random() - 0.5) * height * 1.5,
-      z: Math.random() * 800 + 100,
-      size: Math.random() * 1.5 + 0.5,
-      twinkle: Math.random() * Math.PI * 2
-    }));
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
 
-    // 1,200 Particles for the 3D Electric Particle Plasma Orb (TecTimmy Core)
-    const orbParticles = Array.from({ length: 1100 }, (_, i) => {
-      const phi = Math.acos(1 - 2 * (i + 0.5) / 1100);
-      const theta = Math.PI * (1 + Math.sqrt(5)) * (i + 0.5);
-      const baseR = 120 + (Math.random() - 0.5) * 15;
-      return {
-        phi,
-        theta,
-        baseR,
-        speed: 0.008 + Math.random() * 0.012,
-        spikeFreq: Math.random() * 8 + 2,
-        phase: Math.random() * Math.PI * 2,
-        size: Math.random() * 1.8 + 0.8
-      };
-    });
-
-    let t = 0;
+    // Generate Orb Points (1,200 particle sphere)
+    const particleCount = 1200;
+    const baseOrbParticles = [];
+    for (let i = 0; i < particleCount; i++) {
+      const phi = Math.acos(-1 + (2 * i) / particleCount);
+      const theta = Math.sqrt(particleCount * Math.PI) * phi;
+      baseOrbParticles.push({
+        baseX: Math.cos(theta) * Math.sin(phi),
+        baseY: Math.cos(phi),
+        baseZ: Math.sin(theta) * Math.sin(phi),
+        spikePhase: Math.random() * Math.PI * 2,
+        spikeFreq: 2 + Math.random() * 4,
+        size: 0.9 + Math.random() * 1.6
+      });
+    }
 
     const render = () => {
-      t += 0.025;
-      ctx.clearRect(0, 0, width, height);
+      timeRef.current += 0.018;
+      const t = timeRef.current;
+      const w = canvas.width;
+      const h = canvas.height;
+      const originX = w / 2;
+      const originY = h / 2 - 20;
 
-      // Deep space background
-      const bgGrad = ctx.createRadialGradient(
-        width * 0.5, height * 0.5, 40,
-        width * 0.5, height * 0.5, width * 0.85
-      );
-      bgGrad.addColorStop(0, '#06101d');
-      bgGrad.addColorStop(0.5, '#030810');
-      bgGrad.addColorStop(1, '#010408');
-      ctx.fillStyle = bgGrad;
-      ctx.fillRect(0, 0, width, height);
-
-      const originX = width * (focusOn ? 0.5 : 0.44);
-      const originY = height * 0.46;
-
-      // Render Ambient Stars
-      stars.forEach((s) => {
-        s.twinkle += 0.03;
-        const alpha = 0.2 + Math.sin(s.twinkle) * 0.18;
-        ctx.fillStyle = `rgba(180, 230, 255, ${alpha})`;
-        ctx.beginPath();
-        ctx.arc(originX + s.x * (400 / s.z), originY + s.y * (400 / s.z), s.size, 0, Math.PI * 2);
-        ctx.fill();
-      });
+      ctx.clearRect(0, 0, w, h);
 
       // ---------------------------------------------------------------------
-      // MODE A: TECTIMMY 3D ELECTRIC PARTICLE ORB (JARVIS 2.0)
+      // HOLOGRAPHIC SCI-FI BACKGROUND GRID & RADAR
+      // ---------------------------------------------------------------------
+      ctx.save();
+      // Polar Concentric Rings
+      ctx.strokeStyle = 'rgba(0, 245, 212, 0.035)';
+      ctx.lineWidth = 1;
+      for (let r = 80; r < Math.max(w, h); r += 100) {
+        ctx.beginPath();
+        ctx.arc(originX, originY, r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Radar Crosshairs
+      ctx.strokeStyle = 'rgba(0, 245, 212, 0.04)';
+      ctx.beginPath();
+      ctx.moveTo(originX - 350, originY);
+      ctx.lineTo(originX + 350, originY);
+      ctx.moveTo(originX, originY - 350);
+      ctx.lineTo(originX, originY + 350);
+      ctx.stroke();
+
+      // Rotating Radar Sweep Line
+      const sweepAngle = t * 0.5;
+      ctx.strokeStyle = 'rgba(0, 245, 212, 0.12)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(originX, originY);
+      ctx.lineTo(originX + Math.cos(sweepAngle) * 320, originY + Math.sin(sweepAngle) * 320);
+      ctx.stroke();
+      ctx.restore();
+
+      // ---------------------------------------------------------------------
+      // MODE A: TECTIMMY 3D ELECTRIC PARTICLE PLASMA ORB
       // ---------------------------------------------------------------------
       if (viewMode === 'ORB') {
         const isSpeaking = systemState === 'SPEAKING';
         const isListeningNow = systemState === 'LISTENING';
         const isThinking = systemState === 'THINKING';
 
-        const dynamicSpike = isSpeaking
-          ? 35 + Math.sin(t * 12) * 20
-          : isListeningNow
-          ? 25 + Math.cos(t * 8) * 15
-          : isThinking
-          ? 18 + Math.sin(t * 16) * 12
-          : 6 + Math.sin(t * 2) * 4;
+        const baseRadius = isSpeaking ? 165 : isThinking ? 145 : 135;
+        const currentAudioLevel = isSpeaking ? audioLevel || 0.8 : audioLevel || 0.15;
 
-        // Central Electric Plasma Core Glow
-        const coreGlow = ctx.createRadialGradient(originX, originY, 10, originX, originY, 180);
-        coreGlow.addColorStop(0, 'rgba(0, 245, 212, 0.45)');
-        coreGlow.addColorStop(0.3, 'rgba(0, 210, 255, 0.22)');
-        coreGlow.addColorStop(0.7, 'rgba(5, 30, 60, 0.12)');
-        coreGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = coreGlow;
-        ctx.beginPath();
-        ctx.arc(originX, originY, 180, 0, Math.PI * 2);
-        ctx.fill();
+        const orbRotY = t * 0.45;
+        const orbRotX = Math.sin(t * 0.25) * 0.35;
+        const cosY = Math.cos(orbRotY);
+        const sinY = Math.sin(orbRotY);
+        const cosX = Math.cos(orbRotX);
+        const sinX = Math.sin(orbRotX);
 
-        // Project and Draw 3D Orb Particles
-        const cosY = Math.cos(t * 0.4);
-        const sinY = Math.sin(t * 0.4);
-        const cosX = Math.cos(0.25);
-        const sinX = Math.sin(0.25);
+        const projectedOrb = baseOrbParticles.map((p) => {
+          const harmonic = Math.sin(t * p.spikeFreq + p.spikePhase);
+          const spikeAmount = isSpeaking
+            ? Math.pow(Math.max(0, harmonic), 2.5) * (currentAudioLevel * 90)
+            : Math.sin(t * 2 + p.spikePhase) * 6;
 
-        const projectedOrb = orbParticles.map((p) => {
-          // Dynamic radius with audio reactive spike modulation
-          const currentR =
-            p.baseR + Math.sin(p.phi * p.spikeFreq + t * 4 + p.phase) * dynamicSpike;
+          const r = baseRadius + spikeAmount;
+          let x = p.baseX * r;
+          let y = p.baseY * r;
+          let z = p.baseZ * r;
 
-          // Spherical coordinates to 3D Cartesian
-          let x = Math.sin(p.phi) * Math.cos(p.theta + t * p.speed) * currentR;
-          let y = Math.cos(p.phi) * currentR;
-          let z = Math.sin(p.phi) * Math.sin(p.theta + t * p.speed) * currentR;
-
-          // 3D Rotation
           let x1 = x * cosY - z * sinY;
           let z1 = z * cosY + x * sinY;
           let y2 = y * cosX - z1 * sinX;
           let z2 = z1 * cosX + y * sinX;
 
-          const distance = z2 + 380;
-          const scale = 400 / distance;
+          const fov = 420;
+          const distance = z2 + 360;
+          const scale = fov / distance;
+
           return {
             px: originX + x1 * scale,
             py: originY + y2 * scale,
             depth: z2,
-            scale,
-            size: p.size * scale
+            size: p.size * scale,
+            spike: spikeAmount
           };
         });
 
-        // Depth sort
         projectedOrb.sort((a, b) => b.depth - a.depth);
 
-        // Draw electric connecting arcs between nearby particles
-        ctx.lineWidth = 0.65;
-        for (let i = 0; i < projectedOrb.length; i += 7) {
-          const p1 = projectedOrb[i];
-          const p2 = projectedOrb[(i + 14) % projectedOrb.length];
-          const dist = Math.hypot(p1.px - p2.px, p1.py - p2.py);
-          if (dist < 45) {
-            const alpha = (1 - dist / 45) * 0.35;
-            ctx.strokeStyle = `rgba(0, 245, 212, ${alpha})`;
-            ctx.beginPath();
-            ctx.moveTo(p1.px, p1.py);
-            ctx.lineTo(p2.px, p2.py);
-            ctx.stroke();
+        // Core Glowing Aura
+        const auraGradient = ctx.createRadialGradient(
+          originX,
+          originY,
+          baseRadius * 0.2,
+          originX,
+          originY,
+          baseRadius * 1.5
+        );
+        auraGradient.addColorStop(0, 'rgba(0, 245, 212, 0.25)');
+        auraGradient.addColorStop(0.5, 'rgba(0, 187, 249, 0.08)');
+        auraGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = auraGradient;
+        ctx.beginPath();
+        ctx.arc(originX, originY, baseRadius * 1.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Lightning Tendril Filaments
+        if (isSpeaking || isListeningNow) {
+          ctx.strokeStyle = 'rgba(0, 245, 212, 0.35)';
+          ctx.lineWidth = 1;
+          for (let k = 0; k < 18; k++) {
+            const idx1 = Math.floor(Math.random() * projectedOrb.length);
+            const idx2 = Math.floor(Math.random() * projectedOrb.length);
+            const p1 = projectedOrb[idx1];
+            const p2 = projectedOrb[idx2];
+            if (p1 && p2 && Math.hypot(p1.px - p2.px, p1.py - p2.py) < 90) {
+              ctx.beginPath();
+              ctx.moveTo(p1.px, p1.py);
+              ctx.lineTo(p2.px, p2.py);
+              ctx.stroke();
+            }
           }
         }
 
-        // Draw glowing particle points
+        // Particle Points
         projectedOrb.forEach((p) => {
-          const depthAlpha = Math.max(0.25, Math.min(1.0, 1 - p.depth / 500));
+          const depthAlpha = Math.max(0.2, Math.min(1.0, 1 - p.depth / 450));
           ctx.fillStyle = isSpeaking
             ? `rgba(255, 255, 255, ${depthAlpha})`
             : `rgba(0, 245, 212, ${depthAlpha})`;
@@ -452,29 +601,31 @@ export default function JarvisUltimateHUD() {
           ctx.fill();
         });
 
-        // Central Subtle Monospace Text in Orb Center (TecTimmy Style)
+        // Center Monospace Prompt
         ctx.save();
         ctx.fillStyle = '#ffffff';
-        ctx.font = '500 13px "IBM Plex Mono", monospace';
+        ctx.font = '600 13px "IBM Plex Mono", monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.shadowColor = '#00f5d4';
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 12;
         const centerPrompt = isListeningNow
-          ? 'Listening...'
+          ? 'Mendengarkan...'
           : isThinking
-          ? 'Thinking...'
-          : 'How may I help, sir?';
+          ? 'Memproses...'
+          : 'Ada yang bisa Ai bantu, Heru?';
         ctx.fillText(centerPrompt, originX, originY);
         ctx.restore();
       }
 
       // ---------------------------------------------------------------------
-      // MODE B: ZUBAIR 3D CONSTELLATION GALAXY
+      // MODE B: INTERACTIVE 3D CONSTELLATION GALAXY
       // ---------------------------------------------------------------------
       if (viewMode === 'GALAXY' && graphData) {
         const cam = cameraRef.current;
-        if (!cam.isDragging) cam.rotY += rotationSpeed;
+        if (autoRotate && !cam.isDragging) {
+          cam.targetRotY += rotationSpeed;
+        }
 
         cam.rotX += (cam.targetRotX - cam.rotX) * 0.08;
         cam.rotY += (cam.targetRotY - cam.rotY) * 0.08;
@@ -492,37 +643,49 @@ export default function JarvisUltimateHUD() {
           let y2 = node.y3d * cosX - z1 * sinX;
           let z2 = z1 * cosX + node.y3d * sinX;
 
-          const spreadFactor = galaxySpread / 200;
+          const spreadFactor = galaxySpread / 160;
           x1 *= spreadFactor;
           y2 *= spreadFactor;
           z2 *= spreadFactor;
 
           const distance = z2 + 420;
           const scale = distance > 20 ? fov / distance : 0;
+          const radius = Math.max(3.5, node.baseRadius * (scale / 1.4));
+
           return {
             ...node,
             px: originX + x1 * scale,
             py: originY + y2 * scale,
             depth: z2,
             scale,
+            radius,
             visible: distance > 20
           };
         });
 
+        projectedNodesRef.current = projectedNodes;
         projectedNodes.sort((a, b) => b.depth - a.depth);
 
-        // Connections
-        ctx.lineWidth = 0.75;
+        // Connections Lines
+        ctx.lineWidth = 0.85;
         graphData.links.forEach((l) => {
           const s = projectedNodes.find((n) => n.id === l.source);
-          const t = projectedNodes.find((n) => n.id === l.target);
-          if (s && t && s.visible && t.visible) {
-            const depthAvg = (s.depth + t.depth) / 2;
-            const alpha = Math.max(0.04, Math.min(0.28, 1 - depthAvg / 600));
-            ctx.strokeStyle = `rgba(0, 245, 212, ${alpha * 0.75})`;
+          const tNode = projectedNodes.find((n) => n.id === l.target);
+          if (s && tNode && s.visible && tNode.visible) {
+            const isHoveredConnection =
+              hoveredNode && (hoveredNode.id === s.id || hoveredNode.id === tNode.id);
+            const depthAvg = (s.depth + tNode.depth) / 2;
+            const alpha = isHoveredConnection
+              ? 0.85
+              : Math.max(0.05, Math.min(0.3, 1 - depthAvg / 600));
+
+            ctx.strokeStyle = isHoveredConnection
+              ? 'rgba(0, 245, 212, 0.95)'
+              : `rgba(0, 245, 212, ${alpha * 0.75})`;
+            ctx.lineWidth = isHoveredConnection ? 2.0 : 0.8;
             ctx.beginPath();
             ctx.moveTo(s.px, s.py);
-            ctx.lineTo(t.px, t.py);
+            ctx.lineTo(tNode.px, tNode.py);
             ctx.stroke();
           }
         });
@@ -530,16 +693,39 @@ export default function JarvisUltimateHUD() {
         // Nodes
         projectedNodes.forEach((node) => {
           if (!node.visible) return;
-          const radius = Math.max(2.5, node.baseRadius * (node.scale / 1.5));
-          ctx.fillStyle = node.color;
+          const isNodeHovered = hoveredNode && hoveredNode.id === node.id;
+          const isNodeSelected = selectedNode && selectedNode.id === node.id;
+
+          // Glowing Outer Halo on Hover/Select
+          if (isNodeHovered || isNodeSelected) {
+            ctx.save();
+            ctx.fillStyle = 'rgba(0, 245, 212, 0.25)';
+            ctx.beginPath();
+            ctx.arc(node.px, node.py, node.radius * 2.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Pulsing Reticle Ring
+            ctx.strokeStyle = '#00f5d4';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(node.px, node.py, node.radius * 2.0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          ctx.fillStyle = isNodeHovered ? '#ffffff' : node.color;
           ctx.beginPath();
-          ctx.arc(node.px, node.py, radius, 0, Math.PI * 2);
+          ctx.arc(node.px, node.py, node.radius, 0, Math.PI * 2);
           ctx.fill();
 
-          if (node.depth < 120 || node.category === 'core') {
-            ctx.font = `${Math.max(9, Math.min(13, 10 * (node.scale / 1.4)))}px "IBM Plex Mono", monospace`;
-            ctx.fillStyle = `rgba(230, 240, 245, 0.85)`;
-            ctx.fillText(node.label, node.px + radius + 6, node.py + 3.5);
+          // Monospace Node Label
+          if (node.depth < 140 || node.category === 'core' || isNodeHovered) {
+            ctx.font = `${Math.max(
+              10,
+              Math.min(14, 11 * (node.scale / 1.3))
+            )}px "IBM Plex Mono", monospace`;
+            ctx.fillStyle = isNodeHovered ? '#00f5d4' : 'rgba(230, 240, 245, 0.85)';
+            ctx.fillText(node.label, node.px + node.radius + 7, node.py + 4);
           }
         });
       }
@@ -548,352 +734,353 @@ export default function JarvisUltimateHUD() {
     };
 
     render();
-    return () => cancelAnimationFrame(animFrameRef.current);
-  }, [viewMode, graphData, systemState, focusOn, galaxySpread, rotationSpeed]);
+    return () => {
+      cancelAnimationFrame(animFrameRef.current);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [viewMode, graphData, systemState, autoRotate, galaxySpread, rotationSpeed, hoveredNode, selectedNode]);
 
-  // J.A.R.V.I.S. Arc Reactor HUD Canvas Render
+  // Arc Reactor Canvas Telemetry Widget
   useEffect(() => {
     if (hudMode !== 'RING' || !ringCanvasRef.current) return;
-
     const canvas = ringCanvasRef.current;
     const ctx = canvas.getContext('2d');
     const size = 180;
-    canvas.width = size * window.devicePixelRatio;
-    canvas.height = size * window.devicePixelRatio;
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    canvas.width = size;
+    canvas.height = size;
+    const center = size / 2;
 
-    let angle = 0;
-    let pulse = 0;
-
+    let ringFrame;
     const renderRing = () => {
-      angle += 0.025;
-      pulse += 0.05;
+      const t = timeRef.current;
       ctx.clearRect(0, 0, size, size);
 
-      const cx = size / 2;
-      const cy = size / 2;
-      const r = 74;
-
-      // Radial ticks
-      const numTicks = 48;
+      // Outer Rotating Segmented Ticks
       ctx.save();
-      ctx.translate(cx, cy);
-      for (let i = 0; i < numTicks; i++) {
-        const rad = (i / numTicks) * Math.PI * 2;
-        const tickLen = i % 4 === 0 ? 8 : 4;
-        const isAmber = i > 6 && i < 18;
-        ctx.strokeStyle = isAmber ? 'rgba(245, 158, 11, 0.75)' : 'rgba(0, 245, 212, 0.45)';
-        ctx.lineWidth = i % 4 === 0 ? 1.75 : 1;
+      ctx.translate(center, center);
+      ctx.rotate(t * 0.4);
+      ctx.strokeStyle = 'rgba(0, 245, 212, 0.4)';
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 24; i++) {
+        const rad = (i * Math.PI) / 12;
         ctx.beginPath();
-        ctx.moveTo(Math.cos(rad) * (r + 4), Math.sin(rad) * (r + 4));
-        ctx.lineTo(Math.cos(rad) * (r + 4 + tickLen), Math.sin(rad) * (r + 4 + tickLen));
+        ctx.moveTo(Math.cos(rad) * 72, Math.sin(rad) * 72);
+        ctx.lineTo(Math.cos(rad) * 82, Math.sin(rad) * 82);
         ctx.stroke();
       }
       ctx.restore();
 
-      // Outer cyan track
+      // Inner Counter-Rotating Hex Ring
       ctx.save();
+      ctx.translate(center, center);
+      ctx.rotate(-t * 0.6);
+      ctx.strokeStyle = 'rgba(0, 187, 249, 0.6)';
+      ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.arc(cx, cy, r - 4, angle, angle + Math.PI * 1.3);
-      ctx.strokeStyle = '#00f5d4';
-      ctx.lineWidth = 3;
-      ctx.shadowColor = '#00f5d4';
-      ctx.shadowBlur = 10;
+      for (let i = 0; i < 6; i++) {
+        const rad = (i * Math.PI) / 3;
+        const x = Math.cos(rad) * 55;
+        const y = Math.sin(rad) * 55;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
       ctx.stroke();
       ctx.restore();
 
-      // Amber accent arc
-      ctx.save();
+      // Glowing Center Arc Core
+      const coreGrad = ctx.createRadialGradient(center, center, 5, center, center, 42);
+      coreGrad.addColorStop(0, '#ffffff');
+      coreGrad.addColorStop(0.4, '#00f5d4');
+      coreGrad.addColorStop(1, 'rgba(0, 245, 212, 0)');
+      ctx.fillStyle = coreGrad;
       ctx.beginPath();
-      ctx.arc(cx, cy, r - 4, -angle * 0.8, -angle * 0.8 + Math.PI * 0.5);
-      ctx.strokeStyle = '#f59e0b';
-      ctx.lineWidth = 3.5;
-      ctx.shadowColor = '#f59e0b';
-      ctx.shadowBlur = 12;
-      ctx.stroke();
-      ctx.restore();
-
-      // Center text
-      ctx.save();
-      ctx.fillStyle = 'rgba(4, 10, 18, 0.9)';
-      ctx.beginPath();
-      ctx.arc(cx, cy, 38, 0, Math.PI * 2);
+      ctx.arc(center, center, 36, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = 'rgba(0, 245, 212, 0.4)';
-      ctx.lineWidth = 1;
-      ctx.stroke();
 
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '600 11px "IBM Plex Mono", monospace';
+      // Core Monospace Text
+      ctx.fillStyle = '#050a12';
+      ctx.font = '700 9px "IBM Plex Mono", monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.letterSpacing = '3px';
-      ctx.shadowColor = '#00f5d4';
-      ctx.shadowBlur = 8;
-      ctx.fillText('J.A.R.V.I.S.', cx, cy);
-      ctx.restore();
+      ctx.fillText('ARC-3.0', center, center);
 
-      ringAnimRef.current = requestAnimationFrame(renderRing);
+      ringFrame = requestAnimationFrame(renderRing);
     };
 
     renderRing();
-    return () => cancelAnimationFrame(ringAnimRef.current);
+    return () => cancelAnimationFrame(ringFrame);
   }, [hudMode]);
 
   return (
-    <div
+    <main
       style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
+        position: 'relative',
         width: '100vw',
         height: '100vh',
-        background: '#04070d',
+        background: '#03060c',
         color: '#e2e8f0',
-        fontFamily: '"IBM Plex Sans", -apple-system, sans-serif',
+        fontFamily: '"Rajdhani", "IBM Plex Sans", sans-serif',
         overflow: 'hidden',
-        zIndex: 9999,
         userSelect: 'none'
       }}
     >
-      {/* Background 3D Engine Canvas */}
+      {/* Sci-Fi Scanline Overlay */}
+      <div className="scanlines" />
+
+      {/* Background Interactive 3D Canvas */}
       <canvas
         ref={canvasRef}
+        onMouseDown={handleCanvasMouseDown}
+        onMouseMove={handleCanvasMouseMove}
+        onMouseUp={handleCanvasMouseUp}
+        onWheel={handleCanvasWheel}
+        onClick={handleCanvasClick}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
           width: '100%',
           height: '100%',
-          display: 'block'
+          display: 'block',
+          cursor: hoveredNode ? 'pointer' : cameraRef.current.isDragging ? 'grabbing' : 'grab'
         }}
       />
 
-      {/* TOP HEADER STATUS BAR */}
+      {/* TOP HEADER STATUS & TELEMETRY BAR */}
       <header
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
-          height: '52px',
+          height: '56px',
           padding: '0 24px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: 'linear-gradient(180deg, rgba(3,7,12,0.9) 0%, rgba(3,7,12,0) 100%)',
-          pointerEvents: 'none',
-          zIndex: 10
+          background: 'linear-gradient(180deg, rgba(3, 7, 14, 0.95) 0%, rgba(3, 7, 14, 0.6) 80%, rgba(3, 7, 14, 0) 100%)',
+          backdropFilter: 'blur(12px)',
+          zIndex: 30,
+          borderBottom: '1px solid rgba(0, 245, 212, 0.15)'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', pointerEvents: 'auto' }}>
-          <Link
-            href="/"
+        {/* Left: Branding & Neural Status */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div
+            style={{
+              fontFamily: '"Orbitron", monospace',
+              fontWeight: '900',
+              fontSize: '17px',
+              letterSpacing: '2.5px',
+              color: '#00f5d4',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}
+          >
+            <span style={{ fontSize: '18px' }}>⚡</span>
+            <span>J.A.R.V.I.S. 3.0</span>
+            <span
+              style={{
+                fontFamily: '"IBM Plex Mono", monospace',
+                fontSize: '10px',
+                padding: '2px 8px',
+                borderRadius: '4px',
+                background: 'rgba(0, 245, 212, 0.12)',
+                border: '1px solid rgba(0, 245, 212, 0.35)',
+                color: '#00f5d4'
+              }}
+            >
+              PERSONA: AI (20s / ID)
+            </span>
+          </div>
+
+          <div
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
               fontFamily: '"IBM Plex Mono", monospace',
-              fontSize: '12px',
-              color: '#94a3b8',
-              letterSpacing: '1px'
+              fontSize: '11px',
+              color: '#94a3b8'
             }}
           >
-            <span style={{ color: '#00f5d4' }}>←</span> GRADIENT STUDIO
-          </Link>
-          <span style={{ color: '#334155' }}>|</span>
-
-          {/* VIEW MODE TOGGLE (ORB 2.0 vs GALAXY) */}
-          <div
-            style={{
-              display: 'flex',
-              background: 'rgba(15, 23, 42, 0.75)',
-              border: '1px solid rgba(0, 245, 212, 0.3)',
-              borderRadius: '999px',
-              padding: '2px'
-            }}
-          >
-            {[
-              { id: 'ORB', label: '⚡ ORB 2.0' },
-              { id: 'GALAXY', label: '🌌 GALAXY' }
-            ].map((m) => (
-              <button
-                key={m.id}
-                onClick={() => setViewMode(m.id)}
-                style={{
-                  padding: '3px 12px',
-                  borderRadius: '999px',
-                  fontSize: '10px',
-                  fontFamily: '"IBM Plex Mono", monospace',
-                  letterSpacing: '1px',
-                  background: viewMode === m.id ? '#00f5d4' : 'transparent',
-                  color: viewMode === m.id ? '#04070d' : '#94a3b8',
-                  fontWeight: viewMode === m.id ? '700' : '500',
-                  cursor: 'pointer'
-                }}
-              >
-                {m.label}
-              </button>
-            ))}
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span
               style={{
                 width: '7px',
                 height: '7px',
                 borderRadius: '50%',
-                background: '#10b981',
-                boxShadow: '0 0 8px #10b981'
+                background: systemState === 'ONLINE' ? '#00f5d4' : '#f59e0b',
+                boxShadow: `0 0 10px ${systemState === 'ONLINE' ? '#00f5d4' : '#f59e0b'}`
               }}
             />
-            <span
-              style={{
-                fontFamily: '"IBM Plex Mono", monospace',
-                fontSize: '11px',
-                letterSpacing: '1.5px',
-                color: '#cbd5e1'
-              }}
-            >
-              OMNIROUTE LIVE [18 ACC]
-            </span>
+            <span>{systemState}</span>
+            <span style={{ color: '#475569' }}>·</span>
+            <span style={{ color: '#00f5d4' }}>WITA: MAKASSAR</span>
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', pointerEvents: 'auto' }}>
-          <div
+        {/* Center: Mode Switcher */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            background: 'rgba(15, 23, 42, 0.8)',
+            border: '1px solid rgba(0, 245, 212, 0.3)',
+            borderRadius: '999px',
+            padding: '3px'
+          }}
+        >
+          <button
+            onClick={() => setViewMode('ORB')}
             style={{
+              background: viewMode === 'ORB' ? '#00f5d4' : 'transparent',
+              color: viewMode === 'ORB' ? '#04070d' : '#94a3b8',
+              fontWeight: '700',
               fontFamily: '"IBM Plex Mono", monospace',
               fontSize: '11px',
-              color: '#00f5d4',
-              letterSpacing: '1px'
+              letterSpacing: '1px',
+              padding: '5px 16px',
+              borderRadius: '999px',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
             }}
           >
-            {currentTime}
-          </div>
+            ⚡ PLASMA ORB
+          </button>
+          <button
+            onClick={() => setViewMode('GALAXY')}
+            style={{
+              background: viewMode === 'GALAXY' ? '#00f5d4' : 'transparent',
+              color: viewMode === 'GALAXY' ? '#04070d' : '#94a3b8',
+              fontWeight: '700',
+              fontFamily: '"IBM Plex Mono", monospace',
+              fontSize: '11px',
+              letterSpacing: '1px',
+              padding: '5px 16px',
+              borderRadius: '999px',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
+            }}
+          >
+            🌌 GALAXY 3D (INTERAKTIF)
+          </button>
+        </div>
+
+        {/* Right: Audio Controls & Test Voice Button */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button
+            onClick={() =>
+              speakText(
+                'Halo Heru! Semua sistem JARVIS dan SecondBrain siap siaga. Suara bahasa Indonesia sudah aktif, ada yang bisa Ai bantu?'
+              )
+            }
+            style={{
+              background: 'rgba(0, 245, 212, 0.1)',
+              border: '1px solid rgba(0, 245, 212, 0.3)',
+              borderRadius: '8px',
+              color: '#00f5d4',
+              padding: '5px 12px',
+              fontSize: '11px',
+              fontFamily: '"IBM Plex Mono", monospace',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            <span>🔊</span>
+            <span>TEST SUARA AI</span>
+          </button>
+
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
             style={{
-              background: soundEnabled ? 'rgba(0,245,212,0.15)' : 'rgba(255,255,255,0.05)',
-              border: `1px solid ${soundEnabled ? '#00f5d4' : '#334155'}`,
+              background: 'transparent',
+              border: '1px solid rgba(0, 245, 212, 0.2)',
+              borderRadius: '8px',
               color: soundEnabled ? '#00f5d4' : '#64748b',
-              padding: '4px 10px',
-              borderRadius: '999px',
-              fontSize: '10px',
-              fontFamily: '"IBM Plex Mono", monospace',
-              letterSpacing: '1px',
+              padding: '6px',
               cursor: 'pointer'
             }}
           >
-            {soundEnabled ? '🔊 BRITISH VOICE' : '🔇 MUTED'}
+            {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+          </button>
+
+          <button
+            onClick={() => setEyesOn(!eyesOn)}
+            style={{
+              background: 'transparent',
+              border: '1px solid rgba(0, 245, 212, 0.2)',
+              borderRadius: '8px',
+              color: eyesOn ? '#00f5d4' : '#64748b',
+              padding: '6px',
+              cursor: 'pointer'
+            }}
+          >
+            {eyesOn ? <Eye size={16} /> : <EyeOff size={16} />}
           </button>
         </div>
       </header>
 
-      {/* TOP USER QUERY BANNER (TecTimmy Style) */}
+      {/* TOP BANNER: USER SPEECH TRANSCRIPT */}
       {userSpeechQuery && (
         <div
           style={{
             position: 'absolute',
-            top: '72px',
+            top: '70px',
             left: '50%',
             transform: 'translateX(-50%)',
-            textAlign: 'center',
-            zIndex: 10,
-            pointerEvents: 'none'
+            zIndex: 25,
+            background: 'rgba(4, 9, 18, 0.85)',
+            border: '1px solid rgba(0, 245, 212, 0.35)',
+            borderRadius: '12px',
+            padding: '8px 24px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            boxShadow: '0 0 20px rgba(0, 245, 212, 0.2)'
           }}
         >
-          <div
+          <span
             style={{
               fontFamily: '"IBM Plex Mono", monospace',
-              fontSize: '10px',
-              letterSpacing: '2px',
+              fontSize: '11px',
               color: '#64748b',
-              textTransform: 'uppercase'
+              letterSpacing: '1px'
             }}
           >
-            YOU
-          </div>
-          <div
+            HERU:
+          </span>
+          <span
             style={{
-              fontSize: '15px',
-              color: '#f8fafc',
-              fontWeight: '500',
-              marginTop: '2px'
-            }}
-          >
-            &ldquo;{userSpeechQuery}&rdquo;
-          </div>
-        </div>
-      )}
-
-      {/* TECTIMMY WEATHER & TELEMETRY CARD (Top Left) */}
-      {showWeatherCard && !focusOn && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '68px',
-            left: '20px',
-            background: 'rgba(5, 10, 18, 0.8)',
-            backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(0, 245, 212, 0.2)',
-            borderRadius: '14px',
-            padding: '14px 16px',
-            width: '230px',
-            zIndex: 10
-          }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span
-              style={{
-                fontFamily: '"IBM Plex Mono", monospace',
-                fontSize: '9px',
-                letterSpacing: '1.5px',
-                color: '#64748b',
-                textTransform: 'uppercase'
-              }}
-            >
-              WEATHER · MAKASSAR
-            </span>
-            <button
-              onClick={() => setShowWeatherCard(false)}
-              style={{ color: '#64748b', fontSize: '10px', cursor: 'pointer' }}
-            >
-              ✕
-            </button>
-          </div>
-          <div style={{ fontSize: '20px', fontWeight: '700', color: '#f8fafc', marginTop: '4px' }}>
-            28°C · Fair
-          </div>
-          <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
-            Humidity 78% · Wind 12 km/h WNW
-          </div>
-          <div
-            style={{
-              marginTop: '8px',
-              paddingTop: '6px',
-              borderTop: '1px solid rgba(51,65,85,0.4)',
-              fontSize: '10px',
               fontFamily: '"IBM Plex Mono", monospace',
-              color: '#00f5d4'
+              fontSize: '13px',
+              color: '#ffffff',
+              fontWeight: '500'
             }}
           >
-            ▲ High Tide 23:45 · 1.4m
-          </div>
+            &quot;{userSpeechQuery}&quot;
+          </span>
         </div>
       )}
 
-      {/* TOP RIGHT: JARVIS INBOX FEED */}
+      {/* TOP LEFT: MAKASSAR WEATHER & TIDES RADAR */}
       <div
+        className="hud-panel hud-glow"
         style={{
           position: 'absolute',
-          top: '64px',
-          right: '20px',
-          width: '300px',
-          zIndex: 10,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '8px'
+          top: '72px',
+          left: '24px',
+          padding: '14px 18px',
+          zIndex: 20,
+          width: '260px'
         }}
       >
         <div
@@ -905,202 +1092,330 @@ export default function JarvisUltimateHUD() {
             fontSize: '10px',
             letterSpacing: '1.5px',
             color: '#64748b',
-            padding: '0 4px'
+            marginBottom: '8px'
           }}
         >
-          <span>JARVIS · INBOX</span>
+          <span>MAKASSAR · RADAR</span>
+          <span style={{ color: '#00f5d4' }}>LIVE</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '6px' }}>
           <span
             style={{
-              background: 'rgba(0, 245, 212, 0.2)',
-              color: '#00f5d4',
-              padding: '1px 6px',
-              borderRadius: '999px',
-              fontWeight: '600'
+              fontFamily: '"Orbitron", monospace',
+              fontSize: '28px',
+              fontWeight: '700',
+              color: '#f8fafc'
             }}
           >
-            {inboxItems.length}
+            {weatherData.temp}
           </span>
+          <span style={{ fontSize: '13px', color: '#94a3b8' }}>{weatherData.condition}</span>
         </div>
+        <div
+          style={{
+            fontFamily: '"IBM Plex Mono", monospace',
+            fontSize: '10px',
+            color: '#94a3b8',
+            lineHeight: '1.6'
+          }}
+        >
+          <div>Kelembapan: {weatherData.humidity}</div>
+          <div>Angin: {weatherData.wind}</div>
+          <div style={{ color: '#00f5d4' }}>{weatherData.tide}</div>
+          <div style={{ color: '#38bdf8' }}>{weatherData.solar}</div>
+        </div>
+      </div>
 
-        {inboxItems.map((item) => (
+      {/* TOP RIGHT: HARDWARE LINK (MOTOROLA MOTO G06 POWER & OMNIROUTE) */}
+      <div
+        className="hud-panel hud-glow"
+        style={{
+          position: 'absolute',
+          top: '72px',
+          right: '24px',
+          padding: '14px 18px',
+          zIndex: 20,
+          width: '280px'
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            fontFamily: '"IBM Plex Mono", monospace',
+            fontSize: '10px',
+            letterSpacing: '1.5px',
+            color: '#64748b',
+            marginBottom: '8px'
+          }}
+        >
+          <span>SMARTPHONE & PC BRIDGE</span>
+          <span style={{ color: '#00f5d4' }}>ONLINE</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+          <Smartphone size={22} color="#00f5d4" />
+          <div>
+            <div style={{ fontSize: '13px', fontWeight: '700', color: '#ffffff' }}>
+              {phoneStatus.model}
+            </div>
+            <div
+              style={{
+                fontFamily: '"IBM Plex Mono", monospace',
+                fontSize: '10px',
+                color: '#00f5d4'
+              }}
+            >
+              Baterai: {phoneStatus.battery} · Port 5555
+            </div>
+          </div>
+        </div>
+        <div
+          style={{
+            fontFamily: '"IBM Plex Mono", monospace',
+            fontSize: '10px',
+            color: '#94a3b8',
+            borderTop: '1px solid rgba(255,255,255,0.08)',
+            paddingTop: '6px'
+          }}
+        >
+          <div>OmniRoute: 18 Akun Pro ($0.00)</div>
+          <div>ADB State: Wireless TCP/IP Connected</div>
+        </div>
+      </div>
+
+      {/* FLOATING GALAXY CONTROLS HUD (Only in GALAXY mode) */}
+      {viewMode === 'GALAXY' && (
+        <div
+          className="hud-panel"
+          style={{
+            position: 'absolute',
+            bottom: '170px',
+            left: '24px',
+            padding: '12px 16px',
+            zIndex: 20,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px',
+            width: '220px'
+          }}
+        >
           <div
-            key={item.id}
             style={{
-              background: 'rgba(5, 10, 18, 0.8)',
-              backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(0, 245, 212, 0.2)',
-              borderRadius: '12px',
-              padding: '12px',
+              fontFamily: '"IBM Plex Mono", monospace',
+              fontSize: '10px',
+              letterSpacing: '1.5px',
+              color: '#00f5d4',
               display: 'flex',
-              flexDirection: 'column',
-              gap: '6px'
+              alignItems: 'center',
+              justifyContent: 'space-between'
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  fontFamily: '"IBM Plex Mono", monospace',
-                  fontSize: '11px',
-                  fontWeight: '600',
-                  color: '#f8fafc'
-                }}
-              >
-                <span>{item.icon}</span>
-                <span>{item.title}</span>
-              </div>
-              <span style={{ fontSize: '9px', color: '#64748b' }}>{item.time}</span>
-            </div>
-            <div style={{ fontSize: '11px', color: '#94a3b8', lineHeight: '1.35' }}>
-              {item.desc}
-            </div>
+            <span>ORBIT CONTROLS</span>
+            <span>3D</span>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <button
-              onClick={() => setInboxItems((prev) => prev.filter((i) => i.id !== item.id))}
+              onClick={() => {
+                cameraRef.current.targetZoom = Math.min(2.8, cameraRef.current.targetZoom + 0.25);
+              }}
               style={{
-                alignSelf: 'flex-start',
-                marginTop: '4px',
+                flex: 1,
                 background: 'rgba(0, 245, 212, 0.1)',
                 border: '1px solid rgba(0, 245, 212, 0.3)',
                 color: '#00f5d4',
-                padding: '2px 10px',
+                padding: '6px',
                 borderRadius: '6px',
-                fontSize: '10px',
-                fontFamily: '"IBM Plex Mono", monospace',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '4px',
+                fontSize: '11px',
+                fontFamily: '"IBM Plex Mono", monospace'
               }}
             >
-              Dismiss
+              <ZoomIn size={14} /> Zoom +
             </button>
-          </div>
-        ))}
-      </div>
-
-      {/* MIDDLE-RIGHT: ARC REACTOR HUD RING */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '300px',
-          right: '48px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '12px',
-          zIndex: 10
-        }}
-      >
-        <div style={{ position: 'relative', width: '180px', height: '180px' }}>
-          {hudMode === 'RING' && (
-            <canvas ref={ringCanvasRef} style={{ width: '180px', height: '180px', display: 'block' }} />
-          )}
-        </div>
-
-        {/* Status & Model Pill Badges */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              background: 'rgba(5, 10, 18, 0.85)',
-              border: '1px solid rgba(0, 245, 212, 0.3)',
-              borderRadius: '999px',
-              padding: '5px 12px',
-              fontFamily: '"IBM Plex Mono", monospace',
-              fontSize: '10px',
-              letterSpacing: '1px',
-              color: '#00f5d4'
-            }}
-          >
-            <span
-              style={{
-                width: '6px',
-                height: '6px',
-                borderRadius: '50%',
-                background:
-                  systemState === 'SPEAKING' ? '#00f5d4' : systemState === 'THINKING' ? '#f59e0b' : '#10b981',
-                boxShadow: `0 0 8px ${systemState === 'SPEAKING' ? '#00f5d4' : '#10b981'}`
+            <button
+              onClick={() => {
+                cameraRef.current.targetZoom = Math.max(0.4, cameraRef.current.targetZoom - 0.25);
               }}
-            />
-            {systemState}
+              style={{
+                flex: 1,
+                background: 'rgba(0, 245, 212, 0.1)',
+                border: '1px solid rgba(0, 245, 212, 0.3)',
+                color: '#00f5d4',
+                padding: '6px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '4px',
+                fontSize: '11px',
+                fontFamily: '"IBM Plex Mono", monospace'
+              }}
+            >
+              <ZoomOut size={14} /> Zoom -
+            </button>
           </div>
 
           <button
             onClick={() => {
-              const brains = ['SONNET 5.5', 'GEMINI 2.5 PRO', 'ANTIGRAVITY'];
-              const nextIndex = (brains.indexOf(activeBrain) + 1) % brains.length;
-              setActiveBrain(brains[nextIndex]);
+              cameraRef.current.targetRotX = 0.25;
+              cameraRef.current.targetRotY = 0;
+              cameraRef.current.targetZoom = 1.0;
             }}
             style={{
-              background: 'rgba(5, 10, 18, 0.85)',
-              border: '1px solid rgba(0, 245, 212, 0.3)',
-              borderRadius: '999px',
-              padding: '5px 12px',
-              fontFamily: '"IBM Plex Mono", monospace',
-              fontSize: '10px',
-              letterSpacing: '1px',
-              color: '#f8fafc',
-              cursor: 'pointer'
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              color: '#cbd5e1',
+              padding: '6px',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              fontSize: '11px',
+              fontFamily: '"IBM Plex Mono", monospace'
             }}
           >
-            ✦ {activeBrain} ⚡
+            <RotateCcw size={13} /> Reset Sudut Pandang
+          </button>
+
+          <button
+            onClick={() => setAutoRotate(!autoRotate)}
+            style={{
+              background: autoRotate ? 'rgba(0, 245, 212, 0.15)' : 'rgba(255, 255, 255, 0.03)',
+              border: `1px solid ${autoRotate ? '#00f5d4' : 'rgba(255, 255, 255, 0.1)'}`,
+              color: autoRotate ? '#00f5d4' : '#64748b',
+              padding: '6px',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '11px',
+              fontFamily: '"IBM Plex Mono", monospace'
+            }}
+          >
+            Auto-Orbit: {autoRotate ? 'ON' : 'OFF'}
           </button>
         </div>
-      </div>
+      )}
 
-      {/* LOWER-RIGHT: QUICK CONTROL STACK */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '120px',
-          right: '48px',
-          width: '180px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '6px',
-          zIndex: 10
-        }}
-      >
-        {[
-          { key: 'EYES', state: eyesOn ? 'live' : 'off', toggle: () => setEyesOn(!eyesOn) },
-          { key: 'WATCH', state: watchOn ? 'active' : 'off', toggle: () => setWatchOn(!watchOn) },
-          { key: 'FOCUS', state: focusOn ? 'zen' : 'off', toggle: () => setFocusOn(!focusOn) },
-          { key: 'REFLEX', state: 'free $0', toggle: () => setShowReflexModal(true) }
-        ].map((ctrl) => (
-          <button
-            key={ctrl.key}
-            onClick={ctrl.toggle}
+      {/* FLOATING NODE INSPECTOR CARD (When Node is Hovered or Selected) */}
+      {(hoveredNode || selectedNode) && (
+        <div
+          className="hud-panel hud-glow"
+          style={{
+            position: 'absolute',
+            bottom: '170px',
+            right: '24px',
+            width: '300px',
+            padding: '16px',
+            zIndex: 25,
+            border: '1px solid #00f5d4'
+          }}
+        >
+          <div
             style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              background: 'rgba(5, 10, 18, 0.75)',
-              backdropFilter: 'blur(12px)',
-              border: '1px solid rgba(0, 245, 212, 0.2)',
-              borderRadius: '999px',
-              padding: '6px 14px',
+              marginBottom: '8px'
+            }}
+          >
+            <span
+              style={{
+                fontFamily: '"IBM Plex Mono", monospace',
+                fontSize: '10px',
+                letterSpacing: '1px',
+                color: '#00f5d4'
+              }}
+            >
+              [NODE INSPECTOR]
+            </span>
+            <button
+              onClick={() => {
+                setSelectedNode(null);
+                setHoveredNode(null);
+              }}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#64748b',
+                cursor: 'pointer',
+                fontSize: '12px'
+              }}
+            >
+              ✕
+            </button>
+          </div>
+
+          <div style={{ fontSize: '15px', fontWeight: '700', color: '#ffffff', marginBottom: '4px' }}>
+            {(selectedNode || hoveredNode).label}
+          </div>
+
+          <div
+            style={{
               fontFamily: '"IBM Plex Mono", monospace',
-              fontSize: '10px',
-              letterSpacing: '1.5px',
-              color: '#cbd5e1',
+              fontSize: '11px',
+              color: '#38bdf8',
+              marginBottom: '8px'
+            }}
+          >
+            Kategori: {(selectedNode || hoveredNode).category?.toUpperCase()}
+          </div>
+
+          <div style={{ fontSize: '12px', color: '#cbd5e1', lineHeight: '1.45', marginBottom: '12px' }}>
+            {(selectedNode || hoveredNode).desc || 'Elemen terintegrasi dalam SecondBrain Heru.'}
+          </div>
+
+          <button
+            onClick={() => handleExecute(`jelaskan node ${(selectedNode || hoveredNode).label}`)}
+            style={{
+              width: '100%',
+              background: '#00f5d4',
+              color: '#04070d',
+              fontWeight: '700',
+              fontFamily: '"IBM Plex Mono", monospace',
+              fontSize: '11px',
+              padding: '8px',
+              borderRadius: '6px',
+              border: 'none',
               cursor: 'pointer'
             }}
           >
-            <span>{ctrl.key}</span>
-            <span style={{ color: ctrl.state === 'off' ? '#64748b' : '#00f5d4', fontSize: '9px' }}>
-              {ctrl.state}
-            </span>
+            EKSEKUSI DATA NODE
           </button>
-        ))}
-      </div>
+        </div>
+      )}
+
+      {/* MIDDLE-RIGHT: ARC REACTOR HUD RING */}
+      {viewMode === 'ORB' && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '260px',
+            right: '48px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '12px',
+            zIndex: 15
+          }}
+        >
+          <canvas ref={ringCanvasRef} style={{ width: '180px', height: '180px', display: 'block' }} />
+        </div>
+      )}
 
       {/* LIVE WEBCAM PIP OVERLAY */}
       {eyesOn && (
         <div
           style={{
             position: 'absolute',
-            bottom: '260px',
+            bottom: '240px',
             right: '250px',
             width: '160px',
             height: '120px',
@@ -1121,24 +1436,24 @@ export default function JarvisUltimateHUD() {
         </div>
       )}
 
-      {/* BOTTOM CENTER: FLOATING SPEECH CAPSULE & REFLEX ACTION BAR */}
+      {/* BOTTOM CENTER: TACTICAL SPEECH CAPSULE & COMMAND DOCK */}
       <footer
         style={{
           position: 'absolute',
           bottom: '20px',
           left: '50%',
           transform: 'translateX(-50%)',
-          width: 'min(760px, calc(100vw - 40px))',
-          background: 'rgba(5, 10, 18, 0.85)',
-          backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(0, 245, 212, 0.3)',
+          width: 'min(780px, calc(100vw - 40px))',
+          background: 'rgba(4, 9, 18, 0.88)',
+          backdropFilter: 'blur(24px)',
+          border: '1px solid rgba(0, 245, 212, 0.35)',
           borderRadius: '20px',
           padding: '16px 20px',
           display: 'flex',
           flexDirection: 'column',
           gap: '12px',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 245, 212, 0.15)',
-          zIndex: 20
+          boxShadow: '0 8px 36px rgba(0, 0, 0, 0.8), 0 0 24px rgba(0, 245, 212, 0.15)',
+          zIndex: 30
         }}
       >
         {/* Real-time Spoken Text Display */}
@@ -1149,60 +1464,58 @@ export default function JarvisUltimateHUD() {
               width: '8px',
               height: '8px',
               borderRadius: '50%',
-              background: systemState === 'SPEAKING' ? '#00f5d4' : '#10b981',
-              boxShadow: '0 0 8px #00f5d4'
+              background: '#00f5d4',
+              boxShadow: '0 0 8px #00f5d4',
+              flexShrink: 0
             }}
           />
-          <div style={{ flex: 1, maxHeight: '110px', overflowY: 'auto' }}>
-            <div
-              style={{
-                fontSize: '13px',
-                color: '#f8fafc',
-                lineHeight: '1.5',
-                whiteSpace: 'pre-wrap'
-              }}
-            >
-              {activeSpeech}
-            </div>
+          <div
+            style={{
+              fontSize: '13px',
+              color: '#f8fafc',
+              lineHeight: '1.45',
+              fontFamily: '"IBM Plex Mono", monospace',
+              maxHeight: '44px',
+              overflowY: 'auto'
+            }}
+          >
+            {activeSpeech}
           </div>
         </div>
 
-        {/* Interactive Prompt & Speech Action Bar */}
-        <div style={{ display: 'flex', gap: '10px' }}>
+        {/* Input Bar with Mic & Transmit */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button
             onClick={toggleListening}
             style={{
+              background: isListening ? '#f43f5e' : 'rgba(0, 245, 212, 0.12)',
+              border: `1px solid ${isListening ? '#f43f5e' : 'rgba(0, 245, 212, 0.35)'}`,
+              borderRadius: '10px',
+              width: '40px',
+              height: '40px',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px',
-              background: isListening ? '#f43f5e' : 'rgba(0, 245, 212, 0.15)',
-              border: `1px solid ${isListening ? '#f43f5e' : '#00f5d4'}`,
+              justifyContent: 'center',
               color: isListening ? '#ffffff' : '#00f5d4',
-              borderRadius: '10px',
-              padding: '8px 14px',
-              fontSize: '11px',
-              fontFamily: '"IBM Plex Mono", monospace',
               cursor: 'pointer',
-              whiteSpace: 'nowrap'
+              flexShrink: 0
             }}
           >
-            <span>{isListening ? '🔴' : '🎙️'}</span>
-            <span>{isListening ? 'Listening...' : 'Tap to talk'}</span>
+            {isListening ? <MicOff size={18} /> : <Mic size={18} />}
           </button>
 
           <input
             type="text"
-            placeholder="Ask JARVIS or trigger reflex (e.g., 'give me a status report', 'buka rhino', 'call sister')..."
             value={commandInput}
             onChange={(e) => setCommandInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleExecute()}
-            disabled={isProcessing}
+            placeholder="Ketik atau bicara perintah (misal: 'status hp', 'buka rhino', 'call sister')..."
             style={{
               flex: 1,
-              background: 'rgba(15, 23, 42, 0.7)',
+              background: 'rgba(15, 23, 42, 0.75)',
               border: '1px solid rgba(0, 245, 212, 0.25)',
               borderRadius: '10px',
-              padding: '8px 14px',
+              padding: '9px 14px',
               fontSize: '12px',
               color: '#ffffff',
               outline: 'none',
@@ -1215,22 +1528,22 @@ export default function JarvisUltimateHUD() {
             disabled={isProcessing || !commandInput.trim()}
             style={{
               background: '#00f5d4',
-              color: '#050a12',
-              fontWeight: '600',
+              color: '#04070d',
+              fontWeight: '700',
               border: 'none',
               borderRadius: '10px',
-              padding: '8px 18px',
-              fontSize: '11px',
+              padding: '9px 20px',
+              fontSize: '12px',
               fontFamily: '"IBM Plex Mono", monospace',
-              cursor: isProcessing ? 'not-allowed' : 'pointer',
-              opacity: isProcessing || !commandInput.trim() ? 0.5 : 1
+              cursor: isProcessing || !commandInput.trim() ? 'not-allowed' : 'pointer',
+              opacity: isProcessing || !commandInput.trim() ? 0.4 : 1
             }}
           >
-            {isProcessing ? 'Thinking...' : 'TRANSMIT'}
+            {isProcessing ? 'PROSES...' : 'TRANSMIT'}
           </button>
         </div>
 
-        {/* Quick Reflex Chips */}
+        {/* Quick Reflex Action Chips */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
           <span
             style={{
@@ -1240,137 +1553,37 @@ export default function JarvisUltimateHUD() {
               letterSpacing: '1px'
             }}
           >
-            INSTANT REFLEXES:
+            INSTANT REFLEX:
           </span>
           {[
-            { label: 'Status Report', cmd: 'give me a system status report, jarvis' },
             { label: '📱 Status HP', cmd: 'status hp' },
             { label: '📱 Unlock HP', cmd: 'unlock my phone' },
             { label: '📱 WA di HP', cmd: 'open whatsapp in my phone' },
             { label: '📞 Call Sister', cmd: 'call sister' },
-            { label: 'Buka Rhino', cmd: 'buka rhino' },
-            { label: 'Buka Revit', cmd: 'buka revit' },
-            { label: 'Sync GDrive', cmd: 'sync drive' }
+            { label: '🖥️ Buka Rhino', cmd: 'buka rhino' },
+            { label: '🖥️ Buka Revit', cmd: 'buka revit' },
+            { label: '📺 Buka YouTube', cmd: 'buka youtube' },
+            { label: '🔄 Sync Drive', cmd: 'sync drive' }
           ].map((rf) => (
             <button
               key={rf.label}
               onClick={() => handleExecute(rf.cmd)}
               style={{
                 background: 'rgba(255, 255, 255, 0.04)',
-                border: '1px solid rgba(51, 65, 85, 0.5)',
+                border: '1px solid rgba(0, 245, 212, 0.2)',
                 color: '#cbd5e1',
-                padding: '2px 8px',
+                padding: '4px 10px',
                 borderRadius: '6px',
                 fontSize: '10px',
                 fontFamily: '"IBM Plex Mono", monospace',
                 cursor: 'pointer'
               }}
             >
-              ⚡ {rf.label}
+              {rf.label}
             </button>
           ))}
-          <div
-            style={{
-              marginLeft: 'auto',
-              fontFamily: '"IBM Plex Mono", monospace',
-              fontSize: '9px',
-              color: '#10b981'
-            }}
-          >
-            AI Engine: Live OmniRoute ($0.00)
-          </div>
         </div>
       </footer>
-
-      {/* COST & REFLEX GUIDE MODAL */}
-      {showReflexModal && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(2, 5, 10, 0.85)',
-            backdropFilter: 'blur(20px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 99999,
-            padding: '20px'
-          }}
-        >
-          <div
-            style={{
-              width: 'min(640px, 95vw)',
-              background: '#f7f5ed',
-              color: '#1e293b',
-              borderRadius: '16px',
-              padding: '28px',
-              position: 'relative'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <div>
-                <div
-                  style={{
-                    fontFamily: '"IBM Plex Mono", monospace',
-                    fontSize: '10px',
-                    letterSpacing: '2px',
-                    color: '#0f766e',
-                    fontWeight: '600'
-                  }}
-                >
-                  THE METER · OMNIROUTE 18-CH
-                </div>
-                <div style={{ fontSize: '24px', fontWeight: '700', color: '#0f172a' }}>
-                  JARVIS 2.0 Live Architecture
-                </div>
-              </div>
-              <button
-                onClick={() => setShowReflexModal(false)}
-                style={{
-                  background: '#e2e8f0',
-                  color: '#0f172a',
-                  border: 'none',
-                  borderRadius: '50%',
-                  width: '32px',
-                  height: '32px',
-                  cursor: 'pointer',
-                  fontWeight: '700'
-                }}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div style={{ marginTop: '20px', borderTop: '2px solid #0f172a', paddingTop: '12px' }}>
-              {[
-                { task: 'Live AI Brain (OmniRoute Gateway)', desc: '18 Akun Google Pro / Antigravity via port 20128', cost: '$0.00 UNLIMITED' },
-                { task: '3D Electric Particle Orb (TecTimmy Core)', desc: '1,100 Partikel plasma audio-reactive 60 FPS', cost: 'GPU Native ($0)' },
-                { task: 'British Voice Synthesis (Paul Bettany)', desc: 'Natural English UK / ID cadence synthesizer', cost: 'Free Built-in' },
-                { task: 'Wireless ADB Phone Control', desc: 'Unlock, app launch, SIM call otomatis via Wi-Fi', cost: 'Free ($0)' },
-                { task: 'Desktop Reflex Engine (150ms)', desc: 'Universal App Launcher di Session 1', cost: 'Local $0.00' }
-              ].map((r, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    padding: '8px 0',
-                    borderBottom: '1px solid #e2e8f0'
-                  }}
-                >
-                  <div>
-                    <div style={{ fontSize: '13px', fontWeight: '600' }}>{r.task}</div>
-                    <div style={{ fontSize: '11px', color: '#64748b' }}>{r.desc}</div>
-                  </div>
-                  <div style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '11px', fontWeight: '700', color: '#059669' }}>
-                    {r.cost}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+    </main>
   );
 }
