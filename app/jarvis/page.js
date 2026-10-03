@@ -1554,7 +1554,9 @@ export default function JarvisZubairHUD() {
             { label: 'Buka Revit', cmd: 'buka revit' },
             { label: 'Sync GDrive', cmd: 'sync drive' },
             { label: 'Virtual Office', cmd: 'buka virtual office' },
-            { label: 'Cek Skripsi', cmd: 'skripsi' }
+            { label: '📱 Unlock HP', cmd: 'unlock my phone' },
+            { label: '📞 Call Sister', cmd: 'call sister' },
+            { label: '📱 WA di HP', cmd: 'open whatsapp in my phone' }
           ].map((rf) => (
             <button
               key={rf.label}

@@ -16,6 +16,51 @@ export async function POST(req) {
     const q = command.trim().toLowerCase();
     const timestamp = new Date().toLocaleTimeString('id-ID', { timeZone: 'Asia/Makassar', hour12: false }) + ' WITA';
 
+    // 0. Smartphone Automation Hooks (Wireless ADB Bridge)
+    if (q.includes('unlock') && (q.includes('phone') || q.includes('hp'))) {
+      const pythonPath = 'C:\\Python314\\python.exe';
+      const scriptPath = 'D:\\SecondBrain\\00_system\\phone_jarvis.py';
+      exec(`"${pythonPath}" "${scriptPath}" unlock`);
+      return NextResponse.json({
+        status: 'success',
+        type: 'phone_control',
+        cost: '$0.00 (Wireless ADB)',
+        text: 'Membuka kunci layar smartphone via Wireless ADB.',
+        agent: 'JARVIS // PHONE_BRIDGE',
+        timestamp
+      });
+    }
+
+    if (q.startsWith('call ') || q.startsWith('telepon ') || q.startsWith('hubungi ')) {
+      const target = command.replace(/^(call|telepon|hubungi)\s+/i, '').replace(/in my phone|di hp/gi, '').trim();
+      const pythonPath = 'C:\\Python314\\python.exe';
+      const scriptPath = 'D:\\SecondBrain\\00_system\\phone_jarvis.py';
+      exec(`"${pythonPath}" "${scriptPath}" call "${target}"`);
+      return NextResponse.json({
+        status: 'success',
+        type: 'phone_control',
+        cost: '$0.00 (Wireless ADB)',
+        text: `Melakukan panggilan telepon langsung ke ${target} dari SIM card smartphone.`,
+        agent: 'JARVIS // PHONE_BRIDGE',
+        timestamp
+      });
+    }
+
+    if ((q.includes('in my phone') || q.includes('di hp')) && (q.startsWith('buka ') || q.startsWith('open '))) {
+      const appName = command.replace(/^(buka|open)\s+/i, '').replace(/in my phone|di hp/gi, '').trim();
+      const pythonPath = 'C:\\Python314\\python.exe';
+      const scriptPath = 'D:\\SecondBrain\\00_system\\phone_jarvis.py';
+      exec(`"${pythonPath}" "${scriptPath}" app "${appName}"`);
+      return NextResponse.json({
+        status: 'success',
+        type: 'phone_control',
+        cost: '$0.00 (Wireless ADB)',
+        text: `Membuka aplikasi ${appName} di layar smartphone.`,
+        agent: 'JARVIS // PHONE_BRIDGE',
+        timestamp
+      });
+    }
+
     // 1. Desktop Reflex Launchers (Sub-second execution, $0.00 cost)
     if (q.startsWith('buka ') || q.startsWith('open ') || q.startsWith('launch ')) {
       const target = command.replace(/^(buka|open|launch)\s+/i, '').trim();
