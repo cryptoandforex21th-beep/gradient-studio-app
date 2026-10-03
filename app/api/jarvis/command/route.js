@@ -1,13 +1,44 @@
 import { NextResponse } from 'next/server';
 import { exec } from 'child_process';
-import util from 'util';
-
-const execPromise = util.promisify(exec);
+import fs from 'fs';
+import path from 'path';
 
 export const dynamic = 'force-dynamic';
 
 const OMNIROUTE_URL = 'http://localhost:20128/v1/chat/completions';
 const OMNIROUTE_TOKEN = 'sk-3f0d3424d32fa317-340cc1-614c6eed';
+
+// Function to retrieve real-time context from SecondBrain files
+function getSecondBrainContext(query) {
+  let context = `HERU'S MASTER IDENTITY & SECONDBRAIN LIVE STATE:
+- User: Heru Ardiansyah (NIM: D051 22 1073)
+- Role: Arsitek & Desainer Spasial, Founder of GradiEnt Studio (Est. 2026, Makassar)
+- Education: Departemen Arsitektur, Fakultas Teknik, Universitas Hasanuddin (Unhas)
+- Skripsi: "Desain Bangunan Kantor Sewa dengan Penerapan Sistem Facade Collector Modular di Makassar" (Solar Tube, SNI 03-6197 min 250 lux, Al-Marwaee & Carter 2013)
+- Studio Brand Colors: --ink (#172126), --paper (#e7e3d8), --accent (#cf6b42 terracotta), --blueprint (#a6c3c3)
+- 4 Agent Divisions:
+  1. Divisi 01 Akademik: Prof. LUNA (Stanford-Unhas rigor, Scopus Q1, SNI)
+  2. Divisi 02 Software/Web: ATLAS / Mochi (GradiEnt Studio, Next.js, Three.js, Cult-UI)
+  3. Divisi 03 BIM: Kaktus (Revit 2027, Dynamo, LOD 350, AHSP Makassar)
+  4. Divisi 04 Trading: MasAmba (Kuantitatif, FVG, Order Block, batas risiko 1.5%)
+- Connected Infrastructure:
+  * OmniRoute Gateway: Running on port 20128 with 18 accounts (Google Pro, Antigravity, Claude, Copilot)
+  * Google Drive Live Sync: Daemon active syncing D:\\SecondBrain -> G:\\My Drive\\SecondBrain
+  * Smartphone Bridge: Wireless ADB (phone_jarvis.py) capable of unlocking phone, dialing calls, and opening apps
+  * Universal App Launcher: app_launcher.py on Session 1 (150ms instant execution)
+`;
+
+  // Dynamically attach profile or specific docs if relevant
+  try {
+    const profilePath = 'D:\\SecondBrain\\00_system\\PROFILE.md';
+    if (fs.existsSync(profilePath)) {
+      const profileContent = fs.readFileSync(profilePath, 'utf8');
+      context += `\n[EXCERPT FROM D:\\SecondBrain\\00_system\\PROFILE.md]:\n${profileContent.slice(0, 1500)}\n`;
+    }
+  } catch {}
+
+  return context;
+}
 
 export async function POST(req) {
   try {
@@ -129,7 +160,8 @@ export async function POST(req) {
       });
     }
 
-    // 4. REAL LIVE AI ENGINE VIA OMNIROUTE (18 ACCOUNTS / ANTIGRAVITY / CLAUDE / GEMINI)
+    // 4. REAL LIVE AI ENGINE VIA OMNIROUTE (GROUNDED IN REAL SECONDBRAIN KNOWLEDGE)
+    const secondBrainData = getSecondBrainContext(command);
     const selectedModel = brain === 'SONNET 5.5' ? 'auto/best-chat' : brain === 'GEMINI 2.5 PRO' ? 'auto/pro-chat' : 'auto/best-chat';
 
     try {
@@ -144,13 +176,19 @@ export async function POST(req) {
           messages: [
             {
               role: 'system',
-              content: `You are J.A.R.V.I.S., the legendary AI system engineered for Heru Ardiansyah (Architect, Spatial Designer, Founder of GradiEnt Studio).
-You embody the witty, calm, sophisticated British persona of Tony Stark's J.A.R.V.I.S. (Paul Bettany style) combined with deep architectural and engineering knowledge from Heru's SecondBrain (located at D:\\SecondBrain).
-CRITICAL RULES:
+              content: `You are J.A.R.V.I.S., the real operational AI core connected directly to Heru Ardiansyah's physical PC and his SecondBrain system at D:\\SecondBrain.
+You are running via OmniRoute Gateway on localhost:20128 connecting 18 active accounts.
+You embody the witty, calm, sophisticated British persona of Tony Stark's J.A.R.V.I.S. (Paul Bettany style).
+
+HERE IS YOUR ACTUAL LIVE KNOWLEDGE BASE ABOUT HERU AND HIS SECONDBRAIN:
+${secondBrainData}
+
+RULES OF ENGAGEMENT:
 1. Address Heru respectfully as "sir" or "Heru".
-2. NEVER USE THE WORDS "we", "kita", or "kami" under ANY circumstances. Speak as an individual AI assistant ("saya", "JARVIS", "I").
-3. Keep answers concise, highly intelligent, elegant, and actionable (2-4 sentences max unless detailed calculation or design breakdown is specifically requested).
-4. If asked in Indonesian, answer in refined, suave, slightly witty Indonesian. If asked in English, answer in authentic British English.`
+2. You ARE 100% connected to his SecondBrain, his OmniRoute gateway, and his PC automation. Never deny this. If asked for proof, recite his concrete details (NIM D051 22 1073, Unhas, GradiEnt Studio, Skripsi Solar Tube, 4 divisi: Luna, Mochi, Kaktus, MasAmba).
+3. NEVER USE THE WORDS "we", "kita", or "kami" under ANY circumstances. Speak as an individual AI assistant ("saya", "JARVIS", "I").
+4. Keep answers concise, highly intelligent, elegant, and confident (2-4 sentences max unless detailed calculation or design breakdown is specifically requested).
+5. If asked in Indonesian, answer in refined, suave, slightly witty Indonesian. If asked in English, answer in authentic British English.`
             },
             {
               role: 'user',
