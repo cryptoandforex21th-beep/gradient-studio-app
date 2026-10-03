@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 
-export default function JarvisZubairHUD() {
-  // Canvas & Simulation Refs
+export default function JarvisUltimateHUD() {
+  // Main Canvas & Mode Refs
   const canvasRef = useRef(null);
   const ringCanvasRef = useRef(null);
   const cubeCanvasRef = useRef(null);
@@ -13,65 +13,68 @@ export default function JarvisZubairHUD() {
   const cubeAnimRef = useRef(null);
   const videoRef = useRef(null);
 
-  // System States
-  const [telemetry, setTelemetry] = useState(null);
+  // View Mode: 'ORB' (TecTimmy 3D Electric Core) | 'GALAXY' (Zubair 3D Constellation)
+  const [viewMode, setViewMode] = useState('ORB');
+  
+  // HUD Mode for the Right Dial: 'RING' | 'CUBE' | 'FACE'
+  const [hudMode, setHudMode] = useState('RING');
+  const [systemState, setSystemState] = useState('ONLINE'); // 'ONLINE' | 'SPEAKING' | 'LISTENING' | 'THINKING'
+  const [activeBrain, setActiveBrain] = useState('SONNET 5.5'); // 'SONNET 5.5' | 'GEMINI 2.5 PRO' | 'ANTIGRAVITY'
+  
+  // Data States
   const [graphData, setGraphData] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeHub, setActiveHub] = useState('all');
   const [currentTime, setCurrentTime] = useState('');
 
-  // Zubair UI Modes & Toggles
-  const [hudMode, setHudMode] = useState('RING'); // 'RING' | 'CUBE' | 'FACE'
-  const [systemState, setSystemState] = useState('ONLINE'); // 'ONLINE' | 'SPEAKING' | 'LISTENING' | 'THINKING'
-  const [activeBrain, setActiveBrain] = useState('SONNET 5.5'); // 'SONNET 5.5' | 'GEMINI 2.5 PRO' | 'ANTIGRAVITY'
-  
   // Right Control Stack Toggles
   const [eyesOn, setEyesOn] = useState(false);
   const [watchOn, setWatchOn] = useState(false);
   const [holoOn, setHoloOn] = useState(true);
   const [focusOn, setFocusOn] = useState(false);
   const [showReflexModal, setShowReflexModal] = useState(false);
-  const [showForces, setShowForces] = useState(false);
+  const [showWeatherCard, setShowWeatherCard] = useState(true);
 
-  // Simulation Forces
-  const [rotationSpeed, setRotationSpeed] = useState(0.0018);
-  const [linkDistance, setLinkDistance] = useState(140);
-  const [galaxySpread, setGalaxySpread] = useState(260);
-
-  // Inbox Notifications (matching Zubair)
-  const [inboxItems, setInboxItems] = useState([
-    {
-      id: 1,
-      icon: '⚡',
-      title: 'Tool run — via Google Drive',
-      desc: 'Live sync daemon aktif memantau D:\\SecondBrain → G:\\My Drive\\SecondBrain (100% synced).',
-      time: 'Just now'
-    },
-    {
-      id: 2,
-      icon: '📞',
-      title: 'Telegram — SecondBrain Bot',
-      desc: 'Webhook Supabase siaga menerima voice note & pesan kilat mobile Heru.',
-      time: '2m ago'
-    },
-    {
-      id: 3,
-      icon: '🏢',
-      title: 'Virtual AI Office — 4 Agents',
-      desc: 'Prof. Luna, Mochi, Kaktus, dan MasAmba tersinkronisasi di localhost:5173.',
-      time: '5m ago'
-    }
-  ]);
-
-  // Speech & Interaction
+  // Audio & Speech States
+  const [userSpeechQuery, setUserSpeechQuery] = useState('');
   const [activeSpeech, setActiveSpeech] = useState(
-    'Halo Heru. Seluruh SecondBrain, Google Drive Live Sync, dan 4 divisi agent sudah siap. Apa instruksi berikutnya?'
+    'All systems nominal, sir. SecondBrain, OmniRoute 18-channel gateway, and phone automation are online. How may I assist you tonight?'
   );
   const [commandInput, setCommandInput] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [audioLevel, setAudioLevel] = useState(0); // 0 to 1 for visualizer spikes
+
+  // Simulation Forces
+  const [rotationSpeed, setRotationSpeed] = useState(0.0018);
+  const [galaxySpread, setGalaxySpread] = useState(260);
+
+  // Inbox Notifications
+  const [inboxItems, setInboxItems] = useState([
+    {
+      id: 1,
+      icon: '⚡',
+      title: 'OmniRoute Gateway Online',
+      desc: 'Port 20128 aktif terhubung ke 18 akun Google Pro, Antigravity & Copilot.',
+      time: 'Just now'
+    },
+    {
+      id: 2,
+      icon: '📁',
+      title: 'Google Drive Live Sync',
+      desc: 'Daemon aktif memantau D:\\SecondBrain → G:\\My Drive\\SecondBrain.',
+      time: '2m ago'
+    },
+    {
+      id: 3,
+      icon: '📱',
+      title: 'Wireless ADB Phone Bridge',
+      desc: 'Skrip phone_jarvis.py siaga menerima voice control unlock & call.',
+      time: '5m ago'
+    }
+  ]);
 
   // 3D Camera / Orbit Coordinates
   const cameraRef = useRef({
@@ -81,9 +84,6 @@ export default function JarvisZubairHUD() {
     targetRotX: 0.15,
     targetRotY: 0.25,
     targetZoom: 1.1,
-    focusX: 0,
-    focusY: 0,
-    focusZ: 0,
     isDragging: false,
     lastMouseX: 0,
     lastMouseY: 0
@@ -105,29 +105,22 @@ export default function JarvisZubairHUD() {
     return () => clearInterval(timer);
   }, []);
 
-  // Fetch Telemetry & Graph Data
+  // Fetch Graph Data
   useEffect(() => {
-    fetch('/api/jarvis/status')
-      .then((res) => res.json())
-      .then((data) => setTelemetry(data))
-      .catch(() => {});
-
     fetch('/api/jarvis/graph')
       .then((res) => res.json())
       .then((data) => {
-        // Distribute nodes in a 3D spherical galaxy
         const nodesWith3D = data.nodes.map((n, i) => {
-          // Golden ratio spherical distribution
           const phi = Math.acos(1 - 2 * (i + 0.5) / data.nodes.length);
           const theta = Math.PI * (1 + Math.sqrt(5)) * (i + 0.5);
           const radius = (n.category === 'core' ? 80 : 160) + Math.random() * 80;
 
           const categoryColors = {
-            core: '#f43f5e',      // Rose Pink
-            academic: '#00f5d4',  // Teal Cyan (Luna)
-            studio: '#a855f7',    // Electric Violet (Mochi)
-            bim: '#f59e0b',       // Amber Gold (Kaktus)
-            trading: '#10b981'    // Emerald Green (MasAmba)
+            core: '#f43f5e',
+            academic: '#00f5d4',
+            studio: '#a855f7',
+            bim: '#f59e0b',
+            trading: '#10b981'
           };
 
           return {
@@ -140,67 +133,95 @@ export default function JarvisZubairHUD() {
           };
         });
 
-        setGraphData({
-          ...data,
-          nodes: nodesWith3D
-        });
+        setGraphData({ ...data, nodes: nodesWith3D });
       })
       .catch(() => {});
   }, []);
 
-  // Text-To-Speech function
+  // British Iron Man JARVIS Speech Synthesis (Paul Bettany Style)
   const speakText = useCallback((text) => {
     if (!soundEnabled || typeof window === 'undefined' || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'id-ID';
-    utterance.rate = 1.05;
-    utterance.pitch = 1.0;
-    utterance.onstart = () => setSystemState('SPEAKING');
-    utterance.onend = () => setSystemState('ONLINE');
+
+    // Clean markdown formatting for smooth speech
+    const cleanSpeech = text
+      .replace(/[#*`_~>[\]()|]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    const utterance = new SpeechSynthesisUtterance(cleanSpeech);
+    
+    // Pick the best British English or refined voice
+    const voices = window.speechSynthesis.getVoices();
+    const britishVoice = voices.find(
+      (v) =>
+        (v.lang.includes('en-GB') || v.lang.includes('en_GB')) &&
+        (v.name.includes('George') || v.name.includes('Ryan') || v.name.includes('Oliver') || v.name.includes('UK') || v.name.includes('Natural'))
+    ) || voices.find((v) => v.lang.includes('en-GB')) || voices.find((v) => v.lang.includes('en-US') && v.name.includes('Natural')) || voices[0];
+
+    if (britishVoice) {
+      utterance.voice = britishVoice;
+    }
+    
+    // Calm, suave, dignified British butler cadence
+    utterance.rate = 1.02;
+    utterance.pitch = 0.94;
+
+    utterance.onstart = () => {
+      setSystemState('SPEAKING');
+      setAudioLevel(0.8);
+    };
+
+    utterance.onend = () => {
+      setSystemState('ONLINE');
+      setAudioLevel(0);
+    };
+
     window.speechSynthesis.speak(utterance);
   }, [soundEnabled]);
 
-  // Execute Command or Reflex
+  // Execute Command via Live AI Engine
   const handleExecute = async (overrideCmd) => {
     const cmd = (overrideCmd || commandInput).trim();
     if (!cmd) return;
 
+    setUserSpeechQuery(cmd);
     setIsProcessing(true);
     setSystemState('THINKING');
+    setAudioLevel(0.4);
 
     try {
       const res = await fetch('/api/jarvis/command', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ command: cmd })
+        body: JSON.stringify({ command: cmd, brain: activeBrain })
       });
       const data = await res.json();
       
-      const reply = data.text || `Reflex dieksekusi: ${cmd}`;
+      const reply = data.text || `Processed: ${cmd}`;
       setActiveSpeech(reply);
       speakText(reply);
       setCommandInput('');
 
-      // Add to inbox if action performed
-      if (data.type === 'reflex') {
-        setInboxItems((prev) => [
-          {
-            id: Date.now(),
-            icon: '⚡',
-            title: `Reflex Action — ${cmd}`,
-            desc: data.text,
-            time: 'Just now'
-          },
-          ...prev.slice(0, 4)
-        ]);
-      }
+      // Add to inbox
+      setInboxItems((prev) => [
+        {
+          id: Date.now(),
+          icon: data.type === 'phone_control' ? '📱' : data.type === 'reflex' ? '⚡' : '🧠',
+          title: `${data.type.toUpperCase()} — ${cmd.slice(0, 22)}...`,
+          desc: reply.slice(0, 80) + '...',
+          time: 'Just now'
+        },
+        ...prev.slice(0, 4)
+      ]);
     } catch {
-      const fallback = `Mengeksekusi reflex "${cmd}" secara lokal...`;
+      const fallback = `I am at your disposal, sir. Executing command locally...`;
       setActiveSpeech(fallback);
+      speakText(fallback);
     } finally {
       setIsProcessing(false);
       setSystemState('ONLINE');
+      setAudioLevel(0);
     }
   };
 
@@ -209,24 +230,26 @@ export default function JarvisZubairHUD() {
     if (typeof window === 'undefined') return;
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      alert('Browser tidak mendukung Speech Recognition API. Silakan ketik perintah langsung.');
+      alert('Browser tidak mendukung Speech Recognition API. Silakan ketik di bar input.');
       return;
     }
 
     if (isListening) {
       setIsListening(false);
       setSystemState('ONLINE');
+      setAudioLevel(0);
       return;
     }
 
     const recognition = new SpeechRecognition();
-    recognition.lang = 'id-ID';
+    recognition.lang = 'en-US'; // English for Iron Man style, or id-ID
     recognition.continuous = false;
     recognition.interimResults = false;
 
     recognition.onstart = () => {
       setIsListening(true);
       setSystemState('LISTENING');
+      setAudioLevel(0.6);
     };
 
     recognition.onresult = (event) => {
@@ -240,11 +263,15 @@ export default function JarvisZubairHUD() {
     recognition.onerror = () => {
       setIsListening(false);
       setSystemState('ONLINE');
+      setAudioLevel(0);
     };
 
     recognition.onend = () => {
       setIsListening(false);
-      if (systemState === 'LISTENING') setSystemState('ONLINE');
+      if (systemState === 'LISTENING') {
+        setSystemState('ONLINE');
+        setAudioLevel(0);
+      }
     };
 
     recognition.start();
@@ -266,9 +293,11 @@ export default function JarvisZubairHUD() {
     };
   }, [eyesOn]);
 
-  // Main 3D Constellation Galaxy Canvas Render Loop
+  // =========================================================================
+  // MAIN CANVAS RENDER LOOP (ORB 2.0 vs GALAXY)
+  // =========================================================================
   useEffect(() => {
-    if (!graphData || !canvasRef.current) return;
+    if (!canvasRef.current) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -278,8 +307,8 @@ export default function JarvisZubairHUD() {
     canvas.height = height * window.devicePixelRatio;
     ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
-    // Stars background
-    const stars = Array.from({ length: 140 }, () => ({
+    // Starfield for galaxy & orb ambient
+    const stars = Array.from({ length: 150 }, () => ({
       x: (Math.random() - 0.5) * width * 1.5,
       y: (Math.random() - 0.5) * height * 1.5,
       z: Math.random() * 800 + 100,
@@ -287,257 +316,242 @@ export default function JarvisZubairHUD() {
       twinkle: Math.random() * Math.PI * 2
     }));
 
-    let frame = 0;
+    // 1,200 Particles for the 3D Electric Particle Plasma Orb (TecTimmy Core)
+    const orbParticles = Array.from({ length: 1100 }, (_, i) => {
+      const phi = Math.acos(1 - 2 * (i + 0.5) / 1100);
+      const theta = Math.PI * (1 + Math.sqrt(5)) * (i + 0.5);
+      const baseR = 120 + (Math.random() - 0.5) * 15;
+      return {
+        phi,
+        theta,
+        baseR,
+        speed: 0.008 + Math.random() * 0.012,
+        spikeFreq: Math.random() * 8 + 2,
+        phase: Math.random() * Math.PI * 2,
+        size: Math.random() * 1.8 + 0.8
+      };
+    });
+
+    let t = 0;
 
     const render = () => {
-      frame++;
+      t += 0.025;
       ctx.clearRect(0, 0, width, height);
 
-      // Deep space ambient gradient
+      // Deep space background
       const bgGrad = ctx.createRadialGradient(
-        width * 0.45, height * 0.5, 50,
-        width * 0.45, height * 0.5, width * 0.8
+        width * 0.5, height * 0.5, 40,
+        width * 0.5, height * 0.5, width * 0.85
       );
-      bgGrad.addColorStop(0, '#060d16');
-      bgGrad.addColorStop(0.5, '#04080e');
-      bgGrad.addColorStop(1, '#020407');
+      bgGrad.addColorStop(0, '#06101d');
+      bgGrad.addColorStop(0.5, '#030810');
+      bgGrad.addColorStop(1, '#010408');
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, width, height);
 
-      const cam = cameraRef.current;
+      const originX = width * (focusOn ? 0.5 : 0.44);
+      const originY = height * 0.46;
 
-      // Auto-drift rotation when idle
-      if (!cam.isDragging) {
-        cam.rotY += rotationSpeed;
-      }
-
-      // Smooth interpolation to target
-      cam.rotX += (cam.targetRotX - cam.rotX) * 0.08;
-      cam.rotY += (cam.targetRotY - cam.rotY) * 0.08;
-      cam.zoom += (cam.targetZoom - cam.zoom) * 0.08;
-
-      const cosX = Math.cos(cam.rotX);
-      const sinX = Math.sin(cam.rotX);
-      const cosY = Math.cos(cam.rotY);
-      const sinY = Math.sin(cam.rotY);
-
-      const fov = 480 * cam.zoom;
-      const originX = width * (focusOn ? 0.5 : 0.42);
-      const originY = height * 0.5;
-
-      // Render stars
+      // Render Ambient Stars
       stars.forEach((s) => {
         s.twinkle += 0.03;
-        const alpha = 0.25 + Math.sin(s.twinkle) * 0.2;
-        ctx.fillStyle = `rgba(200, 235, 255, ${alpha})`;
+        const alpha = 0.2 + Math.sin(s.twinkle) * 0.18;
+        ctx.fillStyle = `rgba(180, 230, 255, ${alpha})`;
         ctx.beginPath();
         ctx.arc(originX + s.x * (400 / s.z), originY + s.y * (400 / s.z), s.size, 0, Math.PI * 2);
         ctx.fill();
       });
 
-      // Filtered nodes
-      let nodes = graphData.nodes;
-      if (activeHub !== 'all') {
-        nodes = nodes.filter((n) => n.category === activeHub || n.category === 'core');
-      }
-      if (searchQuery.trim()) {
-        const sq = searchQuery.toLowerCase();
-        nodes = nodes.filter(
-          (n) => n.label.toLowerCase().includes(sq) || (n.desc && n.desc.toLowerCase().includes(sq))
-        );
-      }
+      // ---------------------------------------------------------------------
+      // MODE A: TECTIMMY 3D ELECTRIC PARTICLE ORB (JARVIS 2.0)
+      // ---------------------------------------------------------------------
+      if (viewMode === 'ORB') {
+        const isSpeaking = systemState === 'SPEAKING';
+        const isListeningNow = systemState === 'LISTENING';
+        const isThinking = systemState === 'THINKING';
 
-      // Project nodes in 3D
-      const projectedNodes = nodes.map((node) => {
-        // Rotate around Y axis
-        let x1 = node.x3d * cosY - node.z3d * sinY;
-        let z1 = node.z3d * cosY + node.x3d * sinY;
+        const dynamicSpike = isSpeaking
+          ? 35 + Math.sin(t * 12) * 20
+          : isListeningNow
+          ? 25 + Math.cos(t * 8) * 15
+          : isThinking
+          ? 18 + Math.sin(t * 16) * 12
+          : 6 + Math.sin(t * 2) * 4;
 
-        // Rotate around X axis
-        let y2 = node.y3d * cosX - z1 * sinX;
-        let z2 = z1 * cosX + node.y3d * sinX;
-
-        // Spread adjustment
-        const spreadFactor = galaxySpread / 200;
-        x1 *= spreadFactor;
-        y2 *= spreadFactor;
-        z2 *= spreadFactor;
-
-        // Translate to camera focus
-        const distance = z2 + 420;
-        const scale = distance > 20 ? fov / distance : 0;
-        const px = originX + x1 * scale;
-        const py = originY + y2 * scale;
-
-        return {
-          ...node,
-          px,
-          py,
-          depth: z2,
-          scale,
-          visible: distance > 20
-        };
-      });
-
-      // Sort by depth (painters algorithm)
-      projectedNodes.sort((a, b) => b.depth - a.depth);
-
-      // Draw Connections (Lasers)
-      ctx.lineWidth = 0.75;
-      graphData.links.forEach((l) => {
-        const s = projectedNodes.find((n) => n.id === l.source);
-        const t = projectedNodes.find((n) => n.id === l.target);
-        if (s && t && s.visible && t.visible) {
-          const depthAvg = (s.depth + t.depth) / 2;
-          const alpha = Math.max(0.04, Math.min(0.28, 1 - depthAvg / 600));
-          ctx.strokeStyle = `rgba(0, 245, 212, ${alpha * 0.75})`;
-          ctx.beginPath();
-          ctx.moveTo(s.px, s.py);
-          ctx.lineTo(t.px, t.py);
-          ctx.stroke();
-        }
-      });
-
-      // Draw Nodes
-      projectedNodes.forEach((node) => {
-        if (!node.visible) return;
-
-        const isSelected = selectedNode && selectedNode.id === node.id;
-        const depthAlpha = Math.max(0.35, Math.min(1.0, 1 - node.depth / 800));
-        const radius = Math.max(2.5, node.baseRadius * (node.scale / 1.5));
-
-        // Soft outer glow
-        const glowRad = radius * (isSelected ? 3.5 : 2.2);
-        const glow = ctx.createRadialGradient(node.px, node.py, radius * 0.2, node.px, node.py, glowRad);
-        glow.addColorStop(0, node.color);
-        glow.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = glow;
+        // Central Electric Plasma Core Glow
+        const coreGlow = ctx.createRadialGradient(originX, originY, 10, originX, originY, 180);
+        coreGlow.addColorStop(0, 'rgba(0, 245, 212, 0.45)');
+        coreGlow.addColorStop(0.3, 'rgba(0, 210, 255, 0.22)');
+        coreGlow.addColorStop(0.7, 'rgba(5, 30, 60, 0.12)');
+        coreGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = coreGlow;
         ctx.beginPath();
-        ctx.arc(node.px, node.py, glowRad, 0, Math.PI * 2);
+        ctx.arc(originX, originY, 180, 0, Math.PI * 2);
         ctx.fill();
 
-        // Solid core
-        ctx.fillStyle = isSelected ? '#ffffff' : node.color;
-        ctx.beginPath();
-        ctx.arc(node.px, node.py, radius, 0, Math.PI * 2);
-        ctx.fill();
+        // Project and Draw 3D Orb Particles
+        const cosY = Math.cos(t * 0.4);
+        const sinY = Math.sin(t * 0.4);
+        const cosX = Math.cos(0.25);
+        const sinX = Math.sin(0.25);
 
-        // Halo ring on selected
-        if (isSelected) {
-          ctx.strokeStyle = '#00f5d4';
-          ctx.lineWidth = 1.5;
+        const projectedOrb = orbParticles.map((p) => {
+          // Dynamic radius with audio reactive spike modulation
+          const currentR =
+            p.baseR + Math.sin(p.phi * p.spikeFreq + t * 4 + p.phase) * dynamicSpike;
+
+          // Spherical coordinates to 3D Cartesian
+          let x = Math.sin(p.phi) * Math.cos(p.theta + t * p.speed) * currentR;
+          let y = Math.cos(p.phi) * currentR;
+          let z = Math.sin(p.phi) * Math.sin(p.theta + t * p.speed) * currentR;
+
+          // 3D Rotation
+          let x1 = x * cosY - z * sinY;
+          let z1 = z * cosY + x * sinY;
+          let y2 = y * cosX - z1 * sinX;
+          let z2 = z1 * cosX + y * sinX;
+
+          const distance = z2 + 380;
+          const scale = 400 / distance;
+          return {
+            px: originX + x1 * scale,
+            py: originY + y2 * scale,
+            depth: z2,
+            scale,
+            size: p.size * scale
+          };
+        });
+
+        // Depth sort
+        projectedOrb.sort((a, b) => b.depth - a.depth);
+
+        // Draw electric connecting arcs between nearby particles
+        ctx.lineWidth = 0.65;
+        for (let i = 0; i < projectedOrb.length; i += 7) {
+          const p1 = projectedOrb[i];
+          const p2 = projectedOrb[(i + 14) % projectedOrb.length];
+          const dist = Math.hypot(p1.px - p2.px, p1.py - p2.py);
+          if (dist < 45) {
+            const alpha = (1 - dist / 45) * 0.35;
+            ctx.strokeStyle = `rgba(0, 245, 212, ${alpha})`;
+            ctx.beginPath();
+            ctx.moveTo(p1.px, p1.py);
+            ctx.lineTo(p2.px, p2.py);
+            ctx.stroke();
+          }
+        }
+
+        // Draw glowing particle points
+        projectedOrb.forEach((p) => {
+          const depthAlpha = Math.max(0.25, Math.min(1.0, 1 - p.depth / 500));
+          ctx.fillStyle = isSpeaking
+            ? `rgba(255, 255, 255, ${depthAlpha})`
+            : `rgba(0, 245, 212, ${depthAlpha})`;
           ctx.beginPath();
-          ctx.arc(node.px, node.py, radius + 4, 0, Math.PI * 2);
-          ctx.stroke();
-        }
+          ctx.arc(p.px, p.py, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
 
-        // Monospace Labels (only for closer nodes or core or selected)
-        if (node.depth < 120 || node.category === 'core' || isSelected) {
-          ctx.font = `${Math.max(9, Math.min(13, 10 * (node.scale / 1.4)))}px "IBM Plex Mono", monospace`;
-          ctx.fillStyle = isSelected ? '#00f5d4' : `rgba(230, 240, 245, ${depthAlpha * 0.85})`;
-          ctx.fillText(node.label, node.px + radius + 6, node.py + 3.5);
-        }
-      });
+        // Central Subtle Monospace Text in Orb Center (TecTimmy Style)
+        ctx.save();
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '500 13px "IBM Plex Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = '#00f5d4';
+        ctx.shadowBlur = 10;
+        const centerPrompt = isListeningNow
+          ? 'Listening...'
+          : isThinking
+          ? 'Thinking...'
+          : 'How may I help, sir?';
+        ctx.fillText(centerPrompt, originX, originY);
+        ctx.restore();
+      }
+
+      // ---------------------------------------------------------------------
+      // MODE B: ZUBAIR 3D CONSTELLATION GALAXY
+      // ---------------------------------------------------------------------
+      if (viewMode === 'GALAXY' && graphData) {
+        const cam = cameraRef.current;
+        if (!cam.isDragging) cam.rotY += rotationSpeed;
+
+        cam.rotX += (cam.targetRotX - cam.rotX) * 0.08;
+        cam.rotY += (cam.targetRotY - cam.rotY) * 0.08;
+        cam.zoom += (cam.targetZoom - cam.zoom) * 0.08;
+
+        const cosX = Math.cos(cam.rotX);
+        const sinX = Math.sin(cam.rotX);
+        const cosY = Math.cos(cam.rotY);
+        const sinY = Math.sin(cam.rotY);
+        const fov = 480 * cam.zoom;
+
+        const projectedNodes = graphData.nodes.map((node) => {
+          let x1 = node.x3d * cosY - node.z3d * sinY;
+          let z1 = node.z3d * cosY + node.x3d * sinY;
+          let y2 = node.y3d * cosX - z1 * sinX;
+          let z2 = z1 * cosX + node.y3d * sinX;
+
+          const spreadFactor = galaxySpread / 200;
+          x1 *= spreadFactor;
+          y2 *= spreadFactor;
+          z2 *= spreadFactor;
+
+          const distance = z2 + 420;
+          const scale = distance > 20 ? fov / distance : 0;
+          return {
+            ...node,
+            px: originX + x1 * scale,
+            py: originY + y2 * scale,
+            depth: z2,
+            scale,
+            visible: distance > 20
+          };
+        });
+
+        projectedNodes.sort((a, b) => b.depth - a.depth);
+
+        // Connections
+        ctx.lineWidth = 0.75;
+        graphData.links.forEach((l) => {
+          const s = projectedNodes.find((n) => n.id === l.source);
+          const t = projectedNodes.find((n) => n.id === l.target);
+          if (s && t && s.visible && t.visible) {
+            const depthAvg = (s.depth + t.depth) / 2;
+            const alpha = Math.max(0.04, Math.min(0.28, 1 - depthAvg / 600));
+            ctx.strokeStyle = `rgba(0, 245, 212, ${alpha * 0.75})`;
+            ctx.beginPath();
+            ctx.moveTo(s.px, s.py);
+            ctx.lineTo(t.px, t.py);
+            ctx.stroke();
+          }
+        });
+
+        // Nodes
+        projectedNodes.forEach((node) => {
+          if (!node.visible) return;
+          const radius = Math.max(2.5, node.baseRadius * (node.scale / 1.5));
+          ctx.fillStyle = node.color;
+          ctx.beginPath();
+          ctx.arc(node.px, node.py, radius, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (node.depth < 120 || node.category === 'core') {
+            ctx.font = `${Math.max(9, Math.min(13, 10 * (node.scale / 1.4)))}px "IBM Plex Mono", monospace`;
+            ctx.fillStyle = `rgba(230, 240, 245, 0.85)`;
+            ctx.fillText(node.label, node.px + radius + 6, node.py + 3.5);
+          }
+        });
+      }
 
       animFrameRef.current = requestAnimationFrame(render);
     };
 
     render();
+    return () => cancelAnimationFrame(animFrameRef.current);
+  }, [viewMode, graphData, systemState, focusOn, galaxySpread, rotationSpeed]);
 
-    // Mouse Interaction Handlers
-    const handleMouseDown = (e) => {
-      // Don't drag if clicking buttons or inputs
-      if (e.target.closest('button, input, a, .interactive-card')) return;
-      cam.isDragging = true;
-      cam.lastMouseX = e.clientX;
-      cam.lastMouseY = e.clientY;
-    };
-
-    const handleMouseMove = (e) => {
-      if (!cam.isDragging) return;
-      const dx = e.clientX - cam.lastMouseX;
-      const dy = e.clientY - cam.lastMouseY;
-      cam.targetRotY += dx * 0.005;
-      cam.targetRotX += dy * 0.005;
-      cam.lastMouseX = e.clientX;
-      cam.lastMouseY = e.clientY;
-    };
-
-    const handleMouseUp = () => {
-      cam.isDragging = false;
-    };
-
-    const handleWheel = (e) => {
-      if (e.target.closest('.scrollable-pane')) return;
-      e.preventDefault();
-      const zoomDelta = e.deltaY * -0.001;
-      cam.targetZoom = Math.max(0.4, Math.min(2.8, cam.targetZoom + zoomDelta));
-    };
-
-    // Click to select node
-    const handleClick = (e) => {
-      if (e.target.closest('button, input, a, .interactive-card')) return;
-      const rect = canvas.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const clickY = e.clientY - rect.top;
-
-      // Project current nodes to hit test
-      const cosX = Math.cos(cam.rotX);
-      const sinX = Math.sin(cam.rotX);
-      const cosY = Math.cos(cam.rotY);
-      const sinY = Math.sin(cam.rotY);
-      const fov = 480 * cam.zoom;
-      const originX = width * (focusOn ? 0.5 : 0.42);
-      const originY = height * 0.5;
-
-      let found = null;
-      let minDistance = 25;
-
-      graphData.nodes.forEach((node) => {
-        let x1 = node.x3d * cosY - node.z3d * sinY;
-        let z1 = node.z3d * cosY + node.x3d * sinY;
-        let y2 = node.y3d * cosX - z1 * sinX;
-        let z2 = z1 * cosX + node.y3d * sinX;
-        const spreadFactor = galaxySpread / 200;
-        x1 *= spreadFactor;
-        y2 *= spreadFactor;
-        z2 *= spreadFactor;
-        const distance = z2 + 420;
-        if (distance > 20) {
-          const scale = fov / distance;
-          const px = originX + x1 * scale;
-          const py = originY + y2 * scale;
-          const d = Math.hypot(clickX - px, clickY - py);
-          if (d < minDistance) {
-            minDistance = d;
-            found = node;
-          }
-        }
-      });
-
-      if (found) {
-        setSelectedNode(found);
-        setActiveSpeech(`SecondBrain Note: ${found.label} (${found.category.toUpperCase()}). ${found.desc || ''}`);
-      }
-    };
-
-    window.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    window.addEventListener('click', handleClick);
-
-    return () => {
-      cancelAnimationFrame(animFrameRef.current);
-      window.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-      window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('click', handleClick);
-    };
-  }, [graphData, activeHub, searchQuery, focusOn, galaxySpread, rotationSpeed, selectedNode]);
-
-  // J.A.R.V.I.S. Arc Reactor Ring Canvas HUD Render
+  // J.A.R.V.I.S. Arc Reactor HUD Canvas Render
   useEffect(() => {
     if (hudMode !== 'RING' || !ringCanvasRef.current) return;
 
@@ -560,7 +574,7 @@ export default function JarvisZubairHUD() {
       const cy = size / 2;
       const r = 74;
 
-      // 1. Outer Speedometer Radial Ticks (Zubair signature)
+      // Radial ticks
       const numTicks = 48;
       ctx.save();
       ctx.translate(cx, cy);
@@ -577,7 +591,7 @@ export default function JarvisZubairHUD() {
       }
       ctx.restore();
 
-      // 2. Cyan Segmented Outer Track
+      // Outer cyan track
       ctx.save();
       ctx.beginPath();
       ctx.arc(cx, cy, r - 4, angle, angle + Math.PI * 1.3);
@@ -588,7 +602,7 @@ export default function JarvisZubairHUD() {
       ctx.stroke();
       ctx.restore();
 
-      // 3. Dynamic Amber / Orange Accent Arc (Zubair top-right accent)
+      // Amber accent arc
       ctx.save();
       ctx.beginPath();
       ctx.arc(cx, cy, r - 4, -angle * 0.8, -angle * 0.8 + Math.PI * 0.5);
@@ -599,38 +613,11 @@ export default function JarvisZubairHUD() {
       ctx.stroke();
       ctx.restore();
 
-      // 4. Concentric Thin Cyan Inner Rings
+      // Center text
       ctx.save();
-      ctx.strokeStyle = 'rgba(0, 245, 212, 0.35)';
-      ctx.lineWidth = 1;
-      ctx.setLineDash([4, 4]);
-      ctx.beginPath();
-      ctx.arc(cx, cy, r - 16, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      ctx.strokeStyle = 'rgba(0, 245, 212, 0.2)';
-      ctx.beginPath();
-      ctx.arc(cx, cy, r - 26, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.restore();
-
-      // 5. Rotating Radar Sweep Line
-      ctx.save();
-      ctx.strokeStyle = 'rgba(0, 245, 212, 0.6)';
-      ctx.lineWidth = 1.25;
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.lineTo(cx + Math.cos(angle * 1.5) * (r - 28), cy + Math.sin(angle * 1.5) * (r - 28));
-      ctx.stroke();
-      ctx.restore();
-
-      // 6. Center Hub Background & Glowing Text "J.A.R.V.I.S."
-      ctx.save();
-      const centerPulse = Math.sin(pulse) * 2;
       ctx.fillStyle = 'rgba(4, 10, 18, 0.9)';
       ctx.beginPath();
-      ctx.arc(cx, cy, 38 + centerPulse, 0, Math.PI * 2);
+      ctx.arc(cx, cy, 38, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = 'rgba(0, 245, 212, 0.4)';
       ctx.lineWidth = 1;
@@ -653,77 +640,6 @@ export default function JarvisZubairHUD() {
     return () => cancelAnimationFrame(ringAnimRef.current);
   }, [hudMode]);
 
-  // 3D Wireframe Tesseract Cube (when hudMode === 'CUBE')
-  useEffect(() => {
-    if (hudMode !== 'CUBE' || !cubeCanvasRef.current) return;
-
-    const canvas = cubeCanvasRef.current;
-    const ctx = canvas.getContext('2d');
-    const size = 180;
-    canvas.width = size * window.devicePixelRatio;
-    canvas.height = size * window.devicePixelRatio;
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-
-    let t = 0;
-    const vertices = [
-      [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
-      [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1]
-    ];
-    const edges = [
-      [0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],
-      [0,4],[1,5],[2,6],[3,7]
-    ];
-
-    const renderCube = () => {
-      t += 0.02;
-      ctx.clearRect(0, 0, size, size);
-
-      const cx = size / 2;
-      const cy = size / 2;
-      const rad = 42;
-
-      const cosA = Math.cos(t);
-      const sinA = Math.sin(t);
-      const cosB = Math.cos(t * 0.7);
-      const sinB = Math.sin(t * 0.7);
-
-      const projected = vertices.map(([x, y, z]) => {
-        // Rotations
-        let x1 = x * cosA - z * sinA;
-        let z1 = z * cosA + x * sinA;
-        let y2 = y * cosB - z1 * sinB;
-        let z2 = z1 * cosB + y * sinB;
-
-        const distance = z2 + 3.5;
-        const scale = 140 / distance;
-        return [cx + x1 * scale, cy + y2 * scale];
-      });
-
-      // Draw Edges
-      ctx.strokeStyle = '#00f5d4';
-      ctx.lineWidth = 1.5;
-      ctx.shadowColor = '#00f5d4';
-      ctx.shadowBlur = 8;
-      edges.forEach(([i, j]) => {
-        ctx.beginPath();
-        ctx.moveTo(projected[i][0], projected[i][1]);
-        ctx.lineTo(projected[j][0], projected[j][1]);
-        ctx.stroke();
-      });
-
-      // Center text
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '600 10px "IBM Plex Mono", monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText('DATA CUBE', cx, cy + 55);
-
-      cubeAnimRef.current = requestAnimationFrame(renderCube);
-    };
-
-    renderCube();
-    return () => cancelAnimationFrame(cubeAnimRef.current);
-  }, [hudMode]);
-
   return (
     <div
       style={{
@@ -740,7 +656,7 @@ export default function JarvisZubairHUD() {
         userSelect: 'none'
       }}
     >
-      {/* Background 3D Galaxy Canvas */}
+      {/* Background 3D Engine Canvas */}
       <canvas
         ref={canvasRef}
         style={{
@@ -749,8 +665,7 @@ export default function JarvisZubairHUD() {
           left: 0,
           width: '100%',
           height: '100%',
-          display: 'block',
-          cursor: cameraRef.current.isDragging ? 'grabbing' : 'grab'
+          display: 'block'
         }}
       />
 
@@ -766,7 +681,7 @@ export default function JarvisZubairHUD() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: 'linear-gradient(180deg, rgba(3,7,12,0.85) 0%, rgba(3,7,12,0) 100%)',
+          background: 'linear-gradient(180deg, rgba(3,7,12,0.9) 0%, rgba(3,7,12,0) 100%)',
           pointerEvents: 'none',
           zIndex: 10
         }}
@@ -787,6 +702,41 @@ export default function JarvisZubairHUD() {
             <span style={{ color: '#00f5d4' }}>←</span> GRADIENT STUDIO
           </Link>
           <span style={{ color: '#334155' }}>|</span>
+
+          {/* VIEW MODE TOGGLE (ORB 2.0 vs GALAXY) */}
+          <div
+            style={{
+              display: 'flex',
+              background: 'rgba(15, 23, 42, 0.75)',
+              border: '1px solid rgba(0, 245, 212, 0.3)',
+              borderRadius: '999px',
+              padding: '2px'
+            }}
+          >
+            {[
+              { id: 'ORB', label: '⚡ ORB 2.0' },
+              { id: 'GALAXY', label: '🌌 GALAXY' }
+            ].map((m) => (
+              <button
+                key={m.id}
+                onClick={() => setViewMode(m.id)}
+                style={{
+                  padding: '3px 12px',
+                  borderRadius: '999px',
+                  fontSize: '10px',
+                  fontFamily: '"IBM Plex Mono", monospace',
+                  letterSpacing: '1px',
+                  background: viewMode === m.id ? '#00f5d4' : 'transparent',
+                  color: viewMode === m.id ? '#04070d' : '#94a3b8',
+                  fontWeight: viewMode === m.id ? '700' : '500',
+                  cursor: 'pointer'
+                }}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span
               style={{
@@ -805,7 +755,7 @@ export default function JarvisZubairHUD() {
                 color: '#cbd5e1'
               }}
             >
-              OMNIROUTE :20128 [18 ACC]
+              OMNIROUTE LIVE [18 ACC]
             </span>
           </div>
         </div>
@@ -835,266 +785,111 @@ export default function JarvisZubairHUD() {
               cursor: 'pointer'
             }}
           >
-            {soundEnabled ? '🔊 VOICE ON' : '🔇 VOICE MUTED'}
+            {soundEnabled ? '🔊 BRITISH VOICE' : '🔇 MUTED'}
           </button>
         </div>
       </header>
 
-      {/* LEFT PANEL: SECOND BRAIN / AI WORKSHOP DOCK */}
-      {!focusOn && (
-        <aside
-          className="scrollable-pane"
+      {/* TOP USER QUERY BANNER (TecTimmy Style) */}
+      {userSpeechQuery && (
+        <div
           style={{
             position: 'absolute',
-            top: '64px',
-            left: '20px',
-            bottom: '120px',
-            width: '280px',
-            background: 'rgba(5, 10, 18, 0.75)',
-            backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(0, 245, 212, 0.15)',
-            borderRadius: '16px',
-            padding: '18px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '14px',
+            top: '72px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            textAlign: 'center',
             zIndex: 10,
-            overflowY: 'auto'
+            pointerEvents: 'none'
           }}
         >
-          {/* Header */}
-          <div>
-            <div
+          <div
+            style={{
+              fontFamily: '"IBM Plex Mono", monospace',
+              fontSize: '10px',
+              letterSpacing: '2px',
+              color: '#64748b',
+              textTransform: 'uppercase'
+            }}
+          >
+            YOU
+          </div>
+          <div
+            style={{
+              fontSize: '15px',
+              color: '#f8fafc',
+              fontWeight: '500',
+              marginTop: '2px'
+            }}
+          >
+            &ldquo;{userSpeechQuery}&rdquo;
+          </div>
+        </div>
+      )}
+
+      {/* TECTIMMY WEATHER & TELEMETRY CARD (Top Left) */}
+      {showWeatherCard && !focusOn && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '68px',
+            left: '20px',
+            background: 'rgba(5, 10, 18, 0.8)',
+            backdropFilter: 'blur(16px)',
+            border: '1px solid rgba(0, 245, 212, 0.2)',
+            borderRadius: '14px',
+            padding: '14px 16px',
+            width: '230px',
+            zIndex: 10
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span
               style={{
                 fontFamily: '"IBM Plex Mono", monospace',
-                fontSize: '11px',
-                letterSpacing: '2px',
+                fontSize: '9px',
+                letterSpacing: '1.5px',
                 color: '#64748b',
                 textTransform: 'uppercase'
               }}
             >
-              AI WORKSHOP
-            </div>
-            <div
-              style={{
-                fontSize: '15px',
-                fontWeight: '600',
-                color: '#f8fafc',
-                letterSpacing: '0.5px'
-              }}
+              WEATHER · MAKASSAR
+            </span>
+            <button
+              onClick={() => setShowWeatherCard(false)}
+              style={{ color: '#64748b', fontSize: '10px', cursor: 'pointer' }}
             >
-              SecondBrain Galaxy
-            </div>
-            <div
-              style={{
-                fontFamily: '"IBM Plex Mono", monospace',
-                fontSize: '10px',
-                color: '#00f5d4',
-                marginTop: '2px'
-              }}
-            >
-              612 notes · GDrive Live Sync OK
-            </div>
+              ✕
+            </button>
           </div>
-
-          {/* Search Bar */}
-          <div style={{ position: 'relative' }}>
-            <input
-              type="text"
-              placeholder="Search notes..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: '100%',
-                background: 'rgba(15, 23, 42, 0.65)',
-                border: '1px solid rgba(0, 245, 212, 0.25)',
-                borderRadius: '8px',
-                padding: '8px 12px',
-                fontSize: '12px',
-                color: '#f1f5f9',
-                outline: 'none',
-                fontFamily: '"IBM Plex Mono", monospace'
-              }}
-            />
+          <div style={{ fontSize: '20px', fontWeight: '700', color: '#f8fafc', marginTop: '4px' }}>
+            28°C · Fair
           </div>
-
-          {/* INSPECT CARD (Zubair Signature) */}
+          <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
+            Humidity 78% · Wind 12 km/h WNW
+          </div>
           <div
             style={{
-              background: 'rgba(15, 23, 42, 0.5)',
-              border: '1px solid rgba(51, 65, 85, 0.6)',
-              borderRadius: '10px',
-              padding: '12px'
+              marginTop: '8px',
+              paddingTop: '6px',
+              borderTop: '1px solid rgba(51,65,85,0.4)',
+              fontSize: '10px',
+              fontFamily: '"IBM Plex Mono", monospace',
+              color: '#00f5d4'
             }}
           >
-            <div
-              style={{
-                fontFamily: '"IBM Plex Mono", monospace',
-                fontSize: '9px',
-                letterSpacing: '1.5px',
-                color: '#64748b',
-                textTransform: 'uppercase',
-                marginBottom: '6px'
-              }}
-            >
-              INSPECT NOTE
-            </div>
-            {selectedNode ? (
-              <div>
-                <div
-                  style={{
-                    fontSize: '13px',
-                    fontWeight: '600',
-                    color: selectedNode.color || '#00f5d4',
-                    marginBottom: '4px'
-                  }}
-                >
-                  {selectedNode.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: '11px',
-                    color: '#94a3b8',
-                    lineHeight: '1.4',
-                    marginBottom: '8px'
-                  }}
-                >
-                  {selectedNode.desc || 'Catatan terhubung dalam SecondBrain.'}
-                </div>
-                <div
-                  style={{
-                    display: 'inline-block',
-                    fontFamily: '"IBM Plex Mono", monospace',
-                    fontSize: '9px',
-                    color: '#00f5d4',
-                    background: 'rgba(0, 245, 212, 0.1)',
-                    padding: '2px 8px',
-                    borderRadius: '4px'
-                  }}
-                >
-                  CATEGORY: {selectedNode.category.toUpperCase()}
-                </div>
-              </div>
-            ) : (
-              <div style={{ fontSize: '11px', color: '#64748b', fontStyle: 'italic' }}>
-                Klik salah satu orb/bintang di galaksi untuk melihat data catatan...
-              </div>
-            )}
+            ▲ High Tide 23:45 · 1.4m
           </div>
-
-          {/* TOP HUBS (Zubair Signature) */}
-          <div>
-            <div
-              style={{
-                fontFamily: '"IBM Plex Mono", monospace',
-                fontSize: '9px',
-                letterSpacing: '1.5px',
-                color: '#64748b',
-                textTransform: 'uppercase',
-                marginBottom: '8px'
-              }}
-            >
-              TOP HUBS
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {[
-                { id: 'all', label: 'All Constellation', color: '#cbd5e1' },
-                { id: 'core', label: 'SecondBrain Core', color: '#f43f5e' },
-                { id: 'academic', label: '01_luna_academic (Skripsi)', color: '#00f5d4' },
-                { id: 'studio', label: '02_gradient_dev (Software)', color: '#a855f7' },
-                { id: 'bim', label: '03_bim_construction (Revit)', color: '#f59e0b' },
-                { id: 'trading', label: '04_trading_quant (Market)', color: '#10b981' }
-              ].map((hub) => (
-                <button
-                  key={hub.id}
-                  onClick={() => setActiveHub(hub.id)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '6px 10px',
-                    borderRadius: '6px',
-                    background:
-                      activeHub === hub.id ? 'rgba(0, 245, 212, 0.15)' : 'rgba(255, 255, 255, 0.02)',
-                    border: `1px solid ${activeHub === hub.id ? 'rgba(0, 245, 212, 0.3)' : 'transparent'}`,
-                    color: activeHub === hub.id ? '#ffffff' : '#94a3b8',
-                    fontSize: '11px',
-                    textAlign: 'left',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <span
-                    style={{
-                      width: '6px',
-                      height: '6px',
-                      borderRadius: '50%',
-                      background: hub.color
-                    }}
-                  />
-                  {hub.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* FORCES COLLAPSIBLE (Zubair) */}
-          <div style={{ borderTop: '1px solid rgba(51, 65, 85, 0.4)', paddingTop: '10px' }}>
-            <button
-              onClick={() => setShowForces(!showForces)}
-              style={{
-                fontFamily: '"IBM Plex Mono", monospace',
-                fontSize: '9px',
-                letterSpacing: '1.5px',
-                color: '#64748b',
-                textTransform: 'uppercase',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                width: '100%',
-                cursor: 'pointer'
-              }}
-            >
-              <span>FORCES & PHYSICS</span>
-              <span>{showForces ? '▲' : '▼'}</span>
-            </button>
-            {showForces && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
-                <div>
-                  <div style={{ fontSize: '10px', color: '#94a3b8', marginBottom: '2px' }}>Spread:</div>
-                  <input
-                    type="range"
-                    min="120"
-                    max="400"
-                    value={galaxySpread}
-                    onChange={(e) => setGalaxySpread(Number(e.target.value))}
-                    style={{ width: '100%' }}
-                  />
-                </div>
-                <div>
-                  <div style={{ fontSize: '10px', color: '#94a3b8', marginBottom: '2px' }}>Rotation:</div>
-                  <input
-                    type="range"
-                    min="0"
-                    max="0.006"
-                    step="0.0005"
-                    value={rotationSpeed}
-                    onChange={(e) => setRotationSpeed(Number(e.target.value))}
-                    style={{ width: '100%' }}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        </aside>
+        </div>
       )}
 
-      {/* TOP RIGHT: JARVIS INBOX FEED (Zubair Signature) */}
+      {/* TOP RIGHT: JARVIS INBOX FEED */}
       <div
         style={{
           position: 'absolute',
           top: '64px',
           right: '20px',
-          width: '310px',
+          width: '300px',
           zIndex: 10,
           display: 'flex',
           flexDirection: 'column',
@@ -1130,7 +925,6 @@ export default function JarvisZubairHUD() {
         {inboxItems.map((item) => (
           <div
             key={item.id}
-            className="interactive-card"
             style={{
               background: 'rgba(5, 10, 18, 0.8)',
               backdropFilter: 'blur(16px)',
@@ -1177,13 +971,13 @@ export default function JarvisZubairHUD() {
                 cursor: 'pointer'
               }}
             >
-              Got it
+              Dismiss
             </button>
           </div>
         ))}
       </div>
 
-      {/* MIDDLE-RIGHT: THE J.A.R.V.I.S. ARC REACTOR RING HUD (Exact Zubair) */}
+      {/* MIDDLE-RIGHT: ARC REACTOR HUD RING */}
       <div
         style={{
           position: 'absolute',
@@ -1196,55 +990,9 @@ export default function JarvisZubairHUD() {
           zIndex: 10
         }}
       >
-        {/* Arc Reactor Canvas or Mode Display */}
         <div style={{ position: 'relative', width: '180px', height: '180px' }}>
           {hudMode === 'RING' && (
-            <canvas
-              ref={ringCanvasRef}
-              style={{ width: '180px', height: '180px', display: 'block' }}
-            />
-          )}
-          {hudMode === 'CUBE' && (
-            <canvas
-              ref={cubeCanvasRef}
-              style={{ width: '180px', height: '180px', display: 'block' }}
-            />
-          )}
-          {hudMode === 'FACE' && (
-            <div
-              style={{
-                width: '180px',
-                height: '180px',
-                borderRadius: '50%',
-                border: '1px solid rgba(0, 245, 212, 0.35)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'radial-gradient(circle, rgba(0,245,212,0.15) 0%, rgba(5,10,18,0.9) 70%)'
-              }}
-            >
-              <div
-                style={{
-                  fontSize: '36px',
-                  filter: 'drop-shadow(0 0 12px #00f5d4)',
-                  animation: 'pulse 2s infinite'
-                }}
-              >
-                愛
-              </div>
-              <div
-                style={{
-                  fontFamily: '"IBM Plex Mono", monospace',
-                  fontSize: '9px',
-                  color: '#00f5d4',
-                  letterSpacing: '2px',
-                  marginTop: '4px'
-                }}
-              >
-                PERSONA &apos;AI&apos;
-              </div>
-            </div>
+            <canvas ref={ringCanvasRef} style={{ width: '180px', height: '180px', display: 'block' }} />
           )}
         </div>
 
@@ -1284,7 +1032,6 @@ export default function JarvisZubairHUD() {
               const nextIndex = (brains.indexOf(activeBrain) + 1) % brains.length;
               setActiveBrain(brains[nextIndex]);
             }}
-            title="Click to switch AI Brain"
             style={{
               background: 'rgba(5, 10, 18, 0.85)',
               border: '1px solid rgba(0, 245, 212, 0.3)',
@@ -1300,41 +1047,9 @@ export default function JarvisZubairHUD() {
             ✦ {activeBrain} ⚡
           </button>
         </div>
-
-        {/* Mode Switcher Buttons [ RING ] [ CUBE ] [ FACE ] */}
-        <div
-          style={{
-            display: 'flex',
-            gap: '4px',
-            background: 'rgba(5, 10, 18, 0.65)',
-            border: '1px solid rgba(51, 65, 85, 0.6)',
-            borderRadius: '999px',
-            padding: '3px'
-          }}
-        >
-          {['RING', 'CUBE', 'FACE'].map((mode) => (
-            <button
-              key={mode}
-              onClick={() => setHudMode(mode)}
-              style={{
-                padding: '3px 10px',
-                borderRadius: '999px',
-                fontSize: '9px',
-                fontFamily: '"IBM Plex Mono", monospace',
-                letterSpacing: '1px',
-                background: hudMode === mode ? 'rgba(0, 245, 212, 0.25)' : 'transparent',
-                color: hudMode === mode ? '#00f5d4' : '#64748b',
-                border: hudMode === mode ? '1px solid rgba(0, 245, 212, 0.4)' : '1px solid transparent',
-                cursor: 'pointer'
-              }}
-            >
-              {mode}
-            </button>
-          ))}
-        </div>
       </div>
 
-      {/* LOWER-RIGHT: QUICK CONTROL STACK (Zubair Exact) */}
+      {/* LOWER-RIGHT: QUICK CONTROL STACK */}
       <div
         style={{
           position: 'absolute',
@@ -1350,7 +1065,6 @@ export default function JarvisZubairHUD() {
         {[
           { key: 'EYES', state: eyesOn ? 'live' : 'off', toggle: () => setEyesOn(!eyesOn) },
           { key: 'WATCH', state: watchOn ? 'active' : 'off', toggle: () => setWatchOn(!watchOn) },
-          { key: 'HOLO', state: holoOn ? 'active' : 'off', toggle: () => setHoloOn(!holoOn) },
           { key: 'FOCUS', state: focusOn ? 'zen' : 'off', toggle: () => setFocusOn(!focusOn) },
           { key: 'REFLEX', state: 'free $0', toggle: () => setShowReflexModal(true) }
         ].map((ctrl) => (
@@ -1370,24 +1084,18 @@ export default function JarvisZubairHUD() {
               fontSize: '10px',
               letterSpacing: '1.5px',
               color: '#cbd5e1',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease'
+              cursor: 'pointer'
             }}
           >
             <span>{ctrl.key}</span>
-            <span
-              style={{
-                color: ctrl.state === 'off' ? '#64748b' : '#00f5d4',
-                fontSize: '9px'
-              }}
-            >
+            <span style={{ color: ctrl.state === 'off' ? '#64748b' : '#00f5d4', fontSize: '9px' }}>
               {ctrl.state}
             </span>
           </button>
         ))}
       </div>
 
-      {/* LIVE WEBCAM PIP OVERLAY (When EYES is on) */}
+      {/* LIVE WEBCAM PIP OVERLAY */}
       {eyesOn && (
         <div
           style={{
@@ -1410,21 +1118,6 @@ export default function JarvisZubairHUD() {
             muted
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
-          <div
-            style={{
-              position: 'absolute',
-              top: '4px',
-              left: '6px',
-              fontFamily: '"IBM Plex Mono", monospace',
-              fontSize: '8px',
-              color: '#00f5d4',
-              background: 'rgba(0,0,0,0.7)',
-              padding: '1px 4px',
-              borderRadius: '3px'
-            }}
-          >
-            LIVE VISION
-          </div>
         </div>
       )}
 
@@ -1435,7 +1128,7 @@ export default function JarvisZubairHUD() {
           bottom: '20px',
           left: '50%',
           transform: 'translateX(-50%)',
-          width: 'min(720px, calc(100vw - 40px))',
+          width: 'min(760px, calc(100vw - 40px))',
           background: 'rgba(5, 10, 18, 0.85)',
           backdropFilter: 'blur(20px)',
           border: '1px solid rgba(0, 245, 212, 0.3)',
@@ -1448,7 +1141,7 @@ export default function JarvisZubairHUD() {
           zIndex: 20
         }}
       >
-        {/* Live Spoken Thought & Waveform */}
+        {/* Real-time Spoken Text Display */}
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
           <div
             style={{
@@ -1460,13 +1153,13 @@ export default function JarvisZubairHUD() {
               boxShadow: '0 0 8px #00f5d4'
             }}
           />
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, maxHeight: '110px', overflowY: 'auto' }}>
             <div
               style={{
                 fontSize: '13px',
                 color: '#f8fafc',
-                lineHeight: '1.45',
-                fontWeight: '400'
+                lineHeight: '1.5',
+                whiteSpace: 'pre-wrap'
               }}
             >
               {activeSpeech}
@@ -1474,7 +1167,7 @@ export default function JarvisZubairHUD() {
           </div>
         </div>
 
-        {/* Interactive Prompt & Reflex Bar */}
+        {/* Interactive Prompt & Speech Action Bar */}
         <div style={{ display: 'flex', gap: '10px' }}>
           <button
             onClick={toggleListening}
@@ -1499,7 +1192,7 @@ export default function JarvisZubairHUD() {
 
           <input
             type="text"
-            placeholder="Ketik instruksi atau reflex (contoh: 'buka rhino', 'sync drive')..."
+            placeholder="Ask JARVIS or trigger reflex (e.g., 'give me a status report', 'buka rhino', 'call sister')..."
             value={commandInput}
             onChange={(e) => setCommandInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleExecute()}
@@ -1533,7 +1226,7 @@ export default function JarvisZubairHUD() {
               opacity: isProcessing || !commandInput.trim() ? 0.5 : 1
             }}
           >
-            {isProcessing ? 'Thinking...' : 'SEND'}
+            {isProcessing ? 'Thinking...' : 'TRANSMIT'}
           </button>
         </div>
 
@@ -1547,13 +1240,13 @@ export default function JarvisZubairHUD() {
               letterSpacing: '1px'
             }}
           >
-            FAST REFLEXES:
+            INSTANT REFLEXES:
           </span>
           {[
+            { label: 'Status Report', cmd: 'give me a system status report, jarvis' },
             { label: 'Buka Rhino', cmd: 'buka rhino' },
             { label: 'Buka Revit', cmd: 'buka revit' },
             { label: 'Sync GDrive', cmd: 'sync drive' },
-            { label: 'Virtual Office', cmd: 'buka virtual office' },
             { label: '📱 Unlock HP', cmd: 'unlock my phone' },
             { label: '📞 Call Sister', cmd: 'call sister' },
             { label: '📱 WA di HP', cmd: 'open whatsapp in my phone' }
@@ -1583,12 +1276,12 @@ export default function JarvisZubairHUD() {
               color: '#10b981'
             }}
           >
-            Reflex Cost: $0.00 (Local Free)
+            AI Engine: Live OmniRoute ($0.00)
           </div>
         </div>
       </footer>
 
-      {/* ZUBAIR COST & REFLEX GUIDE MODAL (Exact from Video Chapter 10:21) */}
+      {/* COST & REFLEX GUIDE MODAL */}
       {showReflexModal && (
         <div
           style={{
@@ -1610,11 +1303,9 @@ export default function JarvisZubairHUD() {
               color: '#1e293b',
               borderRadius: '16px',
               padding: '28px',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
               position: 'relative'
             }}
           >
-            {/* Modal Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>
                 <div
@@ -1623,17 +1314,13 @@ export default function JarvisZubairHUD() {
                     fontSize: '10px',
                     letterSpacing: '2px',
                     color: '#0f766e',
-                    fontWeight: '600',
-                    textTransform: 'uppercase'
+                    fontWeight: '600'
                   }}
                 >
-                  THE METER · EVERYDAY
+                  THE METER · OMNIROUTE 18-CH
                 </div>
-                <div style={{ fontSize: '24px', fontWeight: '700', color: '#0f172a', marginTop: '2px' }}>
-                  Your Everyday Assistant
-                </div>
-                <div style={{ fontSize: '12px', color: '#475569', marginTop: '4px' }}>
-                  Setup: Sonnet 5.5 / Gemini / Antigravity Gateway + SecondBrain local memory.
+                <div style={{ fontSize: '24px', fontWeight: '700', color: '#0f172a' }}>
+                  JARVIS 2.0 Live Architecture
                 </div>
               </div>
               <button
@@ -1653,102 +1340,32 @@ export default function JarvisZubairHUD() {
               </button>
             </div>
 
-            {/* Cost Table (From Zubair's real sheet) */}
             <div style={{ marginTop: '20px', borderTop: '2px solid #0f172a', paddingTop: '12px' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  fontFamily: '"IBM Plex Mono", monospace',
-                  fontSize: '10px',
-                  fontWeight: '700',
-                  color: '#64748b',
-                  letterSpacing: '1px',
-                  marginBottom: '10px'
-                }}
-              >
-                <span>WHAT JARVIS DOES</span>
-                <span>TYPICAL COST</span>
-              </div>
-
               {[
-                {
-                  task: 'Answers you, from your own notes',
-                  desc: 'The galaxy flies to the note while he speaks.',
-                  cost: 'FREE (Local SecondBrain)'
-                },
-                {
-                  task: 'Instant reflexes (App launcher, desktop actions)',
-                  desc: 'Simple commands decided in 150ms before big brain wakes up.',
-                  cost: '$0.00 / <0.01¢'
-                },
-                {
-                  task: 'Google actions & Drive sync',
-                  desc: 'Drive sync daemon runs locally in background.',
-                  cost: 'FREE'
-                },
-                {
-                  task: 'Telegram texts and voice notes',
-                  desc: 'Heru talks from his pocket. Webhook delivery free.',
-                  cost: 'FREE'
-                },
-                {
-                  task: 'Long-term memory and the 3D galaxy',
-                  desc: 'Remembers what you tell him and grows the galaxy.',
-                  cost: 'FREE'
-                },
-                {
-                  task: 'Antigravity Route / OmniRoute Multi-Account',
-                  desc: '18 active accounts connected with zero token billing.',
-                  cost: '$0.00 UNLIMITED'
-                }
-              ].map((row, idx) => (
+                { task: 'Live AI Brain (OmniRoute Gateway)', desc: '18 Akun Google Pro / Antigravity via port 20128', cost: '$0.00 UNLIMITED' },
+                { task: '3D Electric Particle Orb (TecTimmy Core)', desc: '1,100 Partikel plasma audio-reactive 60 FPS', cost: 'GPU Native ($0)' },
+                { task: 'British Voice Synthesis (Paul Bettany)', desc: 'Natural English UK / ID cadence synthesizer', cost: 'Free Built-in' },
+                { task: 'Wireless ADB Phone Control', desc: 'Unlock, app launch, SIM call otomatis via Wi-Fi', cost: 'Free ($0)' },
+                { task: 'Desktop Reflex Engine (150ms)', desc: 'Universal App Launcher di Session 1', cost: 'Local $0.00' }
+              ].map((r, i) => (
                 <div
-                  key={idx}
+                  key={i}
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '9px 0',
+                    padding: '8px 0',
                     borderBottom: '1px solid #e2e8f0'
                   }}
                 >
-                  <div style={{ paddingRight: '16px' }}>
-                    <div style={{ fontSize: '13px', fontWeight: '600', color: '#0f172a' }}>
-                      {row.task}
-                    </div>
-                    <div style={{ fontSize: '11px', color: '#64748b' }}>{row.desc}</div>
+                  <div>
+                    <div style={{ fontSize: '13px', fontWeight: '600' }}>{r.task}</div>
+                    <div style={{ fontSize: '11px', color: '#64748b' }}>{r.desc}</div>
                   </div>
-                  <div
-                    style={{
-                      fontFamily: '"IBM Plex Mono", monospace',
-                      fontSize: '11px',
-                      fontWeight: '700',
-                      color: row.cost.includes('FREE') || row.cost.includes('0.00') ? '#059669' : '#0f172a',
-                      whiteSpace: 'nowrap'
-                    }}
-                  >
-                    {row.cost}
+                  <div style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: '11px', fontWeight: '700', color: '#059669' }}>
+                    {r.cost}
                   </div>
                 </div>
               ))}
-            </div>
-
-            {/* Bottom summary note */}
-            <div
-              style={{
-                marginTop: '16px',
-                background: '#fef3c7',
-                border: '1px solid #fde68a',
-                borderRadius: '8px',
-                padding: '10px 14px',
-                fontSize: '11px',
-                color: '#92400e'
-              }}
-            >
-              💡 <strong>Heru&apos;s Setup Advantage:</strong> Zubair membayar ~$0.50 per hari di Sonnet 5.5,
-              tetapi Heru mendapatkan biaya <strong>$0.00 (Gratis)</strong> karena routing berjalan lewat
-              OmniRoute Gateway (port 20128) yang memanfaatkan Google Pro &amp; Antigravity route!
             </div>
           </div>
         </div>
