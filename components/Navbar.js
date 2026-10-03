@@ -99,6 +99,17 @@ export default function Navbar() {
         <Link href="/#projects">Projects</Link>
         <Link href="/#approach">Approach</Link>
         <Link href="/#contact">Contact</Link>
+        <Link 
+          href="/jarvis" 
+          style={{
+            color: '#00f0ff',
+            fontWeight: 600,
+            textShadow: '0 0 8px rgba(0, 240, 255, 0.4)',
+            letterSpacing: '0.06em'
+          }}
+        >
+          ⚡ J.A.R.V.I.S.
+        </Link>
         
         {user ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
