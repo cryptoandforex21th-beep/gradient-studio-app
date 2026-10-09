@@ -13,10 +13,10 @@ export default function LayoutShell({ children }) {
   }
 
   return (
-    <div className="site">
+    <>
       <Navbar />
-      <main>{children}</main>
+      <main id="main">{children}</main>
       <Footer />
-    </div>
+    </>
   );
 }

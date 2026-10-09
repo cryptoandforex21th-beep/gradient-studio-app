@@ -59,7 +59,7 @@ export default function PrivacyPage() {
             1. Pendahuluan
           </h2>
           <p>
-            GradiEnt Studio ("kami", "studio") berkomitmen penuh melindungi privasi setiap pengunjung, klien, dan pengguna aplikasi web <strong>https://gradientstudioapp.vercel.app</strong>. Kebijakan ini menjelaskan bagaimana data Anda dikumpulkan, digunakan, dan dilindungi.
+            GradiEnt Studio ("kami", "studio") berkomitmen penuh melindungi privasi setiap pengunjung, klien, dan pengguna aplikasi web <strong>https://gradientarch.tech</strong>. Kebijakan ini menjelaskan bagaimana data Anda dikumpulkan, digunakan, dan dilindungi.
           </p>
         </section>
 

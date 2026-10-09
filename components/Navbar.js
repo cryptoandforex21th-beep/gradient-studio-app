@@ -5,17 +5,10 @@ import Link from 'next/link';
 import { supabase } from '../lib/supabaseClient';
 
 export default function Navbar() {
-  const [theme, setTheme] = useState('auto');
   const [user, setUser] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('gradient-theme') || 'auto';
-      setTheme(saved);
-      applyTheme(saved);
-    } catch (e) {}
-
-    // Check Supabase session & local admin session
     const checkAuth = async () => {
       const { data } = await supabase.auth.getSession();
       if (data?.session?.user) {
@@ -47,24 +40,6 @@ export default function Navbar() {
     };
   }, []);
 
-  const applyTheme = (t) => {
-    const root = document.documentElement;
-    if (t === 'auto') {
-      root.removeAttribute('data-theme');
-    } else {
-      root.dataset.theme = t;
-    }
-  };
-
-  const toggleTheme = () => {
-    const next = theme === 'auto' ? 'dark' : theme === 'dark' ? 'light' : 'auto';
-    setTheme(next);
-    try {
-      localStorage.setItem('gradient-theme', next);
-    } catch (e) {}
-    applyTheme(next);
-  };
-
   const handleLogout = async () => {
     await supabase.auth.signOut();
     try {
@@ -85,95 +60,121 @@ export default function Navbar() {
   const avatarChar = displayName[0]?.toUpperCase() || 'U';
 
   return (
-    <header className="topbar">
-      <Link href="/" className="mark" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-        <img 
-          src="/brand-logo-transparent.png" 
-          alt="GradiEnt Logo" 
-          style={{ width: '22px', height: '22px', objectFit: 'contain' }}
-        />
-        <span className="brand-name">GradiEnt</span>
-        <span className="mark-sub">Studio</span>
-      </Link>
-      <nav className="nav" aria-label="Primary navigation">
-        <Link href="/#projects">Projects</Link>
-        <Link href="/#approach">Approach</Link>
-        <Link href="/#contact">Contact</Link>
-        <Link 
-          href="/jarvis" 
-          style={{
-            color: '#00f0ff',
-            fontWeight: 600,
-            textShadow: '0 0 8px rgba(0, 240, 255, 0.4)',
-            letterSpacing: '0.06em'
-          }}
-        >
-          ⚡ J.A.R.V.I.S.
-        </Link>
-        
-        {user ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Link 
-              href={user.isAdmin ? '/admin' : '/dashboard'} 
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '6px 12px',
-                background: 'rgba(207, 107, 66, 0.12)',
-                border: '1px solid var(--accent)',
-                color: 'var(--accent)',
-                fontFamily: 'var(--mono)',
-                fontSize: '10px',
-                letterSpacing: '.06em',
-                textTransform: 'uppercase',
-                fontWeight: 600,
-                borderRadius: '2px'
-              }}
-            >
-              <span style={{
-                width: '18px',
-                height: '18px',
-                borderRadius: '50%',
-                background: 'var(--accent)',
-                color: 'var(--white)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '9px',
-                fontWeight: 700
-              }}>
-                {avatarChar}
-              </span>
-              <span>{displayName} (Profil)</span>
-            </Link>
-            <button
-              onClick={handleLogout}
-              style={{
-                fontFamily: 'var(--mono)',
-                fontSize: '9px',
-                letterSpacing: '.08em',
-                textTransform: 'uppercase',
-                color: 'var(--ink-soft)',
-                border: '1px solid var(--line)',
-                padding: '6px 8px'
-              }}
-              title="Keluar dari akun"
-            >
-              Keluar
-            </button>
-          </div>
-        ) : (
-          <Link href="/login" className="nav-auth">
-            <span>Masuk / Akun</span>
-            <span>→</span>
-          </Link>
-        )}
+    <>
+      <div className="topline">
+        <span>Praktik Arsitektur & Desain Spasial</span>
+        <span>Makassar, Indonesia</span>
+      </div>
 
-        <button className="theme-toggle" onClick={toggleTheme} type="button">
-          Theme: {theme}
-        </button>
+      <header className="header">
+        <Link href="/" className="brand" aria-label="GradiEnt Studio — beranda">
+          <img 
+            src="/assets/brand-logo.png" 
+            alt="Logo GradiEnt" 
+            width="40" 
+            height="40" 
+          />
+          <span>GradiEnt<span className="brand-studio">STUDIO</span></span>
+        </Link>
+
+        <nav className="desktop-nav" aria-label="Navigasi utama">
+          <Link href="/#explorations">Studi Desain</Link>
+          <Link href="/#services">Layanan</Link>
+          <Link href="/#process">Tahapan Kerja</Link>
+          <Link href="/#studio">Studio</Link>
+        </nav>
+
+        <div className="header-actions">
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Link 
+                href={user.isAdmin ? '/admin' : '/dashboard'} 
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '6px 12px',
+                  background: 'rgba(207, 107, 66, 0.12)',
+                  border: '1px solid var(--accent)',
+                  color: 'var(--accent)',
+                  fontFamily: 'var(--mono)',
+                  fontSize: '11px',
+                  letterSpacing: '.06em',
+                  textTransform: 'uppercase',
+                  fontWeight: 600,
+                  borderRadius: '3px'
+                }}
+              >
+                <span style={{
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  background: 'var(--accent)',
+                  color: '#fff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '10px',
+                  fontWeight: 700
+                }}>
+                  {avatarChar}
+                </span>
+                <span>{displayName} (Portal)</span>
+              </Link>
+              <button
+                onClick={handleLogout}
+                style={{
+                  fontFamily: 'var(--mono)',
+                  fontSize: '10px',
+                  letterSpacing: '.08em',
+                  textTransform: 'uppercase',
+                  color: 'var(--muted)',
+                  border: '1px solid var(--line-strong)',
+                  padding: '6px 10px',
+                  borderRadius: '3px'
+                }}
+                title="Keluar dari akun"
+              >
+                Keluar
+              </button>
+            </div>
+          ) : (
+            <Link className="account" href="/login">Masuk</Link>
+          )}
+
+          <Link className="button button-dark compact" href="/#contact">
+            Bicarakan proyek
+          </Link>
+
+          <button
+            id="menu-button"
+            className="menu-button"
+            aria-label={menuOpen ? 'Tutup menu' : 'Buka menu'}
+            aria-controls="mobile-nav"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile Nav */}
+      <nav id="mobile-nav" className="mobile-nav" aria-label="Navigasi ponsel" hidden={!menuOpen}>
+        <Link href="/#explorations" onClick={() => setMenuOpen(false)}>Studi Desain</Link>
+        <Link href="/#services" onClick={() => setMenuOpen(false)}>Layanan</Link>
+        <Link href="/#process" onClick={() => setMenuOpen(false)}>Tahapan Kerja</Link>
+        <Link href="/#studio" onClick={() => setMenuOpen(false)}>Studio</Link>
+        {user ? (
+          <Link href={user.isAdmin ? '/admin' : '/dashboard'} onClick={() => setMenuOpen(false)}>
+            Portal ({displayName})
+          </Link>
+        ) : (
+          <Link href="/login" onClick={() => setMenuOpen(false)}>Masuk ke akun</Link>
+        )}
+        <Link href="/#contact" onClick={() => setMenuOpen(false)}>Bicarakan proyek</Link>
       </nav>
-    </header>
+    </>
   );
 }

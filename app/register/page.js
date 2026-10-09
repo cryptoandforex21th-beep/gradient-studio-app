@@ -37,7 +37,7 @@ export default function RegisterPage() {
     try {
       const redirectUrl = typeof window !== 'undefined' 
         ? `${window.location.origin}/dashboard` 
-        : 'https://gradientstudioapp.vercel.app/dashboard';
+        : 'https://gradientarch.tech/dashboard';
 
       const { data, error: authError } = await supabase.auth.signUp({
         email: formData.email,
@@ -81,7 +81,7 @@ export default function RegisterPage() {
     try {
       const redirectUrl = typeof window !== 'undefined' 
         ? `${window.location.origin}/dashboard` 
-        : 'https://gradientstudioapp.vercel.app/dashboard';
+        : 'https://gradientarch.tech/dashboard';
 
       const { data, error: oauthError } = await supabase.auth.signInWithOAuth({
         provider: 'google',

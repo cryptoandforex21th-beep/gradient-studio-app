@@ -217,7 +217,6 @@ export default function HomePage() {
           <a href="#services">Layanan</a>
           <a href="#process">Tahapan Kerja</a>
           <a href="#studio">Studio</a>
-          <Link href="/jarvis" style={{ color: 'var(--accent)', fontWeight: 600 }}>J.A.R.V.I.S.</Link>
         </nav>
 
         <div className="header-actions">
@@ -243,7 +242,6 @@ export default function HomePage() {
         <a href="#services" onClick={() => setMenuOpen(false)}>Layanan</a>
         <a href="#process" onClick={() => setMenuOpen(false)}>Tahapan Kerja</a>
         <a href="#studio" onClick={() => setMenuOpen(false)}>Studio</a>
-        <Link href="/jarvis" onClick={() => setMenuOpen(false)}>J.A.R.V.I.S. Studio</Link>
         <Link href="/login" onClick={() => setMenuOpen(false)}>Masuk ke akun</Link>
         <a href="#contact" onClick={() => setMenuOpen(false)}>Bicarakan proyek</a>
       </nav>
@@ -808,7 +806,6 @@ export default function HomePage() {
             <Link href="/login">Masuk Akun</Link>
             <Link href="/register">Registrasi</Link>
             <Link href="/dashboard">Portal Klien</Link>
-            <Link href="/jarvis">J.A.R.V.I.S. Core</Link>
           </div>
 
           <div className="footer-address">
