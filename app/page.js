@@ -4,6 +4,33 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 const CONCEPTS = {
+  lemukutan: {
+    title: 'Paviliun Sewa Olahraga Pulau Lemukutan',
+    label: 'Arsitektur & DED · Sport Resort',
+    image: '/assets/lemukutan-hero-crop.png',
+    alt: 'Perspektif 3D Paviliun Sewa Olahraga Pulau Lemukutan Kalimantan Barat',
+    description: 'Fasilitas sewa alat olahraga bahari dengan sistem panggung adaptif pesisir dan portal rangka baja prapabrikasi.',
+    facts: [
+      ['Lokasi', 'Pulau Lemukutan, Kalbar'],
+      ['Dimensi', 'Modul 8.4m × 6.6m (55.4 m²)'],
+      ['Struktur', 'Baja H-Beam 305×305 & Footplat'],
+      ['Keluaran', 'DED Lengkap (40 Lembar)']
+    ],
+    sections: [
+      [
+        'Respon Tapak Pesisir & Logistik Pulau',
+        'Dirancang untuk kondisi pulau terpencil dengan mengangkat massa bangunan di atas pondasi footplat bertingkat untuk menjaga kontur tanah alami pesisir. Modul struktur baja prapabrikasi memudahkan mobilisasi laut dan perakitan cepat di tapak.'
+      ],
+      [
+        'Transparansi Etalase & Efisiensi Termal',
+        'Fasad depan curtain wall kaca transparan berfungsi ganda sebagai etalase peralatan olahraga air dan penangkap cahaya alami. Bukaan ventilasi silang dipadukan dengan 4 titik skylight pada atap pelana bitumen untuk mengalirkan panas ke atas dan memaksimalkan penerangan.'
+      ],
+      [
+        'Gambar Kerja Lengkap & Spesifikasi Teknis',
+        'Dokumentasi teknis terinci mencakup denah arsitektur 1:100, potongan melintang/memanjang, isometri 3D rangka baja H-Beam 305×305, hingga detail pembesian footplat beton 150×150 cm bertulang D13.'
+      ]
+    ]
+  },
   courtyard: {
     title: 'Studi Paviliun Halaman',
     label: 'Arsitektur · Eksplorasi Konsep',
@@ -74,7 +101,7 @@ const CONCEPTS = {
 
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('atmosphere');
+  const [activeTab, setActiveTab] = useState('coastal');
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedProject, setSelectedProject] = useState(null);
   const [contactAfterClose, setContactAfterClose] = useState(false);
@@ -169,7 +196,7 @@ export default function HomePage() {
 
   // Keyboard navigation for tabs
   const handleTabKeyDown = (e, currentTab) => {
-    const tabsList = ['atmosphere', 'space', 'light'];
+    const tabsList = ['coastal', 'atmosphere', 'space', 'light'];
     const idx = tabsList.indexOf(currentTab);
     let nextTab;
     if (e.key === 'ArrowRight') nextTab = tabsList[(idx + 1) % tabsList.length];
@@ -186,6 +213,7 @@ export default function HomePage() {
 
   // Filter study cards count
   const studyCards = [
+    { id: 'lemukutan', category: 'architecture', title: 'Paviliun Lemukutan', desc: 'Fasilitas sewa olahraga bahari resort pesisir Kalimantan Barat.', badge: 'Arsitektur & DED', img: '/assets/lemukutan-hero-crop.png' },
     { id: 'courtyard', category: 'architecture', title: 'Ruang sela', desc: 'Studi paviliun halaman dan naungan lebar.', badge: 'Konsep · Visual AI', img: '/assets/courtyard-concept.png' },
     { id: 'space', category: 'research', title: 'Susunan ruang', desc: 'Diagram hubungan ruang bersama dan ruang terbuka.', badge: 'Diagram konsep', img: '/assets/space-study.svg?v=3' },
     { id: 'light', category: 'research', title: 'Lapisan cahaya', desc: 'Diagram orientasi bukaan dan pembiasan cahaya.', badge: 'Diagram konsep', img: '/assets/light-study.svg?v=3' }
@@ -273,6 +301,17 @@ export default function HomePage() {
           <div className="showcase-frame">
             <div className="showcase-tabs" role="tablist" aria-label="Sudut pandang eksplorasi">
               <button
+                id="tab-coastal"
+                role="tab"
+                aria-selected={activeTab === 'coastal'}
+                aria-controls="panel-coastal"
+                tabIndex={activeTab === 'coastal' ? 0 : -1}
+                onClick={() => setActiveTab('coastal')}
+                onKeyDown={(e) => handleTabKeyDown(e, 'coastal')}
+              >
+                Paviliun pesisir
+              </button>
+              <button
                 id="tab-atmosphere"
                 role="tab"
                 aria-selected={activeTab === 'atmosphere'}
@@ -305,6 +344,49 @@ export default function HomePage() {
               >
                 Cahaya & naungan
               </button>
+            </div>
+
+            {/* PANEL COASTAL */}
+            <div
+              id="panel-coastal"
+              className="showcase-panel"
+              role="tabpanel"
+              aria-labelledby="tab-coastal"
+              hidden={activeTab !== 'coastal'}
+            >
+              <div className="showcase-media">
+                <img
+                  className="showcase-image"
+                  src="/assets/lemukutan-hero-crop.png"
+                  alt="Perspektif 3D Paviliun Sewa Olahraga Pulau Lemukutan Kalimantan Barat"
+                  fetchPriority="high"
+                  width="1667"
+                  height="1179"
+                />
+                <span className="media-label" style={{ background: '#cf6b42', color: '#fff', border: 'none' }}>Arsitektur & DED</span>
+              </div>
+              <div className="showcase-info-bar">
+                <div className="info-text">
+                  <span className="micro">DED & TEKTONIK PESISIR</span>
+                  <h3>Paviliun Lemukutan</h3>
+                  <p>Fasilitas sewa olahraga bahari dengan sistem panggung adaptif pesisir dan portal baja H-Beam.</p>
+                </div>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <a
+                    href="/preview-lemukutan.html"
+                    className="button button-outline compact"
+                  >
+                    Buka DED lengkap ↗
+                  </a>
+                  <button
+                    type="button"
+                    className="button button-dark compact"
+                    onClick={() => setSelectedProject('lemukutan')}
+                  >
+                    Lihat detail
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* PANEL ATMOSPHERE */}
@@ -870,6 +952,17 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
+              {selectedProject === 'lemukutan' && (
+                <div style={{ marginTop: '16px', marginBottom: '14px' }}>
+                  <a
+                    href="/preview-lemukutan.html"
+                    className="button button-outline compact"
+                    style={{ display: 'inline-flex' }}
+                  >
+                    Buka Gambar Kerja & Analisis Lengkap ↗
+                  </a>
+                </div>
+              )}
               <button
                 type="button"
                 className="button button-dark dialog-contact"
