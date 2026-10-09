@@ -70,6 +70,22 @@ export async function GET() {
       "desc": "Dokumen SecondBrain di 01_knowledge\\archives\\desktop_bridge_legacy\\SKILL.md"
     },
     {
+      "id": "analisis_4_reels_instagram_ai",
+      "label": "Analisis 4 Reels Instagram A",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\inbox\\analisis_4_reels_instagram_ai.md"
+    },
+    {
+      "id": "latest_video_analysis",
+      "label": "Latest Video Analysis",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\inbox\\latest_video_analysis.md"
+    },
+    {
       "id": "sample_quick_note",
       "label": "Sample Quick Note",
       "category": "academic",
@@ -84,6 +100,14 @@ export async function GET() {
       "val": 12,
       "status": "SYNCED",
       "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\project_cloud_secondbrain.md"
+    },
+    {
+      "id": "project_jarvis_os",
+      "label": "Project Jarvis Os",
+      "category": "studio",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\projects\\project_jarvis_os.md"
     },
     {
       "id": "project_kaktus_towers_ml",
@@ -214,6 +238,14 @@ export async function GET() {
       "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\architecture_ai_starter_kit.md"
     },
     {
+      "id": "doktrin_agen_arsitektur_dan_sistem_ai",
+      "label": "Doktrin Agen Arsitektur Dan ",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\doktrin_agen_arsitektur_dan_sistem_ai.md"
+    },
+    {
       "id": "kurikulum_kuliah_ai_drizzle",
       "label": "Kurikulum Kuliah Ai Drizzle",
       "category": "academic",
@@ -278,52 +310,20 @@ export async function GET() {
       "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_pyrevit_threading_external_event.md"
     },
     {
+      "id": "panduan_replica_skill_architecture",
+      "label": "Panduan Replica Skill Archit",
+      "category": "academic",
+      "val": 12,
+      "status": "SYNCED",
+      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_replica_skill_architecture.md"
+    },
+    {
       "id": "panduan_riset_akademik_prof_luna",
       "label": "Panduan Riset Akademik Prof ",
       "category": "academic",
       "val": 12,
       "status": "SYNCED",
       "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_riset_akademik_prof_luna.md"
-    },
-    {
-      "id": "panduan_setup_revit_mcp",
-      "label": "Panduan Setup Revit Mcp",
-      "category": "academic",
-      "val": 12,
-      "status": "SYNCED",
-      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_setup_revit_mcp.md"
-    },
-    {
-      "id": "panduan_setup_rhino_mcp",
-      "label": "Panduan Setup Rhino Mcp",
-      "category": "academic",
-      "val": 12,
-      "status": "SYNCED",
-      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\panduan_setup_rhino_mcp.md"
-    },
-    {
-      "id": "referensi_ui_cult_design_engineers",
-      "label": "Referensi Ui Cult Design Eng",
-      "category": "academic",
-      "val": 12,
-      "status": "SYNCED",
-      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\referensi_ui_cult_design_engineers.md"
-    },
-    {
-      "id": "revit_guide",
-      "label": "Revit Guide",
-      "category": "academic",
-      "val": 12,
-      "status": "SYNCED",
-      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\revit_guide.md"
-    },
-    {
-      "id": "rhino_guide",
-      "label": "Rhino Guide",
-      "category": "academic",
-      "val": 12,
-      "status": "SYNCED",
-      "desc": "Dokumen SecondBrain di 01_knowledge\\resources\\rhino_guide.md"
     }
   ],
   "links": [
@@ -369,6 +369,16 @@ export async function GET() {
     },
     {
       "source": "prof_luna",
+      "target": "analisis_4_reels_instagram_ai",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "latest_video_analysis",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
       "target": "sample_quick_note",
       "strength": 0.7
     },
@@ -379,12 +389,32 @@ export async function GET() {
     },
     {
       "source": "mochi",
+      "target": "project_jarvis_os",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
       "target": "project_kaktus_towers_ml",
       "strength": 0.7
     },
     {
       "source": "mochi",
       "target": "project_samata_pavilion_bim",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "readme",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "readme",
+      "strength": 0.7
+    },
+    {
+      "source": "mochi",
+      "target": "readme",
       "strength": 0.7
     },
     {
@@ -499,6 +529,11 @@ export async function GET() {
     },
     {
       "source": "prof_luna",
+      "target": "doktrin_agen_arsitektur_dan_sistem_ai",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
       "target": "kurikulum_kuliah_ai_drizzle",
       "strength": 0.7
     },
@@ -535,6 +570,11 @@ export async function GET() {
     {
       "source": "prof_luna",
       "target": "panduan_pyrevit_threading_external_event",
+      "strength": 0.7
+    },
+    {
+      "source": "prof_luna",
+      "target": "panduan_replica_skill_architecture",
       "strength": 0.7
     },
     {
@@ -585,46 +625,6 @@ export async function GET() {
     {
       "source": "prof_luna",
       "target": "known_limitations",
-      "strength": 0.7
-    },
-    {
-      "source": "prof_luna",
-      "target": "manifest",
-      "strength": 0.7
-    },
-    {
-      "source": "prof_luna",
-      "target": "readme",
-      "strength": 0.7
-    },
-    {
-      "source": "prof_luna",
-      "target": "skill",
-      "strength": 0.7
-    },
-    {
-      "source": "prof_luna",
-      "target": "test_cases",
-      "strength": 0.7
-    },
-    {
-      "source": "prof_luna",
-      "target": "chinese_text_ai_risk",
-      "strength": 0.7
-    },
-    {
-      "source": "prof_luna",
-      "target": "detection_principles",
-      "strength": 0.7
-    },
-    {
-      "source": "prof_luna",
-      "target": "qualitative_authorship_restoration",
-      "strength": 0.7
-    },
-    {
-      "source": "prof_luna",
-      "target": "rewrite_methods",
       "strength": 0.7
     }
   ]
