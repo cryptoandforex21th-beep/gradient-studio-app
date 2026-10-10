@@ -1,16 +1,32 @@
 {
   "name": "gradient_studio_app",
-  "version": "1.0.0",
-  "description": "GradiEnt Studio — Architectural Design, 3D Spatial Modeling & Daylighting Platform (Makassar)",
+  "version": "1.2.0",
+  "description": "GradiEnt Studio Architectural Design, 3D Spatial Modeling & Tropical Daylighting Platform (https://gradientarch.tech)",
+  "homepage": "https://gradientarch.tech",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cryptoandforex21th-beep/gradient-studio-app.git"
+  },
+  "bin": {
+    "gradient-studio": "./bin/gradient-studio.mjs"
+  },
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --test tests/agent-readiness.test.mjs"
+    "test": "node --test tests/agent-readiness.test.mjs",
+    "cli": "node ./bin/gradient-studio.mjs"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "gradient-studio",
+    "architectural-design",
+    "3d-spatial-modeling",
+    "tropical-daylighting",
+    "mcp-server",
+    "makassar-architecture"
+  ],
+  "author": "Heru Ardiansyah <heruardiansyah2one@gmail.com> (https://gradientarch.tech)",
   "license": "ISC",
   "dependencies": {
     "@notionhq/client": "^5.26.0",

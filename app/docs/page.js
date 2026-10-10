@@ -1,10 +1,10 @@
 import Link from 'next/link';
-import { SITE_URL, MCP_TOOLS } from '../../lib/mcpServer';
+import { MCP_TOOLS } from '../../lib/mcpServer';
 
 export const metadata = {
-  title: 'Developer Portal, API & MCP Server Documentation — GradiEnt Studio (Vercel)',
+  title: 'GradiEnt Studio Architectural Design — Developer Portal, REST API v1, CLI & MCP Docs',
   description:
-    'Official developer resources for GradiEnt Studio on Vercel: REST API endpoints, OpenAPI 3.1 specification, Model Context Protocol (MCP) Streamable HTTP server, authentication, and Markdown content negotiation.',
+    'Official developer resources for GradiEnt Studio Architectural Design (https://gradientarch.tech): Versioned REST API v1, OpenAPI 3.1 specification, RFC 9457 typed JSON error models, RateLimit headers, CLI tool, and MCP Streamable HTTP server.',
   alternates: {
     canonical: 'https://gradientarch.tech/docs'
   }
@@ -43,7 +43,7 @@ export default function DocsPage() {
         letterSpacing: '-.03em',
         marginBottom: '12px'
       }}>
-        GradiEnt Studio Developer Portal, API & MCP Docs
+        GradiEnt Studio Architectural Design — Developer Portal, API v1, CLI & MCP Docs
       </h1>
 
       <p style={{
@@ -55,7 +55,7 @@ export default function DocsPage() {
         borderBottom: '1px solid var(--line)',
         paddingBottom: '16px'
       }}>
-        GradiEnt Studio Platform · Hosted on Vercel (gradientarch.tech) · OpenAPI 3.1 & MCP Streamable HTTP
+        GradiEnt Studio Architectural Design · Canonical Domain: gradientarch.tech · REST API v1, OpenAPI 3.1, CLI & MCP Streamable HTTP
       </p>
 
       <div style={{ display: 'grid', gap: '32px', fontSize: '15px' }}>
@@ -64,7 +64,7 @@ export default function DocsPage() {
             1. Machine-Readable Discovery Index
           </h2>
           <p>
-            GradiEnt Studio exposes standardized machine-readable endpoints for AI agents, LLM crawlers, and developer integrations deployed on Vercel:
+            GradiEnt Studio Architectural Design exposes standardized machine-readable endpoints for AI agents, LLM crawlers, and developer integrations on <code>https://gradientarch.tech</code>:
           </p>
           <ul style={{ paddingLeft: '20px', marginTop: '12px', display: 'grid', gap: '8px' }}>
             <li>
@@ -88,8 +88,16 @@ export default function DocsPage() {
               <a href="/.well-known/mcp" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientarch.tech/.well-known/mcp</a>
             </li>
             <li>
-              <strong>MCP API Endpoint:</strong>{' '}
-              <a href="/api/mcp" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientarch.tech/api/mcp</a>
+              <strong>Versioned REST API v1 Projects:</strong>{' '}
+              <a href="/api/v1/projects" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientarch.tech/api/v1/projects</a>
+            </li>
+            <li>
+              <strong>Versioned REST API v1 Services:</strong>{' '}
+              <a href="/api/v1/services" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientarch.tech/api/v1/services</a>
+            </li>
+            <li>
+              <strong>Versioned REST API v1 Status & Policy:</strong>{' '}
+              <a href="/api/v1/status" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientarch.tech/api/v1/status</a>
             </li>
             <li>
               <strong>XML Sitemap:</strong>{' '}
@@ -100,10 +108,53 @@ export default function DocsPage() {
 
         <section>
           <h2 style={{ fontFamily: 'var(--mono)', fontSize: '13px', textTransform: 'uppercase', color: 'var(--accent)', letterSpacing: '.08em', marginBottom: '10px' }}>
-            2. Model Context Protocol (MCP) Server — Streamable HTTP
+            2. Versioned Read-Only REST API (v1) & Typed JSON Error Model
           </h2>
           <p>
-            GradiEnt Studio provides a native Model Context Protocol (MCP) server supporting <strong>Streamable HTTP transport</strong> (protocol versions <code>2025-03-26</code> and <code>2024-11-05</code>) at <code>https://gradientarch.tech/.well-known/mcp</code>. Claude, ChatGPT, Cursor, and custom AI agents can connect directly without API keys for public tools.
+            All public REST API endpoints are strictly <strong>100% Read-Only</strong>, versioned under <code>/api/v1/*</code> (aliased at <code>/v1/*</code>), and include full typed schemas in <a href="/openapi.json" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>/openapi.json</a>:
+          </p>
+          <ul style={{ paddingLeft: '20px', marginTop: '10px', display: 'grid', gap: '8px' }}>
+            <li>
+              <code>GET /api/v1/projects?category=all|architecture|research</code> — Lists architectural case studies and DED specifications.
+            </li>
+            <li>
+              <code>GET /api/v1/projects/&#123;projectId&#125;</code> — Retrieves detailed structural and daylighting metadata for <code>lemukutan</code>, <code>courtyard</code>, <code>space</code>, or <code>light</code>.
+            </li>
+            <li>
+              <code>GET /api/v1/services</code> — Lists studio services and the 4-stage collaboration workflow.
+            </li>
+            <li>
+              <code>GET /api/v1/status</code> — Returns operational status, active version (<code>v1</code> / <code>2026-10-01</code>), deprecation timeline, and rate-limit configuration.
+            </li>
+          </ul>
+          <p style={{ marginTop: '12px' }}>
+            <strong>Structured JSON Error Responses (RFC 9457):</strong> Invalid parameters or nonexistent resources return structured JSON errors (<code>400</code>, <code>404</code>, <code>405</code>, <code>429</code>) with machine-readable <code>code</code>, <code>message</code>, <code>hint</code>, <code>resolution</code>, and <code>documentation_url</code> fields.
+          </p>
+        </section>
+
+        <section id="versioning-and-deprecation">
+          <h2 style={{ fontFamily: 'var(--mono)', fontSize: '13px', textTransform: 'uppercase', color: 'var(--accent)', letterSpacing: '.08em', marginBottom: '10px' }}>
+            3. Versioning, Deprecation & Rate-Limit Headers
+          </h2>
+          <ul style={{ paddingLeft: '20px', display: 'grid', gap: '8px' }}>
+            <li>
+              <strong>API Versioning:</strong> URL path versioning (<code>/api/v1/*</code>) paired with response headers <code>API-Version: v1</code> and <code>X-API-Version: 2026-10-01</code>.
+            </li>
+            <li>
+              <strong>Deprecation & Sunset Policy:</strong> Deprecated endpoints (such as legacy <code>GET /api/notion/projects</code>) carry a minimum <strong>180-day notice period</strong> and emit RFC headers <code>Deprecation: @1767225600</code>, <code>Sunset: Fri, 31 Dec 2027 23:59:59 GMT</code>, and <code>Link: rel=&quot;successor-version&quot;</code>.
+            </li>
+            <li>
+              <strong>Rate-Limit Headers:</strong> Every API response returns <code>RateLimit-Limit: 120</code>, <code>RateLimit-Remaining: 119</code>, <code>RateLimit-Reset: 60</code>, <code>RateLimit-Policy: 120;w=60</code>, and <code>Retry-After: 60</code> on HTTP <code>429</code>.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 style={{ fontFamily: 'var(--mono)', fontSize: '13px', textTransform: 'uppercase', color: 'var(--accent)', letterSpacing: '.08em', marginBottom: '10px' }}>
+            4. Official CLI Tool (gradient-studio)
+          </h2>
+          <p>
+            Agents and developers can script interactions from the command line using the bundled CLI binary (<code>bin/gradient-studio.mjs</code>):
           </p>
           <pre style={{
             background: '#172126',
@@ -114,22 +165,21 @@ export default function DocsPage() {
             fontFamily: 'var(--mono)',
             marginTop: '12px'
           }}>
-{`curl -sS -X POST https://gradientarch.tech/.well-known/mcp \\
-  -H "Content-Type: application/json" \\
-  -H "Accept: application/json, text/event-stream" \\
-  -d '{
-    "jsonrpc": "2.0",
-    "id": 1,
-    "method": "initialize",
-    "params": {
-      "protocolVersion": "2025-03-26",
-      "capabilities": {},
-      "clientInfo": { "name": "agent-client", "version": "1.0.0" }
-    }
-  }'`}
+{`npx github:cryptoandforex21th-beep/gradient-studio-app projects --json
+npx github:cryptoandforex21th-beep/gradient-studio-app project lemukutan
+npx github:cryptoandforex21th-beep/gradient-studio-app services
+npx github:cryptoandforex21th-beep/gradient-studio-app status`}
           </pre>
+        </section>
 
-          <h3 style={{ fontSize: '16px', fontWeight: 600, marginTop: '18px', marginBottom: '8px' }}>
+        <section>
+          <h2 style={{ fontFamily: 'var(--mono)', fontSize: '13px', textTransform: 'uppercase', color: 'var(--accent)', letterSpacing: '.08em', marginBottom: '10px' }}>
+            5. Model Context Protocol (MCP) Server — Streamable HTTP
+          </h2>
+          <p>
+            GradiEnt Studio provides a native Model Context Protocol (MCP) server supporting <strong>Streamable HTTP transport</strong> (protocol versions <code>2025-03-26</code> and <code>2024-11-05</code>) at <code>https://gradientarch.tech/.well-known/mcp</code>.
+          </p>
+          <h3 style={{ fontSize: '16px', fontWeight: 600, marginTop: '14px', marginBottom: '8px' }}>
             Exposed MCP Tools ({MCP_TOOLS.length})
           </h3>
           <ul style={{ paddingLeft: '20px', display: 'grid', gap: '8px' }}>
@@ -139,44 +189,6 @@ export default function DocsPage() {
               </li>
             ))}
           </ul>
-        </section>
-
-        <section>
-          <h2 style={{ fontFamily: 'var(--mono)', fontSize: '13px', textTransform: 'uppercase', color: 'var(--accent)', letterSpacing: '.08em', marginBottom: '10px' }}>
-            3. Read-Only Public API & Security Boundary
-          </h2>
-          <p>
-            Seluruh endpoint agen publik bersifat <strong>100% Read-Only (Hanya-Baca)</strong> dan hanya menyajikan data katalog portofolio arsitektur serta spesifikasi publik studio tanpa mengekspos database internal maupun kredensial. Portal Klien dan Admin (<code>/login</code>, <code>/dashboard</code>, <code>/admin</code>) dilindungi sepenuhnya oleh <strong>Supabase Auth</strong> (OAuth 2.0 & Row Level Security).
-          </p>
-          <ul style={{ paddingLeft: '20px', marginTop: '10px', display: 'grid', gap: '8px' }}>
-            <li>
-              <code>GET /api/notion/projects</code> — Mengambil daftar proyek portofolio arsitektur dan studi spasial yang dipublikasikan (Read-Only JSON).
-            </li>
-            <li>
-              <code>GET /openapi.json</code> — Spesifikasi skema OpenAPI 3.1.0 untuk integrasi agen.
-            </li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 style={{ fontFamily: 'var(--mono)', fontSize: '13px', textTransform: 'uppercase', color: 'var(--accent)', letterSpacing: '.08em', marginBottom: '10px' }}>
-            4. Markdown Content Negotiation (acceptmarkdown.com)
-          </h2>
-          <p>
-            Every public route on <code>https://gradientarch.tech</code> supports HTTP content negotiation. Send <code>Accept: text/markdown</code> to receive clean Markdown with <code>Content-Type: text/markdown; charset=utf-8</code> and <code>Vary: Accept</code>, including agent-friendly Markdown 404 responses on nonexistent routes.
-          </p>
-          <pre style={{
-            background: '#172126',
-            color: '#e7e3d8',
-            padding: '16px',
-            overflowX: 'auto',
-            fontSize: '12px',
-            fontFamily: 'var(--mono)',
-            marginTop: '12px'
-          }}>
-{`curl -sS -L -i -H "Accept: text/markdown" https://gradientarch.tech/
-curl -sS -L -i -H "Accept: text/markdown" https://gradientarch.tech/nonexistent-path`}
-          </pre>
         </section>
       </div>
     </div>
