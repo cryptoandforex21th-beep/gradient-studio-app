@@ -112,6 +112,13 @@ export function middleware(request) {
     !accept.includes('text/html') &&
     !wantsMarkdown;
 
+  // Redirect /index.html to canonical root / for browser HTML requests
+  if (normPath === '/index.html' && !wantsMarkdown) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/';
+    return NextResponse.redirect(url, 308);
+  }
+
   // Rewrite MCP well-known aliases directly to /api/mcp
   if (normPath === '/.well-known/mcp' || normPath === '/.well-known/mcp.json') {
     const url = request.nextUrl.clone();

@@ -879,20 +879,18 @@ export default function HomePage() {
           </div>
 
           <div>
-            <span className="footer-heading">DEVELOPER & AI</span>
-            <Link href="/docs">Dokumentasi API & MCP</Link>
-            <a href="/llms.txt">LLMs Manifest (llms.txt)</a>
-            <a href="/openapi.json">OpenAPI 3.1 Spec</a>
-            <a href="/.well-known/mcp">MCP Server Endpoint</a>
+            <span className="footer-heading">DOKUMENTASI & DED</span>
+            <a href="/preview-lemukutan.html">DED Paviliun Lemukutan</a>
+            <a href="#process">Tahapan Perancangan</a>
+            <a href="https://instagram.com/heruardiansyah_" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://www.linkedin.com/in/heru-ardiansyah-84a97343a/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
 
           <div>
-            <span className="footer-heading">PORTAL & SOSIAL</span>
+            <span className="footer-heading">PORTAL KLIEN</span>
             <Link href="/login">Masuk Akun</Link>
             <Link href="/register">Registrasi</Link>
-            <Link href="/dashboard">Portal Klien</Link>
-            <a href="https://www.linkedin.com/in/heru-ardiansyah-84a97343a/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            <a href="https://github.com/cryptoandforex21th-beep" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <Link href="/dashboard">Dashboard Konsultasi</Link>
           </div>
 
           <div className="footer-address">
@@ -910,7 +908,6 @@ export default function HomePage() {
           <div>
             <Link href="/about">Tentang</Link>
             <Link href="/contact">Kontak</Link>
-            <Link href="/docs">API & MCP</Link>
             <Link href="/privacy">Kebijakan Privasi</Link>
             <Link href="/terms">Ketentuan Layanan</Link>
           </div>

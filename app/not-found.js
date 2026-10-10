@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
 export const metadata = {
-  title: '404 — Halaman Tidak Ditemukan (Page Not Found) | GradiEnt Studio',
-  description: 'Halaman yang Anda cari tidak ditemukan di GradiEnt Studio. Akses beranda, dokumentasi API/MCP, llms.txt, atau peta situs.'
+  title: '404 — Halaman Tidak Ditemukan | GradiEnt Studio Architectural Design',
+  description: 'Halaman yang Anda cari tidak ditemukan di GradiEnt Studio Architectural Design (https://gradientarch.tech).'
 };
 
 export default function NotFound() {
@@ -25,7 +25,7 @@ export default function NotFound() {
         display: 'block',
         marginBottom: '12px'
       }}>
-        HTTP 404 · NOT FOUND
+        HTTP 404 · HALAMAN TIDAK DITEMUKAN
       </span>
 
       <h1 style={{
@@ -36,11 +36,11 @@ export default function NotFound() {
         letterSpacing: '-.03em',
         marginBottom: '16px'
       }}>
-        Halaman Tidak Ditemukan (404 Page Not Found)
+        Halaman Tidak Ditemukan
       </h1>
 
       <p style={{ marginBottom: '24px', color: 'var(--ink-soft)' }}>
-        Maaf, alamat URL yang Anda minta tidak tersedia di <strong>GradiEnt Studio</strong> (<code>https://gradientarch.tech</code>). Bagi agen AI dan pengembang, kirim header <code>Accept: text/markdown</code> untuk menerima respons galat dalam format Markdown, atau gunakan tautan dokumentasi di bawah ini.
+        Maaf, alamat halaman yang Anda tuju tidak tersedia atau telah dipindahkan di <strong>GradiEnt Studio</strong> (<code>https://gradientarch.tech</code>). Silakan kembali ke beranda atau jelajahi halaman utama studio di bawah ini.
       </p>
 
       <div style={{
@@ -53,18 +53,13 @@ export default function NotFound() {
         fontSize: '14px'
       }}>
         <strong style={{ fontFamily: 'var(--mono)', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '.08em', color: 'var(--accent)' }}>
-          Tautan Navigasi & Sumber Daya Agen (Agent & Developer Resources)
+          Navigasi Utama GradiEnt Studio
         </strong>
         <ul style={{ paddingLeft: '20px', display: 'grid', gap: '8px', margin: 0 }}>
-          <li><Link href="/" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Beranda GradiEnt Studio (/)</Link></li>
-          <li><Link href="/about" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Tentang Studio (/about)</Link></li>
+          <li><Link href="/" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Beranda & Studi Desain (/)</Link></li>
+          <li><Link href="/about" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Tentang GradiEnt Studio (/about)</Link></li>
           <li><Link href="/contact" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Kontak & Konsultasi Proyek (/contact)</Link></li>
-          <li><Link href="/docs" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Dokumentasi Developer, REST API & MCP (/docs)</Link></li>
-          <li><a href="/llms.txt" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>LLMs Manifest & When-to-Use (/llms.txt)</a></li>
-          <li><a href="/agent-instructions.md" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Panduan Instruksi Agen (/agent-instructions.md)</a></li>
-          <li><a href="/openapi.json" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Spesifikasi OpenAPI 3.1 (/openapi.json)</a></li>
-          <li><a href="/.well-known/mcp" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>MCP Server Streamable HTTP (/.well-known/mcp)</a></li>
-          <li><a href="/sitemap.xml" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Peta Situs XML (/sitemap.xml)</a></li>
+          <li><a href="/preview-lemukutan.html" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Pratinjau DED Paviliun Pulau Lemukutan</a></li>
         </ul>
       </div>
 
@@ -72,8 +67,8 @@ export default function NotFound() {
         <Link href="/" className="button button-dark compact">
           ← Kembali ke Beranda
         </Link>
-        <Link href="/docs" className="button button-outline compact">
-          Buka Dokumentasi API & MCP
+        <Link href="/contact" className="button button-outline compact">
+          Diskusikan Proyek
         </Link>
       </div>
     </div>
