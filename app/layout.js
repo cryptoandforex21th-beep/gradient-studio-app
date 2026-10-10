@@ -6,11 +6,12 @@ import { SITE_URL, getJsonLdSchemas } from '../lib/agentContent';
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
-  applicationName: 'GradiEnt Studio Architectural Design',
-  title: 'GradiEnt Studio Architectural Design — 3D Spatial Modeling & Tropical Daylighting Studio (Makassar)',
+  applicationName: 'GradiEnt Studio Architectural Design 3D Modeling',
+  title: 'GradiEnt Studio Architectural Design 3D Modeling & Daylighting Studio (Makassar)',
   description:
-    'GradiEnt Studio Architectural Design (https://gradientarch.tech) by Heru Ardiansyah in Makassar, Indonesia: Architectural design studio, tropical daylighting analysis, 3D spatial modeling platform, DED engineering documentation, REST API v1, CLI tool, and MCP server.',
+    'GradiEnt Studio Architectural Design 3D Modeling (https://gradientarch.tech) by Heru Ardiansyah in Makassar, Indonesia: Architectural design studio, tropical daylighting analysis, 3D spatial modeling platform, DED engineering documentation, REST API v1, CLI tool, and MCP server.',
   keywords: [
+    'GradiEnt Studio Architectural Design 3D Modeling',
     'GradiEnt Studio Architectural Design',
     'GradiEnt Studio',
     'GradiEnt Studio Makassar',
@@ -28,7 +29,7 @@ export const metadata = {
   ],
   authors: [{ name: 'Heru Ardiansyah', url: 'https://www.linkedin.com/in/heru-ardiansyah-84a97343a/' }],
   creator: 'Heru Ardiansyah',
-  publisher: 'GradiEnt Studio Architectural Design',
+  publisher: 'GradiEnt Studio Architectural Design 3D Modeling',
   alternates: {
     canonical: SITE_URL,
     types: {
@@ -38,25 +39,25 @@ export const metadata = {
   openGraph: {
     type: 'website',
     url: SITE_URL,
-    siteName: 'GradiEnt Studio Architectural Design',
+    siteName: 'GradiEnt Studio Architectural Design 3D Modeling',
     locale: 'id_ID',
-    title: 'GradiEnt Studio Architectural Design — 3D Spatial Modeling & Daylighting Studio',
+    title: 'GradiEnt Studio Architectural Design 3D Modeling & Daylighting Studio',
     description:
-      'GradiEnt Studio Architectural Design (gradientarch.tech), praktik arsitektur, analisis pencahayaan alami tropis, dan platform pemodelan spasial 3D di Makassar oleh Heru Ardiansyah.',
+      'GradiEnt Studio Architectural Design 3D Modeling (gradientarch.tech), praktik arsitektur, analisis pencahayaan alami tropis, dan platform pemodelan spasial 3D di Makassar oleh Heru Ardiansyah.',
     images: [
       {
         url: `${SITE_URL}/assets/courtyard-concept.png`,
         width: 1672,
         height: 941,
-        alt: 'GradiEnt Studio Architectural Design & 3D Spatial Modeling'
+        alt: 'GradiEnt Studio Architectural Design 3D Modeling'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'GradiEnt Studio Architectural Design & 3D Spatial Modeling Studio',
+    title: 'GradiEnt Studio Architectural Design 3D Modeling Studio',
     description:
-      'GradiEnt Studio Architectural Design: tropical daylighting analysis, 3D spatial modeling platform, and DED studio in Makassar by Heru Ardiansyah.',
+      'GradiEnt Studio Architectural Design 3D Modeling: tropical daylighting analysis, 3D spatial modeling platform, and DED studio in Makassar by Heru Ardiansyah.',
     images: [`${SITE_URL}/assets/courtyard-concept.png`]
   }
 };
@@ -69,6 +70,8 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="llms-txt" href={`${SITE_URL}/llms.txt`} />
         <link rel="service-desc" href={`${SITE_URL}/openapi.json`} type="application/json" />
+        <link rel="service-doc" href={`${SITE_URL}/docs`} />
+        <link rel="help" href={`${SITE_URL}/docs`} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}

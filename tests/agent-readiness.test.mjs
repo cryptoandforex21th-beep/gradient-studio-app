@@ -112,7 +112,7 @@ test('4 & 5 & 7. JSON-LD structured data includes SoftwareApplication and comple
   assert.ok(organizationSchema.contactPoint[0].contactType);
 
   assert.equal(softwareAppSchema['@type'], 'SoftwareApplication');
-  assert.equal(softwareAppSchema.name, 'GradiEnt Studio Architectural Design');
+  assert.equal(softwareAppSchema.name, 'GradiEnt Studio Architectural Design 3D Modeling');
   assert.equal(softwareAppSchema.url, SITE_URL);
   assert.ok(softwareAppSchema.description);
   assert.ok(softwareAppSchema.offers);
@@ -266,7 +266,8 @@ test('11. Live Next.js HTTP Server end-to-end verification (Markdown, JSON Error
     const homeHtmlBody = await homeHtmlRes.text();
     assert.match(homeHtmlBody, /<html[^>]*lang="id"/i);
     assert.match(homeHtmlBody, /rel="canonical"[^>]*href="https:\/\/gradientarch\.tech\/?"/i);
-    assert.match(homeHtmlBody, /GradiEnt Studio Architectural Design/i);
+    assert.match(homeHtmlBody, /GradiEnt Studio Architectural Design 3D Modeling/i);
+    assert.match(homeHtmlBody, /href="\/docs"/i);
 
     // 3. Agent-friendly 404 with Accept: text/markdown
     const notFoundMdRes = await fetch(`${baseUrl}/__ora-404-probe-1q7nsysh`, {

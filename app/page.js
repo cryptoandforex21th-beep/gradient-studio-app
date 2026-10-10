@@ -908,6 +908,7 @@ export default function HomePage() {
           <div>
             <Link href="/about">Tentang</Link>
             <Link href="/contact">Kontak</Link>
+            <Link href="/docs">Dokumentasi</Link>
             <Link href="/privacy">Kebijakan Privasi</Link>
             <Link href="/terms">Ketentuan Layanan</Link>
           </div>

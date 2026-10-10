@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { MCP_TOOLS } from '../../lib/mcpServer';
 
 export const metadata = {
-  title: 'GradiEnt Studio Architectural Design — Developer Portal, REST API v1, CLI & MCP Docs',
+  title: 'GradiEnt Studio Architectural Design 3D Modeling — Developer Portal, REST API v1, CLI & MCP Docs',
   description:
-    'Official developer resources for GradiEnt Studio Architectural Design (https://gradientarch.tech): Versioned REST API v1, OpenAPI 3.1 specification, RFC 9457 typed JSON error models, RateLimit headers, CLI tool, and MCP Streamable HTTP server.',
+    'Official developer resources for GradiEnt Studio Architectural Design 3D Modeling (https://gradientarch.tech): Versioned REST API v1, OpenAPI 3.1 specification, RFC 9457 typed JSON error models, RateLimit headers, CLI tool, and MCP Streamable HTTP server.',
   alternates: {
     canonical: 'https://gradientarch.tech/docs'
   }
@@ -43,7 +43,7 @@ export default function DocsPage() {
         letterSpacing: '-.03em',
         marginBottom: '12px'
       }}>
-        GradiEnt Studio Architectural Design — Developer Portal, API v1, CLI & MCP Docs
+        GradiEnt Studio Architectural Design 3D Modeling — Developer Portal, API v1, CLI & MCP Docs
       </h1>
 
       <p style={{
@@ -55,7 +55,7 @@ export default function DocsPage() {
         borderBottom: '1px solid var(--line)',
         paddingBottom: '16px'
       }}>
-        GradiEnt Studio Architectural Design · Canonical Domain: gradientarch.tech · REST API v1, OpenAPI 3.1, CLI & MCP Streamable HTTP
+        GradiEnt Studio Architectural Design 3D Modeling · Canonical Domain: gradientarch.tech · REST API v1, OpenAPI 3.1, CLI & MCP Streamable HTTP
       </p>
 
       <div style={{ display: 'grid', gap: '32px', fontSize: '15px' }}>
@@ -154,7 +154,7 @@ export default function DocsPage() {
             4. Official CLI Tool (gradient-studio)
           </h2>
           <p>
-            Agents and developers can script interactions from the command line using the bundled CLI binary (<code>bin/gradient-studio.mjs</code>):
+            Agents and developers can script interactions from the command line using the official Node.js CLI package (<code>gradient-studio</code> / <code>bin/gradient-studio.mjs</code>):
           </p>
           <pre style={{
             background: '#172126',
@@ -165,7 +165,9 @@ export default function DocsPage() {
             fontFamily: 'var(--mono)',
             marginTop: '12px'
           }}>
-{`npx github:cryptoandforex21th-beep/gradient-studio-app projects --json
+{`npm install -g gradient-studio
+npx gradient-studio projects --json
+npx github:cryptoandforex21th-beep/gradient-studio-app projects --json
 npx github:cryptoandforex21th-beep/gradient-studio-app project lemukutan
 npx github:cryptoandforex21th-beep/gradient-studio-app services
 npx github:cryptoandforex21th-beep/gradient-studio-app status`}
