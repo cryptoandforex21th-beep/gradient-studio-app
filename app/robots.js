@@ -19,7 +19,7 @@ export default function robots() {
         disallow: ['/admin', '/dashboard'],
       },
     ],
-    host: 'https://gradientstudioapp.vercel.app',
-    sitemap: 'https://gradientstudioapp.vercel.app/sitemap.xml',
+    host: 'https://gradientarch.tech',
+    sitemap: 'https://gradientarch.tech/sitemap.xml',
   };
 }

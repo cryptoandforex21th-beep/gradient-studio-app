@@ -6,7 +6,7 @@ export const metadata = {
   description:
     'Official developer resources for GradiEnt Studio on Vercel: REST API endpoints, OpenAPI 3.1 specification, Model Context Protocol (MCP) Streamable HTTP server, authentication, and Markdown content negotiation.',
   alternates: {
-    canonical: 'https://gradientstudioapp.vercel.app/docs'
+    canonical: 'https://gradientarch.tech/docs'
   }
 };
 
@@ -55,7 +55,7 @@ export default function DocsPage() {
         borderBottom: '1px solid var(--line)',
         paddingBottom: '16px'
       }}>
-        GradiEnt Studio Platform · Hosted on Vercel (gradientstudioapp.vercel.app) · OpenAPI 3.1 & MCP Streamable HTTP
+        GradiEnt Studio Platform · Hosted on Vercel (gradientarch.tech) · OpenAPI 3.1 & MCP Streamable HTTP
       </p>
 
       <div style={{ display: 'grid', gap: '32px', fontSize: '15px' }}>
@@ -69,31 +69,31 @@ export default function DocsPage() {
           <ul style={{ paddingLeft: '20px', marginTop: '12px', display: 'grid', gap: '8px' }}>
             <li>
               <strong>LLMs Summary & When-to-Use:</strong>{' '}
-              <a href="/llms.txt" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientstudioapp.vercel.app/llms.txt</a>
+              <a href="/llms.txt" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientarch.tech/llms.txt</a>
             </li>
             <li>
               <strong>LLMs Full Corpus:</strong>{' '}
-              <a href="/llms-full.txt" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientstudioapp.vercel.app/llms-full.txt</a>
+              <a href="/llms-full.txt" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientarch.tech/llms-full.txt</a>
             </li>
             <li>
               <strong>Agent Instructions (When-to-Use Guide):</strong>{' '}
-              <a href="/agent-instructions.md" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientstudioapp.vercel.app/agent-instructions.md</a>
+              <a href="/agent-instructions.md" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientarch.tech/agent-instructions.md</a>
             </li>
             <li>
               <strong>OpenAPI 3.1.0 Specification:</strong>{' '}
-              <a href="/openapi.json" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientstudioapp.vercel.app/openapi.json</a>
+              <a href="/openapi.json" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientarch.tech/openapi.json</a>
             </li>
             <li>
               <strong>MCP Server (Streamable HTTP & Discovery):</strong>{' '}
-              <a href="/.well-known/mcp" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientstudioapp.vercel.app/.well-known/mcp</a>
+              <a href="/.well-known/mcp" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientarch.tech/.well-known/mcp</a>
             </li>
             <li>
               <strong>MCP API Endpoint:</strong>{' '}
-              <a href="/api/mcp" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientstudioapp.vercel.app/api/mcp</a>
+              <a href="/api/mcp" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientarch.tech/api/mcp</a>
             </li>
             <li>
               <strong>XML Sitemap:</strong>{' '}
-              <a href="/sitemap.xml" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientstudioapp.vercel.app/sitemap.xml</a>
+              <a href="/sitemap.xml" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>https://gradientarch.tech/sitemap.xml</a>
             </li>
           </ul>
         </section>
@@ -103,7 +103,7 @@ export default function DocsPage() {
             2. Model Context Protocol (MCP) Server — Streamable HTTP
           </h2>
           <p>
-            GradiEnt Studio provides a native Model Context Protocol (MCP) server supporting <strong>Streamable HTTP transport</strong> (protocol versions <code>2025-03-26</code> and <code>2024-11-05</code>) at <code>https://gradientstudioapp.vercel.app/.well-known/mcp</code>. Claude, ChatGPT, Cursor, and custom AI agents can connect directly without API keys for public tools.
+            GradiEnt Studio provides a native Model Context Protocol (MCP) server supporting <strong>Streamable HTTP transport</strong> (protocol versions <code>2025-03-26</code> and <code>2024-11-05</code>) at <code>https://gradientarch.tech/.well-known/mcp</code>. Claude, ChatGPT, Cursor, and custom AI agents can connect directly without API keys for public tools.
           </p>
           <pre style={{
             background: '#172126',
@@ -114,7 +114,7 @@ export default function DocsPage() {
             fontFamily: 'var(--mono)',
             marginTop: '12px'
           }}>
-{`curl -sS -X POST https://gradientstudioapp.vercel.app/.well-known/mcp \\
+{`curl -sS -X POST https://gradientarch.tech/.well-known/mcp \\
   -H "Content-Type: application/json" \\
   -H "Accept: application/json, text/event-stream" \\
   -d '{
@@ -143,17 +143,17 @@ export default function DocsPage() {
 
         <section>
           <h2 style={{ fontFamily: 'var(--mono)', fontSize: '13px', textTransform: 'uppercase', color: 'var(--accent)', letterSpacing: '.08em', marginBottom: '10px' }}>
-            3. REST API & Authentication Documentation
+            3. Read-Only Public API & Security Boundary
           </h2>
           <p>
-            Public portfolio and inquiry endpoints accept standard JSON payloads over HTTPS. Client and Studio Admin portals (<code>/login</code>, <code>/register</code>, <code>/dashboard</code>) authenticate via <strong>Supabase Auth</strong> (OAuth 2.0 & JWT Bearer tokens).
+            Seluruh endpoint agen publik bersifat <strong>100% Read-Only (Hanya-Baca)</strong> dan hanya menyajikan data katalog portofolio arsitektur serta spesifikasi publik studio tanpa mengekspos database internal maupun kredensial. Portal Klien dan Admin (<code>/login</code>, <code>/dashboard</code>, <code>/admin</code>) dilindungi sepenuhnya oleh <strong>Supabase Auth</strong> (OAuth 2.0 & Row Level Security).
           </p>
           <ul style={{ paddingLeft: '20px', marginTop: '10px', display: 'grid', gap: '8px' }}>
             <li>
-              <code>GET /api/notion/projects</code> — Returns published architectural projects and spatial studies in JSON format.
+              <code>GET /api/notion/projects</code> — Mengambil daftar proyek portofolio arsitektur dan studi spasial yang dipublikasikan (Read-Only JSON).
             </li>
             <li>
-              <code>POST /api/notion/inquiry</code> — Submits a client consultation inquiry (<code>name</code>, <code>contact</code>, <code>type</code>, <code>notes</code>) to GradiEnt Studio CRM.
+              <code>GET /openapi.json</code> — Spesifikasi skema OpenAPI 3.1.0 untuk integrasi agen.
             </li>
           </ul>
         </section>
@@ -163,7 +163,7 @@ export default function DocsPage() {
             4. Markdown Content Negotiation (acceptmarkdown.com)
           </h2>
           <p>
-            Every public route on <code>https://gradientstudioapp.vercel.app</code> supports HTTP content negotiation. Send <code>Accept: text/markdown</code> to receive clean Markdown with <code>Content-Type: text/markdown; charset=utf-8</code> and <code>Vary: Accept</code>, including agent-friendly Markdown 404 responses on nonexistent routes.
+            Every public route on <code>https://gradientarch.tech</code> supports HTTP content negotiation. Send <code>Accept: text/markdown</code> to receive clean Markdown with <code>Content-Type: text/markdown; charset=utf-8</code> and <code>Vary: Accept</code>, including agent-friendly Markdown 404 responses on nonexistent routes.
           </p>
           <pre style={{
             background: '#172126',
@@ -174,8 +174,8 @@ export default function DocsPage() {
             fontFamily: 'var(--mono)',
             marginTop: '12px'
           }}>
-{`curl -sS -L -i -H "Accept: text/markdown" https://gradientstudioapp.vercel.app/
-curl -sS -L -i -H "Accept: text/markdown" https://gradientstudioapp.vercel.app/nonexistent-path`}
+{`curl -sS -L -i -H "Accept: text/markdown" https://gradientarch.tech/
+curl -sS -L -i -H "Accept: text/markdown" https://gradientarch.tech/nonexistent-path`}
           </pre>
         </section>
       </div>

@@ -5,7 +5,7 @@ export const metadata = {
   description:
     'Profil resmi GradiEnt Studio, praktik arsitektur, riset pencahayaan alami tropis, dan pemodelan spasial 3D yang didirikan oleh Heru Ardiansyah di Makassar, Indonesia.',
   alternates: {
-    canonical: 'https://gradientstudioapp.vercel.app/about'
+    canonical: 'https://gradientarch.tech/about'
   }
 };
 
@@ -63,7 +63,7 @@ export default function AboutPage() {
             1. Identitas & Misi Praktik Arsitektur
           </h2>
           <p>
-            <strong>GradiEnt Studio</strong> (<code>https://gradientstudioapp.vercel.app</code>) adalah praktik arsitektur, riset pencahayaan alami tropis, dan platform pemodelan spasial 3D yang dirintis oleh <strong>Heru Ardiansyah</strong> di Makassar, Indonesia. Kami merancang bangunan dan ruang yang merespons iklim khatulistiwa secara terukur—menggabungkan kepekaan tektonik material dengan analisis lingkungan berbasis simulasi dan pemodelan digital 3D.
+            <strong>GradiEnt Studio</strong> (<code>https://gradientarch.tech</code>) adalah praktik arsitektur, riset pencahayaan alami tropis, dan platform pemodelan spasial 3D yang dirintis oleh <strong>Heru Ardiansyah</strong> di Makassar, Indonesia. Kami merancang bangunan dan ruang yang merespons iklim khatulistiwa secara terukur—menggabungkan kepekaan tektonik material dengan analisis lingkungan berbasis simulasi dan pemodelan digital 3D.
           </p>
           <p style={{ marginTop: '12px' }}>
             Nama <em>GradiEnt</em> mencerminkan fokus studio pada gradasi ruang transisi: pertemuan antara ruang terbuka dan ruang bernaung, penyaringan radiasi matahari tropis menjadi cahaya alami yang teduh, serta kesinambungan antara eksplorasi konsep spasial dan gambar kerja teknis (Detailed Engineering Design / DED) yang siap dibangun di lapangan.

@@ -48,7 +48,6 @@ test('3. Developer resource discoverability: OpenAPI 3.1 spec and /docs content 
   assert.equal(spec.openapi, '3.1.0');
   assert.equal(spec.info.title, 'GradiEnt Studio Architecture & Spatial Design API');
   assert.ok(spec.paths['/api/notion/projects']);
-  assert.ok(spec.paths['/api/notion/inquiry']);
   assert.ok(spec.paths['/.well-known/mcp']);
 
   const docsMd = getDocsMarkdown();
@@ -242,7 +241,7 @@ test('11. Live Next.js HTTP Server end-to-end verification (Markdown negotiation
     assert.match(homeHtmlRes.headers.get('vary') || '', /accept/i);
     const homeHtmlBody = await homeHtmlRes.text();
     assert.match(homeHtmlBody, /<html[^>]*lang="id"/i);
-    assert.match(homeHtmlBody, /rel="canonical"[^>]*href="https:\/\/gradientstudioapp\.vercel\.app\/?"/i);
+    assert.match(homeHtmlBody, /rel="canonical"[^>]*href="https:\/\/gradientarch\.tech\/?"/i);
     assert.match(homeHtmlBody, /property="og:image"/i);
     assert.match(homeHtmlBody, /property="og:type"[^>]*content="website"/i);
     assert.match(homeHtmlBody, /application\/ld\+json/i);

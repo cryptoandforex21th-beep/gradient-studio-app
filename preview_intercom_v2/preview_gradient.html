@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f9f8f4"><meta name="robots" content="noindex,nofollow">
+<title>GradiEnt Studio — Arsitektur & Desain Spasial Makassar</title>
+<meta name="description" content="GradiEnt Studio, praktik arsitektur dan desain spasial di Makassar oleh Heru Ardiansyah. Konsep ruang, studi tapak dan pencahayaan alami, serta pemodelan 3D.">
+<link rel="icon" href="assets/brand-logo.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"><script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Langsung ke konten</a>
+<div class="topline"><span>Praktik Arsitektur & Desain Spasial</span><span>Makassar, Indonesia</span></div>
+<header class="header">
+  <a href="#" class="brand" aria-label="GradiEnt Studio — beranda"><img src="assets/brand-logo.png" alt="" width="40" height="40"><span>GradiEnt<span class="brand-studio">STUDIO</span></span></a>
+  <nav class="desktop-nav" aria-label="Navigasi utama"><a href="#explorations">Studi Desain</a><a href="#services">Layanan</a><a href="#process">Tahapan Kerja</a><a href="#studio">Studio</a></nav>
+  <div class="header-actions"><a class="account" href="https://gradientarch.tech/login">Masuk</a><a class="button button-dark compact" href="#contact">Bicarakan proyek</a><button id="menu-button" class="menu-button" aria-label="Buka menu" aria-controls="mobile-nav" aria-expanded="false"><span></span><span></span></button></div>
+</header>
+<nav id="mobile-nav" class="mobile-nav" aria-label="Navigasi ponsel" hidden><a href="#explorations">Studi Desain</a><a href="#services">Layanan</a><a href="#process">Tahapan Kerja</a><a href="#studio">Studio</a><a href="https://gradientarch.tech/login">Masuk ke akun</a><a href="#contact">Bicarakan proyek</a></nav>
+<main id="main">
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-content">
+    <h1 id="hero-title"><span>Arsitektur & desain spasial</span><br>di Makassar.</h1>
+    <p class="hero-description">GradiEnt Studio mengembangkan konsep ruang kontekstual, studi tapak dan pencahayaan alami, serta pemodelan 3D arsitektur.</p>
+    <div class="hero-actions">
+      <a href="#explorations" class="button button-dark">Lihat studi desain</a>
+      <a href="#contact" class="button button-outline">Bicarakan proyek</a>
+    </div>
+  </div>
+</section>
+
+<section class="showcase wrap" id="explorations" aria-labelledby="showcase-title">
+  <div class="section-caption"><h2 id="showcase-title">Studi desain</h2></div>
+  <div class="showcase-frame">
+    <div class="showcase-tabs" role="tablist" aria-label="Sudut pandang eksplorasi"><button id="tab-atmosphere" role="tab" aria-selected="true" aria-controls="panel-atmosphere" tabindex="0">Atmosfer ruang</button><button id="tab-space" role="tab" aria-selected="false" aria-controls="panel-space" tabindex="-1">Susunan ruang</button><button id="tab-light" role="tab" aria-selected="false" aria-controls="panel-light" tabindex="-1">Cahaya & naungan</button></div>
+    <div id="panel-atmosphere" class="showcase-panel" role="tabpanel" aria-labelledby="tab-atmosphere">
+      <div class="showcase-media">
+        <img class="showcase-image" src="assets/courtyard-concept.png" alt="Ilustrasi konsep paviliun tropis dengan halaman, pohon, dinding bata, dan naungan lebar" fetchpriority="high" width="1672" height="941">
+        <span class="media-label">Visual konseptual · AI</span>
+      </div>
+      <div class="showcase-info-bar">
+        <div class="info-text">
+          <span class="micro">STUDI KONSEP</span>
+          <h3>Ruang sela</h3>
+          <p>Halaman tengah sebagai ruang pertemuan dan sirkulasi alami.</p>
+        </div>
+        <button class="button button-dark compact" data-project="courtyard">Lihat detail</button>
+      </div>
+    </div>
+    <div id="panel-space" class="showcase-panel" role="tabpanel" aria-labelledby="tab-space" hidden>
+      <div class="showcase-media">
+        <img class="showcase-image" src="assets/space-study.svg?v=3" alt="Diagram konseptual hubungan ruang terbuka, naungan dan ruang bersama" width="1440" height="900">
+        <span class="media-label">Diagram konsep</span>
+      </div>
+      <div class="showcase-info-bar">
+        <div class="info-text">
+          <span class="micro">ORGANISASI RUANG</span>
+          <h3>Susunan ruang</h3>
+          <p>Diagram hubungan fungsional antara ruang bersama, halaman terbuka, dan area bernaung.</p>
+        </div>
+        <button class="button button-dark compact" data-project="space">Buka eksplorasi</button>
+      </div>
+    </div>
+    <div id="panel-light" class="showcase-panel" role="tabpanel" aria-labelledby="tab-light" hidden>
+      <div class="showcase-media">
+        <img class="showcase-image" src="assets/light-study.svg?v=3" alt="Ilustrasi prinsip overhang menyaring cahaya pada ruang di bawah naungan" width="1440" height="900">
+        <span class="media-label">Diagram konsep</span>
+      </div>
+      <div class="showcase-info-bar">
+        <div class="info-text">
+          <span class="micro">CAHAYA & NAUNGAN</span>
+          <h3>Lapisan cahaya</h3>
+          <p>Diagram prinsip overhang dan peneduh dalam mengatur penetrasi cahaya alami.</p>
+        </div>
+        <button class="button button-dark compact" data-project="light">Buka eksplorasi</button>
+      </div>
+    </div>
+  </div>
+  <div class="showcase-meta"><span>Konsep dan diagram eksploratif</span><p>Eksplorasi awal hubungan geometri ruang dengan pencahayaan dan lingkungan.</p></div>
+</section>
+
+<section class="services section wrap" id="services" aria-labelledby="services-title"><div class="section-heading"><div><h2 id="services-title">Layanan desain</h2></div><p class="section-intro">Setiap proyek berangkat dari konteks yang unik. Lingkup kerja disesuaikan mulai dari eksplorasi awal hingga dokumentasi rancangan.</p></div>
+<div class="service-list">
+  <article class="service-row"><span class="service-number">01</span><div><h3>Arsitektur & tata ruang</h3><p>Menyusun kebutuhan ruang, tata letak fungsional, dan bentuk massa bangunan yang kontekstual.</p><div class="tags"><span>Konsep arsitektur</span><span>Tata ruang</span><span>Pengembangan desain</span></div></div><a href="#contact" class="service-link" data-service="Arsitektur & tata ruang">Diskusikan</a></article>
+  <article class="service-row"><span class="service-number">02</span><div><h3>Tapak & pencahayaan</h3><p>Membaca orientasi matahari, jalur angin, dan strategi bukaan alami untuk kenyamanan termal dan visual.</p><div class="tags"><span>Analisis tapak</span><span>Pencahayaan alami</span><span>Strategi selubung</span></div></div><a href="#contact" class="service-link" data-service="Tapak & pencahayaan">Diskusikan</a></article>
+  <article class="service-row"><span class="service-number">03</span><div><h3>Pemodelan & visualisasi 3D</h3><p>Mengembangkan dan menguji gagasan desain melalui model digital 3D dan studi geometri ruang terukur.</p><div class="tags"><span>Pemodelan 3D</span><span>Eksplorasi geometri</span><span>Visualisasi konsep</span></div></div><a href="#contact" class="service-link" data-service="Pemodelan & visualisasi 3D">Diskusikan</a></article>
+</div></section>
+
+<section class="process-section" id="process" aria-labelledby="process-title"><div class="wrap process-layout"><div class="process-intro"><h2 id="process-title">Tahapan kerja</h2><p class="section-intro">Alur kolaborasi yang terstruktur untuk memastikan setiap keputusan rancangan memiliki dasar yang jelas.</p><a href="#contact" class="text-link">Mulai percakapan</a></div><div class="process-steps">
+<details open><summary><h3>Mendengarkan kebutuhan</h3><span class="plus" aria-hidden="true"></span></summary><div class="step-body"><p>Memahami aktivitas, kebutuhan ruang, lokasi tapak, prioritas, dan batasan proyek sejak tahap awal.</p><span class="micro">Keluaran: Brief dan lingkup perancangan</span></div></details>
+<details><summary><h3>Analisis konteks tapak</h3><span class="plus" aria-hidden="true"></span></summary><div class="step-body"><p>Menelaah kondisi tapak, orientasi matahari, sirkulasi akses, dan iklim mikro sekitar sebagai landasan desain.</p><span class="micro">Keluaran: Pemetaan potensi dan batasan</span></div></details>
+<details><summary><h3>Eksplorasi & pengujian konsep</h3><span class="plus" aria-hidden="true"></span></summary><div class="step-body"><p>Mengembangkan alternatif organisasi ruang, hubungan massa, dan strategi naungan untuk menemukan solusi terbaik.</p><span class="micro">Keluaran: Konsep terpilih dan diagram ruang</span></div></details>
+<details><summary><h3>Finalisasi dokumentasi</h3><span class="plus" aria-hidden="true"></span></summary><div class="step-body"><p>Mengembangkan gambar arsitektural dan materi visual terukur sesuai tahap pekerjaan yang disepakati.</p><span class="micro">Keluaran: Dokumentasi rancangan terpadu</span></div></details>
+</div></div></section>
+
+<section class="section wrap studies" aria-labelledby="studies-title"><div class="section-heading compact-heading"><div><h2 id="studies-title">Konsep dan diagram</h2></div><div class="filters" role="group" aria-label="Filter eksplorasi"><button class="active" data-filter="all" aria-pressed="true">Semua</button><button data-filter="architecture" aria-pressed="false">Arsitektur</button><button data-filter="research" aria-pressed="false">Riset ruang</button></div></div>
+<div class="study-grid" id="study-grid">
+<article class="study-card" data-category="architecture"><button class="study-image" data-project="courtyard" aria-label="Buka Ruang sela"><img src="assets/courtyard-concept.png" alt="Paviliun tropis konseptual di sekitar halaman" loading="lazy" width="1672" height="941"><span class="study-badge">Konsep · Visual AI</span></button><div class="study-info"><div><h3><button class="title-button" data-project="courtyard">Ruang sela</button></h3><p>Studi paviliun halaman dan naungan lebar.</p></div></div></article>
+<article class="study-card" data-category="research"><button class="study-image" data-project="space" aria-label="Buka Susunan ruang"><img src="assets/space-study.svg" alt="Studi denah ruang bersama dan halaman" loading="lazy" width="1440" height="900"><span class="study-badge">Diagram konsep</span></button><div class="study-info"><div><h3><button class="title-button" data-project="space">Susunan ruang</button></h3><p>Diagram hubungan ruang bersama dan ruang terbuka.</p></div></div></article>
+<article class="study-card" data-category="research"><button class="study-image" data-project="light" aria-label="Buka Lapisan cahaya"><img src="assets/light-study.svg" alt="Diagram konseptual cahaya dan naungan" loading="lazy" width="1440" height="900"><span class="study-badge">Diagram konsep</span></button><div class="study-info"><div><h3><button class="title-button" data-project="light">Lapisan cahaya</button></h3><p>Diagram orientasi bukaan dan pembiasan cahaya.</p></div></div></article>
+</div><p class="gallery-status" id="gallery-status" aria-live="polite">3 eksplorasi</p></section>
+
+<section class="studio-section wrap" id="studio" aria-labelledby="studio-title"><div class="studio-label"><span class="micro">PROFIL STUDIO</span><span class="studio-city">Makassar, Indonesia</span></div><div class="studio-copy"><h2 id="studio-title">Tentang GradiEnt</h2><p>GradiEnt Studio adalah praktik arsitektur dan desain spasial yang dirintis Heru Ardiansyah di Makassar. Fokus studio tertumpu pada eksplorasi ruang yang kontekstual, optimalisasi pencahayaan alami, dan respons adaptif terhadap iklim tropis.</p><p>Pendekatan desain mengombinasikan studi tapak cermat dengan pemodelan 3D untuk menguji alternatif ruang secara terukur dan komunikatif.</p><div class="founder"><span class="founder-monogram">HA</span><div><strong>Heru Ardiansyah</strong><span>Founder · Spatial Designer</span></div><a href="https://www.linkedin.com/in/heru-ardiansyah-84a97343a/" target="_blank" rel="noopener noreferrer" class="founder-link">LinkedIn</a></div></div></section>
+
+<section class="faq-section wrap" aria-labelledby="faq-title"><h2 id="faq-title">Pertanyaan umum</h2><div class="faq-list"><details><summary>Apa yang perlu disiapkan untuk konsultasi?<span class="plus" aria-hidden="true"></span></summary><p>Gambaran kebutuhan, lokasi tapak, dan perkiraan luas jika sudah tersedia. Foto lokasi, referensi rancangan, serta kisaran anggaran akan mempermudah diskusi awal.</p></details><details><summary>Apakah bisa mulai dari tahap konsep awal saja?<span class="plus" aria-hidden="true"></span></summary><p>Bisa. Tahapan, keluaran dokumen, dan batas pekerjaan disepakati di awal sesuai kebutuhan dan skala proyek Anda.</p></details><details><summary>Bagaimana estimasi biaya dan waktu pengerjaannya?<span class="plus" aria-hidden="true"></span></summary><p>Penawaran kerja dan jadwal disusun setelah lingkup, kompleksitas ruang, dan materi awal dipahami bersama sebelum pengerjaan dimulai.</p></details><details><summary>Apakah visual di situs merupakan bangunan terbangun?<span class="plus" aria-hidden="true"></span></summary><p>Materi yang ditampilkan saat ini merupakan eksplorasi konsep awal dan diagram ruang. Setiap visual diberi keterangan transparan sesuai status pengembangannya.</p></details></div></section>
+
+<section class="contact-section" id="contact" aria-labelledby="contact-title"><div class="wrap contact-layout"><div class="contact-intro"><h2 id="contact-title">Diskusikan rencana<br><span>proyek Anda.</span></h2><p class="contact-description">Ceritakan kebutuhan ruang atau rencana pembangunan Anda.<br>GradiEnt Studio siap membantu merumuskan arah perancangan yang tepat.</p><div class="contact-links"><a href="mailto:heruardiansyah2one@gmail.com">Email studio</a><a href="https://wa.me/6285143628550" target="_blank" rel="noopener noreferrer">WhatsApp studio</a></div></div>
+<form id="inquiry-form" class="inquiry-form"><div class="form-top"><span class="form-title">Formulir Diskusi Proyek</span></div><div class="form-row"><label for="client-name">Nama Anda<input id="client-name" name="name" autocomplete="name" placeholder="Nama lengkap" required maxlength="100"></label><label for="project-location">Lokasi proyek<input id="project-location" name="location" placeholder="Kota / kabupaten" required maxlength="120"></label></div><label for="service-select">Layanan yang ingin didiskusikan<select id="service-select" name="service"><option>Arsitektur & tata ruang</option><option>Tapak & pencahayaan</option><option>Pemodelan & visualisasi 3D</option><option>Belum tahu, ingin berdiskusi</option></select></label><label for="project-brief">Ceritakan tentang rencana Anda<textarea id="project-brief" name="brief" rows="3" placeholder="Kebutuhan ruang, kondisi tapak, atau hal yang ingin ditanyakan…" required maxlength="2000"></textarea></label><button class="button button-dark" type="submit">Siapkan pesan WhatsApp</button><p class="form-note">Pesan dapat Anda periksa dan edit sebelum dibuka di aplikasi WhatsApp. Formulir ini tidak menyimpan data pribadi Anda di server.</p></form></div></section>
+</main>
+<footer class="footer wrap"><div class="footer-top"><a href="#" class="brand"><img src="assets/brand-logo.png" alt="Logo GradiEnt" width="40" height="40"><span>GradiEnt<span class="brand-studio">STUDIO</span></span></a><a class="back-top" href="#" aria-label="Kembali ke atas">Ke atas</a></div><div class="footer-links"><div><span class="footer-heading">JELAJAHI</span><a href="#explorations">Studi Desain</a><a href="#services">Layanan</a><a href="#process">Tahapan Kerja</a><a href="#studio">Studio</a></div><div><span class="footer-heading">TERHUBUNG</span><a href="https://instagram.com/heruardiansyah_" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://www.linkedin.com/in/heru-ardiansyah-84a97343a/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="https://github.com/cryptoandforex21th-beep" target="_blank" rel="noopener noreferrer">GitHub</a></div><div><span class="footer-heading">PORTAL</span><a href="https://gradientarch.tech/login">Masuk Akun</a><a href="https://gradientarch.tech/register">Registrasi</a><a href="https://gradientarch.tech/dashboard">Portal Klien</a></div><div class="footer-address"><span class="footer-heading">LOKASI</span><p>Makassar, Sulawesi Selatan<br>Indonesia · WITA (UTC+8)</p><a href="mailto:heruardiansyah2one@gmail.com">heruardiansyah2one@gmail.com</a></div></div><div class="footer-bottom"><span>© 2026 GradiEnt Studio. Seluruh hak cipta dilindungi.</span><div><a href="https://gradientarch.tech/privacy">Kebijakan Privasi</a><a href="https://gradientarch.tech/terms">Ketentuan Layanan</a></div></div></footer>
+
+<dialog id="project-dialog" class="project-dialog" aria-labelledby="project-dialog-title"><button class="dialog-close" aria-label="Tutup detail konsep">×</button><img id="project-dialog-image" src="assets/courtyard-concept.png" alt=""><div class="project-dialog-body"><p class="dialog-category" id="project-dialog-label"></p><h2 id="project-dialog-title"></h2><p class="dialog-lead" id="project-dialog-description"></p><dl id="project-dialog-facts"></dl><div id="project-dialog-notes"></div><a href="#contact" class="button button-dark dialog-contact">Diskusikan gagasan serupa</a></div></dialog>
+<dialog id="message-dialog" class="message-dialog" aria-labelledby="message-title"><button class="dialog-close" aria-label="Tutup pratinjau pesan">×</button><p class="dialog-category">Konfirmasi Pesan</p><h2 id="message-title">Pesan Anda siap dikirim</h2><p>Pesan belum terkirim secara otomatis. Anda dapat meninjau atau mengubah isi teks sebelum membuka WhatsApp.</p><textarea id="message-preview" aria-label="Pesan WhatsApp yang dapat diedit" rows="10"></textarea><div class="message-actions"><button type="button" class="button button-outline" id="copy-message">Salin pesan</button><a href="https://wa.me/6285143628550" target="_blank" rel="noopener noreferrer" class="button button-dark" id="whatsapp-link">Buka WhatsApp</a></div><p id="copy-status" class="form-note" aria-live="polite"></p></dialog>
+</body></html>

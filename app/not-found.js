@@ -40,7 +40,7 @@ export default function NotFound() {
       </h1>
 
       <p style={{ marginBottom: '24px', color: 'var(--ink-soft)' }}>
-        Maaf, alamat URL yang Anda minta tidak tersedia di <strong>GradiEnt Studio</strong> (<code>https://gradientstudioapp.vercel.app</code>). Bagi agen AI dan pengembang, kirim header <code>Accept: text/markdown</code> untuk menerima respons galat dalam format Markdown, atau gunakan tautan dokumentasi di bawah ini.
+        Maaf, alamat URL yang Anda minta tidak tersedia di <strong>GradiEnt Studio</strong> (<code>https://gradientarch.tech</code>). Bagi agen AI dan pengembang, kirim header <code>Accept: text/markdown</code> untuk menerima respons galat dalam format Markdown, atau gunakan tautan dokumentasi di bawah ini.
       </p>
 
       <div style={{

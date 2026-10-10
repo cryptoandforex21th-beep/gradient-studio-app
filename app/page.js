@@ -245,7 +245,7 @@ export default function HomePage() {
           <a href="#services">Layanan</a>
           <a href="#process">Tahapan Kerja</a>
           <Link href="/about">Tentang Studio</Link>
-          <Link href="/docs">API & MCP</Link>
+          <Link href="/contact">Kontak</Link>
         </nav>
 
         <div className="header-actions">
@@ -272,7 +272,6 @@ export default function HomePage() {
         <a href="#process" onClick={() => setMenuOpen(false)}>Tahapan Kerja</a>
         <Link href="/about" onClick={() => setMenuOpen(false)}>Tentang Studio</Link>
         <Link href="/contact" onClick={() => setMenuOpen(false)}>Kontak</Link>
-        <Link href="/docs" onClick={() => setMenuOpen(false)}>Dokumentasi API & MCP</Link>
         <Link href="/login" onClick={() => setMenuOpen(false)}>Masuk ke akun</Link>
         <a href="#contact" onClick={() => setMenuOpen(false)}>Bicarakan proyek</a>
       </nav>

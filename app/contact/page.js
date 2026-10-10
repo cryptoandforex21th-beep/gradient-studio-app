@@ -5,7 +5,7 @@ export const metadata = {
   description:
     'Hubungi GradiEnt Studio di Makassar untuk konsultasi perancangan arsitektur, analisis tapak & pencahayaan alami, serta pemodelan spasial 3D bersama Heru Ardiansyah.',
   alternates: {
-    canonical: 'https://gradientstudioapp.vercel.app/contact'
+    canonical: 'https://gradientarch.tech/contact'
   }
 };
 

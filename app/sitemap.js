@@ -1,5 +1,5 @@
 export default function sitemap() {
-  const baseUrl = 'https://gradientstudioapp.vercel.app';
+  const baseUrl = 'https://gradientarch.tech';
   const now = new Date();
 
   return [
