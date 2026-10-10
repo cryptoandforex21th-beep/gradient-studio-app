@@ -1,12 +1,13 @@
 {
   "name": "gradient_studio_app",
   "version": "1.0.0",
-  "description": "",
+  "description": "GradiEnt Studio — Architectural Design, 3D Spatial Modeling & Daylighting Platform (Makassar)",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "node --test tests/agent-readiness.test.mjs"
   },
   "keywords": [],
   "author": "",

@@ -34,29 +34,31 @@ export default function Footer() {
           <span className="footer-heading">JELAJAHI</span>
           <Link href="/#explorations">Studi Desain</Link>
           <Link href="/#services">Layanan</Link>
-          <Link href="/#process">Tahapan Kerja</Link>
-          <Link href="/#studio">Studio</Link>
+          <Link href="/about">Tentang Studio</Link>
+          <Link href="/contact">Kontak</Link>
         </div>
 
         <div>
-          <span className="footer-heading">TERHUBUNG</span>
-          <a href="https://instagram.com/heruardiansyah_" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <span className="footer-heading">DEVELOPER & AI</span>
+          <Link href="/docs">Dokumentasi API & MCP</Link>
+          <a href="/llms.txt">LLMs Manifest (llms.txt)</a>
+          <a href="/openapi.json">OpenAPI 3.1 Spec</a>
+          <a href="/.well-known/mcp">MCP Server Endpoint</a>
+        </div>
+
+        <div>
+          <span className="footer-heading">PORTAL & SOSIAL</span>
+          <Link href="/login">Masuk Akun</Link>
+          <Link href="/dashboard">Portal Klien</Link>
           <a href="https://www.linkedin.com/in/heru-ardiansyah-84a97343a/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           <a href="https://github.com/cryptoandforex21th-beep" target="_blank" rel="noopener noreferrer">GitHub</a>
-        </div>
-
-        <div>
-          <span className="footer-heading">PORTAL</span>
-          <Link href="/login">Masuk Akun</Link>
-          <Link href="/register">Registrasi</Link>
-          <Link href="/dashboard">Portal Klien</Link>
         </div>
 
         <div className="footer-address">
           <span className="footer-heading">LOKASI</span>
           <p>
-            Makassar, Sulawesi Selatan<br />
-            Indonesia · WITA (UTC+8)
+            Jl. Perintis Kemerdekaan, Tamalanrea<br />
+            Makassar, Sulawesi Selatan 90245 · WITA
           </p>
           <a href="mailto:heruardiansyah2one@gmail.com">heruardiansyah2one@gmail.com</a>
         </div>
@@ -65,6 +67,9 @@ export default function Footer() {
       <div className="footer-bottom">
         <span>© 2026 GradiEnt Studio. Seluruh hak cipta dilindungi.</span>
         <div>
+          <Link href="/about">Tentang</Link>
+          <Link href="/contact">Kontak</Link>
+          <Link href="/docs">API & MCP</Link>
           <Link href="/privacy">Kebijakan Privasi</Link>
           <Link href="/terms">Ketentuan Layanan</Link>
         </div>

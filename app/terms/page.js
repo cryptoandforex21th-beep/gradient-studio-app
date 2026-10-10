@@ -2,7 +2,10 @@ import Link from 'next/link';
 
 export const metadata = {
   title: 'Syarat & Ketentuan / Terms of Service — GradiEnt Studio',
-  description: 'Syarat dan Ketentuan layanan konsultasi arsitektur dan portal web GradiEnt Studio.'
+  description: 'Syarat dan Ketentuan layanan konsultasi arsitektur dan portal web GradiEnt Studio.',
+  alternates: {
+    canonical: 'https://gradientstudioapp.vercel.app/terms'
+  }
 };
 
 export default function TermsPage() {

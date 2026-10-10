@@ -1,10 +1,25 @@
 export default function robots() {
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: ['/admin', '/dashboard'],
-    },
+    rules: [
+      {
+        userAgent: '*',
+        allow: [
+          '/',
+          '/about',
+          '/contact',
+          '/docs',
+          '/privacy',
+          '/terms',
+          '/llms.txt',
+          '/llms-full.txt',
+          '/agent-instructions.md',
+          '/openapi.json',
+          '/.well-known/mcp'
+        ],
+        disallow: ['/admin', '/dashboard'],
+      },
+    ],
+    host: 'https://gradientstudioapp.vercel.app',
     sitemap: 'https://gradientstudioapp.vercel.app/sitemap.xml',
   };
 }

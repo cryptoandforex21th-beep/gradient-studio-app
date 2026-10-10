@@ -80,8 +80,9 @@ export default function Navbar() {
         <nav className="desktop-nav" aria-label="Navigasi utama">
           <Link href="/#explorations">Studi Desain</Link>
           <Link href="/#services">Layanan</Link>
-          <Link href="/#process">Tahapan Kerja</Link>
-          <Link href="/#studio">Studio</Link>
+          <Link href="/about">Tentang</Link>
+          <Link href="/contact">Kontak</Link>
+          <Link href="/docs">API & MCP</Link>
         </nav>
 
         <div className="header-actions">

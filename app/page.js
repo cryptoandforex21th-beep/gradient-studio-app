@@ -244,7 +244,8 @@ export default function HomePage() {
           <a href="#explorations">Studi Desain</a>
           <a href="#services">Layanan</a>
           <a href="#process">Tahapan Kerja</a>
-          <a href="#studio">Studio</a>
+          <Link href="/about">Tentang Studio</Link>
+          <Link href="/docs">API & MCP</Link>
         </nav>
 
         <div className="header-actions">
@@ -269,7 +270,9 @@ export default function HomePage() {
         <a href="#explorations" onClick={() => setMenuOpen(false)}>Studi Desain</a>
         <a href="#services" onClick={() => setMenuOpen(false)}>Layanan</a>
         <a href="#process" onClick={() => setMenuOpen(false)}>Tahapan Kerja</a>
-        <a href="#studio" onClick={() => setMenuOpen(false)}>Studio</a>
+        <Link href="/about" onClick={() => setMenuOpen(false)}>Tentang Studio</Link>
+        <Link href="/contact" onClick={() => setMenuOpen(false)}>Kontak</Link>
+        <Link href="/docs" onClick={() => setMenuOpen(false)}>Dokumentasi API & MCP</Link>
         <Link href="/login" onClick={() => setMenuOpen(false)}>Masuk ke akun</Link>
         <a href="#contact" onClick={() => setMenuOpen(false)}>Bicarakan proyek</a>
       </nav>
@@ -279,11 +282,11 @@ export default function HomePage() {
         <section className="hero" aria-labelledby="hero-title">
           <div className="hero-content">
             <h1 id="hero-title">
-              <span>Arsitektur & desain spasial</span><br />
+              <span>GradiEnt Studio — Arsitektur & desain spasial</span><br />
               di Makassar.
             </h1>
             <p className="hero-description">
-              GradiEnt Studio mengembangkan konsep ruang kontekstual, studi tapak dan pencahayaan alami, serta pemodelan 3D arsitektur.
+              GradiEnt Studio adalah praktik arsitektur, analisis pencahayaan alami tropis, dan platform pemodelan 3D spasial oleh Heru Ardiansyah untuk konsep ruang kontekstual serta dokumentasi DED terukur.
             </p>
             <div className="hero-actions">
               <a href="#explorations" className="button button-dark">Lihat studi desain</a>
@@ -872,29 +875,32 @@ export default function HomePage() {
             <span className="footer-heading">JELAJAHI</span>
             <a href="#explorations">Studi Desain</a>
             <a href="#services">Layanan</a>
-            <a href="#process">Tahapan Kerja</a>
-            <a href="#studio">Studio</a>
+            <Link href="/about">Tentang Studio</Link>
+            <Link href="/contact">Kontak</Link>
           </div>
 
           <div>
-            <span className="footer-heading">TERHUBUNG</span>
-            <a href="https://instagram.com/heruardiansyah_" target="_blank" rel="noopener noreferrer">Instagram</a>
-            <a href="https://www.linkedin.com/in/heru-ardiansyah-84a97343a/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            <a href="https://github.com/cryptoandforex21th-beep" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <span className="footer-heading">DEVELOPER & AI</span>
+            <Link href="/docs">Dokumentasi API & MCP</Link>
+            <a href="/llms.txt">LLMs Manifest (llms.txt)</a>
+            <a href="/openapi.json">OpenAPI 3.1 Spec</a>
+            <a href="/.well-known/mcp">MCP Server Endpoint</a>
           </div>
 
           <div>
-            <span className="footer-heading">PORTAL</span>
+            <span className="footer-heading">PORTAL & SOSIAL</span>
             <Link href="/login">Masuk Akun</Link>
             <Link href="/register">Registrasi</Link>
             <Link href="/dashboard">Portal Klien</Link>
+            <a href="https://www.linkedin.com/in/heru-ardiansyah-84a97343a/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://github.com/cryptoandforex21th-beep" target="_blank" rel="noopener noreferrer">GitHub</a>
           </div>
 
           <div className="footer-address">
             <span className="footer-heading">LOKASI</span>
             <p>
-              Makassar, Sulawesi Selatan<br />
-              Indonesia · WITA (UTC+8)
+              Jl. Perintis Kemerdekaan, Tamalanrea<br />
+              Makassar, Sulawesi Selatan 90245 · WITA
             </p>
             <a href="mailto:heruardiansyah2one@gmail.com">heruardiansyah2one@gmail.com</a>
           </div>
@@ -903,6 +909,9 @@ export default function HomePage() {
         <div className="footer-bottom">
           <span>© 2026 GradiEnt Studio. Seluruh hak cipta dilindungi.</span>
           <div>
+            <Link href="/about">Tentang</Link>
+            <Link href="/contact">Kontak</Link>
+            <Link href="/docs">API & MCP</Link>
             <Link href="/privacy">Kebijakan Privasi</Link>
             <Link href="/terms">Ketentuan Layanan</Link>
           </div>
