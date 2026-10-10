@@ -6,11 +6,12 @@ import { SITE_URL, getJsonLdSchemas } from '../lib/agentContent';
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
-  applicationName: 'GradiEnt Studio Architectural Design 3D Modeling',
-  title: 'GradiEnt Studio Architectural Design 3D Modeling & Daylighting Studio (Makassar)',
+  applicationName: 'GradiEnt Studio Architectural Design 3D Modeling Daylighting Analysis',
+  title: 'GradiEnt Studio Architectural Design 3D Modeling Daylighting Analysis (Makassar)',
   description:
-    'GradiEnt Studio Architectural Design 3D Modeling (https://gradientarch.tech) by Heru Ardiansyah in Makassar, Indonesia: Architectural design studio, tropical daylighting analysis, 3D spatial modeling platform, DED engineering documentation, REST API v1, CLI tool, and MCP server.',
+    'GradiEnt Studio Architectural Design 3D Modeling Daylighting Analysis (https://gradientarch.tech) by Heru Ardiansyah in Makassar, Indonesia: Architectural design studio, tropical daylighting analysis, 3D spatial modeling platform, DED engineering documentation, REST API v1, CLI tool, and MCP server.',
   keywords: [
+    'GradiEnt Studio Architectural Design 3D Modeling Daylighting Analysis',
     'GradiEnt Studio Architectural Design 3D Modeling',
     'GradiEnt Studio Architectural Design',
     'GradiEnt Studio',
@@ -29,7 +30,7 @@ export const metadata = {
   ],
   authors: [{ name: 'Heru Ardiansyah', url: 'https://www.linkedin.com/in/heru-ardiansyah-84a97343a/' }],
   creator: 'Heru Ardiansyah',
-  publisher: 'GradiEnt Studio Architectural Design 3D Modeling',
+  publisher: 'GradiEnt Studio Architectural Design 3D Modeling Daylighting Analysis',
   alternates: {
     canonical: SITE_URL,
     types: {
@@ -39,25 +40,25 @@ export const metadata = {
   openGraph: {
     type: 'website',
     url: SITE_URL,
-    siteName: 'GradiEnt Studio Architectural Design 3D Modeling',
+    siteName: 'GradiEnt Studio Architectural Design 3D Modeling Daylighting Analysis',
     locale: 'id_ID',
-    title: 'GradiEnt Studio Architectural Design 3D Modeling & Daylighting Studio',
+    title: 'GradiEnt Studio Architectural Design 3D Modeling Daylighting Analysis',
     description:
-      'GradiEnt Studio Architectural Design 3D Modeling (gradientarch.tech), praktik arsitektur, analisis pencahayaan alami tropis, dan platform pemodelan spasial 3D di Makassar oleh Heru Ardiansyah.',
+      'GradiEnt Studio Architectural Design 3D Modeling Daylighting Analysis (gradientarch.tech), praktik arsitektur, analisis pencahayaan alami tropis, dan platform pemodelan spasial 3D di Makassar oleh Heru Ardiansyah.',
     images: [
       {
         url: `${SITE_URL}/assets/courtyard-concept.png`,
         width: 1672,
         height: 941,
-        alt: 'GradiEnt Studio Architectural Design 3D Modeling'
+        alt: 'GradiEnt Studio Architectural Design 3D Modeling Daylighting Analysis'
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'GradiEnt Studio Architectural Design 3D Modeling Studio',
+    title: 'GradiEnt Studio Architectural Design 3D Modeling Daylighting Analysis',
     description:
-      'GradiEnt Studio Architectural Design 3D Modeling: tropical daylighting analysis, 3D spatial modeling platform, and DED studio in Makassar by Heru Ardiansyah.',
+      'GradiEnt Studio Architectural Design 3D Modeling Daylighting Analysis: tropical daylighting analysis, 3D spatial modeling platform, and DED studio in Makassar by Heru Ardiansyah.',
     images: [`${SITE_URL}/assets/courtyard-concept.png`]
   }
 };

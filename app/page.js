@@ -230,7 +230,7 @@ export default function HomePage() {
       <a className="skip-link" href="#main">Langsung ke konten</a>
 
       <div className="topline">
-        <span>Praktik Arsitektur & Desain Spasial · GradiEnt Studio Architectural Design 3D Modeling</span>
+        <span>Praktik Arsitektur & Desain Spasial · GradiEnt Studio Architectural Design 3D Modeling Daylighting Analysis</span>
         <span>Makassar, Indonesia</span>
       </div>
 
@@ -285,7 +285,7 @@ export default function HomePage() {
               di Makassar.
             </h1>
             <p className="hero-description">
-              GradiEnt Studio (GradiEnt Studio Architectural Design 3D Modeling) adalah praktik arsitektur, analisis pencahayaan alami tropis, dan platform pemodelan 3D spasial oleh Heru Ardiansyah untuk konsep ruang kontekstual serta dokumentasi DED terukur.
+              GradiEnt Studio (GradiEnt Studio Architectural Design 3D Modeling Daylighting Analysis) adalah praktik arsitektur, analisis pencahayaan alami tropis, dan platform pemodelan 3D spasial oleh Heru Ardiansyah untuk konsep ruang kontekstual serta dokumentasi DED terukur.
             </p>
             <div className="hero-actions">
               <a href="#explorations" className="button button-dark">Lihat studi desain</a>

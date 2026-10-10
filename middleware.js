@@ -54,7 +54,8 @@ const PASSTHROUGH_EXACT = new Set([
   '/gradient_studio_logo.jpg',
   '/styles.css',
   '/preview-lemukutan.html',
-  '/google7102d1f81dd26d5b.html'
+  '/google7102d1f81dd26d5b.html',
+  '/gradientarch2026indexnowkey.txt'
 ]);
 
 const KNOWN_API_PREFIXES = [
