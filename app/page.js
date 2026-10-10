@@ -230,7 +230,7 @@ export default function HomePage() {
       <a className="skip-link" href="#main">Langsung ke konten</a>
 
       <div className="topline">
-        <span>Praktik Arsitektur & Desain Spasial</span>
+        <span>Praktik Arsitektur & Desain Spasial · GradiEnt Studio Architectural Design 3D Modeling</span>
         <span>Makassar, Indonesia</span>
       </div>
 
@@ -285,7 +285,7 @@ export default function HomePage() {
               di Makassar.
             </h1>
             <p className="hero-description">
-              GradiEnt Studio adalah praktik arsitektur, analisis pencahayaan alami tropis, dan platform pemodelan 3D spasial oleh Heru Ardiansyah untuk konsep ruang kontekstual serta dokumentasi DED terukur.
+              GradiEnt Studio (GradiEnt Studio Architectural Design 3D Modeling) adalah praktik arsitektur, analisis pencahayaan alami tropis, dan platform pemodelan 3D spasial oleh Heru Ardiansyah untuk konsep ruang kontekstual serta dokumentasi DED terukur.
             </p>
             <div className="hero-actions">
               <a href="#explorations" className="button button-dark">Lihat studi desain</a>
@@ -882,6 +882,7 @@ export default function HomePage() {
             <span className="footer-heading">DOKUMENTASI & DED</span>
             <a href="/preview-lemukutan.html">DED Paviliun Lemukutan</a>
             <a href="#process">Tahapan Perancangan</a>
+            <Link href="/docs">Dokumentasi & API Docs</Link>
             <a href="https://instagram.com/heruardiansyah_" target="_blank" rel="noopener noreferrer">Instagram</a>
             <a href="https://www.linkedin.com/in/heru-ardiansyah-84a97343a/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
           </div>
@@ -908,7 +909,7 @@ export default function HomePage() {
           <div>
             <Link href="/about">Tentang</Link>
             <Link href="/contact">Kontak</Link>
-            <Link href="/docs">Dokumentasi</Link>
+            <Link href="/docs">API Docs</Link>
             <Link href="/privacy">Kebijakan Privasi</Link>
             <Link href="/terms">Ketentuan Layanan</Link>
           </div>

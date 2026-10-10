@@ -28,6 +28,12 @@ export default function sitemap() {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/developers`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/llms.txt`,
       lastModified: now,
       changeFrequency: 'weekly',
@@ -41,6 +47,12 @@ export default function sitemap() {
     },
     {
       url: `${baseUrl}/agent-instructions.md`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/agents.md`,
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.9,

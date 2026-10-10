@@ -106,12 +106,33 @@ export default function DocsPage() {
           </ul>
         </section>
 
-        <section>
+        <section id="authentication">
           <h2 style={{ fontFamily: 'var(--mono)', fontSize: '13px', textTransform: 'uppercase', color: 'var(--accent)', letterSpacing: '.08em', marginBottom: '10px' }}>
-            2. Versioned Read-Only REST API (v1) & Typed JSON Error Model
+            2. Authentication & Access Control
           </h2>
           <p>
-            All public REST API endpoints are strictly <strong>100% Read-Only</strong>, versioned under <code>/api/v1/*</code> (aliased at <code>/v1/*</code>), and include full typed schemas in <a href="/openapi.json" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>/openapi.json</a>:
+            Public discovery and portfolio endpoints (<code>GET /api/v1/*</code> and <code>/.well-known/mcp</code>) are <strong>100% Read-Only</strong> and accessible without an API key (rate-limited at <code>120 requests/minute</code>). Partner integrations and automated agents with elevated rate limits may authenticate via Bearer token or API Key header:
+          </p>
+          <pre style={{
+            background: '#172126',
+            color: '#e7e3d8',
+            padding: '16px',
+            overflowX: 'auto',
+            fontSize: '12px',
+            fontFamily: 'var(--mono)',
+            marginTop: '12px'
+          }}>
+{`Authorization: Bearer <YOUR_API_TOKEN>
+X-API-Key: <YOUR_API_KEY>`}
+          </pre>
+        </section>
+
+        <section id="endpoints">
+          <h2 style={{ fontFamily: 'var(--mono)', fontSize: '13px', textTransform: 'uppercase', color: 'var(--accent)', letterSpacing: '.08em', marginBottom: '10px' }}>
+            3. Versioned Read-Only REST API Endpoints (v1) & Example Requests
+          </h2>
+          <p>
+            All public REST API endpoints are versioned under <code>/api/v1/*</code> (aliased at <code>/v1/*</code>) and documented with full typed schemas in <a href="/openapi.json" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>/openapi.json</a>:
           </p>
           <ul style={{ paddingLeft: '20px', marginTop: '10px', display: 'grid', gap: '8px' }}>
             <li>
@@ -127,6 +148,27 @@ export default function DocsPage() {
               <code>GET /api/v1/status</code> — Returns operational status, active version (<code>v1</code> / <code>2026-10-01</code>), deprecation timeline, and rate-limit configuration.
             </li>
           </ul>
+          <h3 style={{ fontSize: '15px', fontWeight: 600, marginTop: '16px', marginBottom: '8px' }}>
+            Example Requests & Responses (cURL)
+          </h3>
+          <pre style={{
+            background: '#172126',
+            color: '#e7e3d8',
+            padding: '16px',
+            overflowX: 'auto',
+            fontSize: '12px',
+            fontFamily: 'var(--mono)',
+            marginTop: '8px'
+          }}>
+{`# Example Request 1: List architectural projects
+curl -sS -H "Accept: application/json" https://gradientarch.tech/api/v1/projects?category=architecture
+
+# Example Request 2: Retrieve Lemukutan Coastal Pavilion DED details
+curl -sS -H "Accept: application/json" https://gradientarch.tech/api/v1/projects/lemukutan
+
+# Example Request 3: Fetch Markdown documentation via content negotiation
+curl -sS -L -H "Accept: text/markdown" https://gradientarch.tech/docs`}
+          </pre>
           <p style={{ marginTop: '12px' }}>
             <strong>Structured JSON Error Responses (RFC 9457):</strong> Invalid parameters or nonexistent resources return structured JSON errors (<code>400</code>, <code>404</code>, <code>405</code>, <code>429</code>) with machine-readable <code>code</code>, <code>message</code>, <code>hint</code>, <code>resolution</code>, and <code>documentation_url</code> fields.
           </p>
@@ -134,7 +176,7 @@ export default function DocsPage() {
 
         <section id="versioning-and-deprecation">
           <h2 style={{ fontFamily: 'var(--mono)', fontSize: '13px', textTransform: 'uppercase', color: 'var(--accent)', letterSpacing: '.08em', marginBottom: '10px' }}>
-            3. Versioning, Deprecation & Rate-Limit Headers
+            4. Versioning, Deprecation & Rate-Limit Headers
           </h2>
           <ul style={{ paddingLeft: '20px', display: 'grid', gap: '8px' }}>
             <li>
@@ -149,12 +191,12 @@ export default function DocsPage() {
           </ul>
         </section>
 
-        <section>
+        <section id="cli">
           <h2 style={{ fontFamily: 'var(--mono)', fontSize: '13px', textTransform: 'uppercase', color: 'var(--accent)', letterSpacing: '.08em', marginBottom: '10px' }}>
-            4. Official CLI Tool (gradient-studio)
+            5. Official CLI Tool (gradient-studio)
           </h2>
           <p>
-            Agents and developers can script interactions from the command line using the official Node.js CLI package (<code>gradient-studio</code> / <code>bin/gradient-studio.mjs</code>):
+            Agents and developers can script interactions from the command line using the official Node.js CLI package (<a href="https://www.npmjs.com/package/gradient-studio" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>gradient-studio on npm</a> / <a href="https://github.com/cryptoandforex21th-beep/gradient-studio-app" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>bin/gradient-studio.mjs on GitHub</a>):
           </p>
           <pre style={{
             background: '#172126',
@@ -174,9 +216,9 @@ npx github:cryptoandforex21th-beep/gradient-studio-app status`}
           </pre>
         </section>
 
-        <section>
+        <section id="mcp">
           <h2 style={{ fontFamily: 'var(--mono)', fontSize: '13px', textTransform: 'uppercase', color: 'var(--accent)', letterSpacing: '.08em', marginBottom: '10px' }}>
-            5. Model Context Protocol (MCP) Server — Streamable HTTP
+            6. Model Context Protocol (MCP) Server — Streamable HTTP
           </h2>
           <p>
             GradiEnt Studio provides a native Model Context Protocol (MCP) server supporting <strong>Streamable HTTP transport</strong> (protocol versions <code>2025-03-26</code> and <code>2024-11-05</code>) at <code>https://gradientarch.tech/.well-known/mcp</code>.

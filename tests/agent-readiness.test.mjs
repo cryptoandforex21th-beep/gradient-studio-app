@@ -267,7 +267,23 @@ test('11. Live Next.js HTTP Server end-to-end verification (Markdown, JSON Error
     assert.match(homeHtmlBody, /<html[^>]*lang="id"/i);
     assert.match(homeHtmlBody, /rel="canonical"[^>]*href="https:\/\/gradientarch\.tech\/?"/i);
     assert.match(homeHtmlBody, /GradiEnt Studio Architectural Design 3D Modeling/i);
-    assert.match(homeHtmlBody, /href="\/docs"/i);
+    assert.match(homeHtmlBody, /<a[^>]*href="\/docs"[^>]*>API Docs<\/a>/i);
+
+    // 2b. Verify /docs and /developers include Authentication, Endpoints, and Example Requests
+    const docsHtmlRes = await fetch(`${baseUrl}/docs`, {
+      headers: { Accept: 'text/html' }
+    });
+    assert.equal(docsHtmlRes.status, 200);
+    const docsHtmlBody = await docsHtmlRes.text();
+    assert.match(docsHtmlBody, /Authentication/i);
+    assert.match(docsHtmlBody, /Example Requests/i);
+    assert.match(docsHtmlBody, /curl -sS/i);
+    assert.match(docsHtmlBody, /npmjs\.com\/package\/gradient-studio/i);
+
+    const devsHtmlRes = await fetch(`${baseUrl}/developers`, {
+      headers: { Accept: 'text/html' }
+    });
+    assert.equal(devsHtmlRes.status, 200);
 
     // 3. Agent-friendly 404 with Accept: text/markdown
     const notFoundMdRes = await fetch(`${baseUrl}/__ora-404-probe-1q7nsysh`, {
